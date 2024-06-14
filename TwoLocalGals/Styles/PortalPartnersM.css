@@ -1,0 +1,70 @@
+﻿div.SuccessDiv
+{
+    width: 100%;
+    text-align: center;
+    clear: both;
+    font-size: 110%;
+    font-weight: bold;
+}
+
+div.ContentHolder
+{
+    text-align: left;
+    margin-left: 20px;
+}
+
+div.Title
+{
+    font-size: 200%;
+    font-weight: bold;
+    color: #005500;
+    margin: 10px 0px 10px 0px;
+}
+
+div.PartnerDiv
+{
+    font-size: 110%;
+    margin-bottom: 30px;
+}
+
+p
+{
+    font-size: 110%;
+}
+
+table.PartnerTable
+{
+    font-size: 120%;
+    margin-top: 20px;
+    border-collapse: collapse;
+    vertical-align: middle;
+    text-align: left;
+}
+
+table.PartnerTable td
+{
+    padding: 0px 0px 8px 20px;
+}
+
+.PartnerEntryHeader
+{
+    color: #444;
+    width: 150px;
+}
+
+.PartnerTextBox
+{
+    font-size: 120%;
+    width: 300px;
+}
+
+.PartnerDescription
+{
+    font-size: 120%;
+    width: 450px;
+}
+
+.PartnerButton
+{
+    font-size: 140%;
+}

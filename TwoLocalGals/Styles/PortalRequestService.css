@@ -1,0 +1,48 @@
+﻿div.ContentHolder
+{
+    text-align: left;
+    margin-left: 40px;
+}
+
+div.Title
+{
+    font-size: 1.4em;
+    font-weight: bold;
+    color: #005500;
+}
+
+table.DataTable
+{
+    width: 800px;
+    margin-top: 20px;
+    border-collapse: collapse;
+    text-align: center;
+    color: #000000;
+    background-color: #EEE;
+}
+
+table.DataTable th
+{
+    padding: 5px 10px 5px 10px;
+    font-size: 1.0em;
+    background-color: #666;
+    color: #FFF;
+}
+
+table.DataTable td
+{
+    font-size: .90em;
+    padding: 5px 10px 5px 10px;
+}
+
+.ServiceTextBox
+{
+    width: 200px;
+    margin: 6px 0px 6px 0px;
+}
+
+.ServiceNotes
+{
+    width: 300px;
+    margin: 6px 0px 6px 0px;
+}

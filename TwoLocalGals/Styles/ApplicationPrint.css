@@ -1,0 +1,89 @@
+﻿body 
+{
+    margin: 0 auto 0 auto;
+    padding: 0;
+    background-color: white;
+    font-family: Helvetica;
+    text-align: center;
+}
+
+div.Page
+{
+    margin: 0 auto 50px auto;
+    padding: 0 0 30px 0;
+    width: 1000px;
+    color: Black;
+    font-size: 120%;
+}
+
+.AlignCenter
+{
+    text-align: center;
+}
+
+div.Title
+{
+    margin-top: 20px;
+    font-size: 200%;
+    font-weight: bold;
+    color: #005500;
+}
+
+div.TitleInfo
+{
+    margin-top: 20px;
+    font-size: 150%;
+    font-weight: bold;
+}
+
+div.Overview
+{
+    margin: 0px auto 0px auto;
+    width: 500px;
+    text-align: left;
+}
+
+table.Entry
+{
+    margin: 10px auto 10px auto;
+    vertical-align: middle;
+    text-align: left;
+}
+
+table.Entry td
+{
+    padding: 5px;
+}
+
+td.EntryHeader
+{
+    color: #696969;
+    text-align: right;
+}
+
+td.EntryTitle
+{
+    padding-top: 10px;
+    text-align: center;
+    font-weight: bold;
+}
+
+td.EntrySection
+{
+    padding-top: 50px !important;
+    text-align: center;
+    font-weight: bold;
+    font-size: 160%;
+    color: #336F97;
+}
+
+input.entryTextBox
+{
+    width: 250px;
+    border: 1px solid #ccc;
+}
+
+input.entryDropDownList
+{
+    border: 1px solid #ccc;
+}

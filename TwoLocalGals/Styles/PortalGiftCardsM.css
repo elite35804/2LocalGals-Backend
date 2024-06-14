@@ -1,0 +1,49 @@
+﻿div.SuccessDiv
+{
+    width: 100%;
+    text-align: center;
+    clear: both;
+    font-size: 110%;
+    font-weight: bold;
+}
+
+div.ContentHolder
+{
+    text-align: left;
+    margin-left: 10px;
+}
+
+div.Title
+{
+    font-size: 200%;
+    font-weight: bold;
+    color: #005500;
+    margin: 10px 0px 10px 0px;
+}
+
+div.Redeem
+{
+    font-size: 110%;
+}
+
+table.GiftCardTable
+{
+    font-size: 110%;
+}
+
+.GiftCardTextBox
+{
+    font-size: 120%;
+    width: 340px;
+}
+
+.GiftCardButton
+{
+    font-size: 120%;
+}
+
+.GiftCardInput
+{
+    font-size: 110%;
+    text-align: center;
+}

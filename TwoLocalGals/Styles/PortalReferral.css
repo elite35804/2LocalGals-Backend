@@ -1,0 +1,30 @@
+﻿div.Success
+{
+    font-weight: bold; 
+    color: #005500; 
+    font-size: 1.4em;
+}
+
+div.Normal
+{
+    margin: 20px 0px 0px 40px; 
+    width:400px; 
+    text-align: left;
+}
+
+div.Title
+{
+    font-weight: bold; 
+    color: #005500; 
+    font-size: 1.4em;
+}
+
+div.ReferralMenu
+{
+    margin-top: 10px;
+}
+
+.ReferralTextBox
+{
+    width: 250px;
+}

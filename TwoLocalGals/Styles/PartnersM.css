@@ -1,0 +1,87 @@
+﻿body 
+{
+    margin: 0;
+    padding: 0;
+    background-color: #B3D3E2;
+    font-family: Helvetica;
+    text-align: center;
+}
+
+div.Page
+{
+    margin: 0;
+    padding: 0 0 30px 0;
+    width: 100%;
+    background-color: White;
+    color: Black;
+}
+
+.Logo
+{
+    width: 100%;
+}
+
+.AlignCenter
+{
+    text-align: center;
+}
+
+div.ErrorDiv
+{
+    color: Red;
+    text-align: center;
+    font-size: 110%;
+    font-weight: bold;
+}
+
+div.Title
+{
+    margin: 20px;
+    font-size: 200%;
+    font-weight: bold;
+    text-align: center;
+    color: #005500;
+}
+
+div.Category
+{
+    font-size: 120%;
+}
+
+.PartnersDropDown
+{
+    font-size: 110%;
+}
+
+div.PartnersDiv
+{
+    margin: 20px 0px 0px 0px;
+}
+
+div.ComapnyDiv
+{
+    padding: 6px 6px 6px 10px;
+    text-align: left;
+}
+
+h2
+{
+    margin: 8px 0px 0px 0px;
+    padding: 0;
+    font-weight: normal;
+    font-size: 110%;
+}
+
+h3
+{
+    margin: 5px 0px 0px 0px;
+    padding: 0;
+    font-weight: normal;
+    font-size: 100%;
+}
+
+p
+{
+    font-size: 100%;
+}
+

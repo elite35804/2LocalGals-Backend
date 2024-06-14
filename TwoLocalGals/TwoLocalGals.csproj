@@ -1,0 +1,1163 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{8CFAF31F-C93C-49F2-A91C-A409C448EE59}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>TwoLocalGals</RootNamespace>
+    <AssemblyName>TwoLocalGals</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
+    <UseIISExpress>false</UseIISExpress>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>4.0</OldToolsVersion>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <Use64BitIISExpress />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AjaxControlToolkit, Version=19.1.0.0, Culture=neutral, PublicKeyToken=28f01b0e84b6d53e, processorArchitecture=MSIL">
+      <HintPath>..\packages\AjaxControlToolkit.19.1.0\lib\net40\AjaxControlToolkit.dll</HintPath>
+    </Reference>
+    <Reference Include="EPPlus, Version=3.1.2.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\EPPlus.dll</HintPath>
+    </Reference>
+    <Reference Include="HtmlRenderer, Version=1.5.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\HtmlRenderer.Core.1.5.1-beta1\lib\net45\HtmlRenderer.dll</HintPath>
+    </Reference>
+    <Reference Include="HtmlRenderer.PdfSharp, Version=1.5.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\HtmlRenderer.PdfSharp.1.5.1-beta1\lib\net45\HtmlRenderer.PdfSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=5.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.5.0.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Win32.Primitives, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Win32.Primitives.4.3.0\lib\net46\Microsoft.Win32.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="PdfSharp, Version=1.50.4000.0, Culture=neutral, PublicKeyToken=f94615aa0424f9eb, processorArchitecture=MSIL">
+      <HintPath>..\packages\PDFsharp.1.50.4000-beta3b\lib\net20\PdfSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="PdfSharp.Charting, Version=1.50.4000.0, Culture=neutral, PublicKeyToken=f94615aa0424f9eb, processorArchitecture=MSIL">
+      <HintPath>..\packages\PDFsharp.1.50.4000-beta3b\lib\net20\PdfSharp.Charting.dll</HintPath>
+    </Reference>
+    <Reference Include="RestSharp, Version=107.3.0.0, Culture=neutral, PublicKeyToken=598062e77f915f75, processorArchitecture=MSIL">
+      <HintPath>..\packages\RestSharp.107.3.0\lib\netstandard2.0\RestSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="RingCentral.Net, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\RingCentral.Net.5.0.0\lib\netstandard2.0\RingCentral.Net.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.AppContext, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.AppContext.4.3.0\lib\net46\System.AppContext.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Console, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Console.4.3.0\lib\net46\System.Console.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Globalization.Calendars, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Globalization.Calendars.4.3.0\lib\net46\System.Globalization.Calendars.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.Compression, Version=4.1.2.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.Compression.4.3.0\lib\net46\System.IO.Compression.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.IO.Compression.ZipFile, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.Compression.ZipFile.4.3.0\lib\net46\System.IO.Compression.ZipFile.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.FileSystem, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.FileSystem.4.3.0\lib\net46\System.IO.FileSystem.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.FileSystem.Primitives, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.FileSystem.Primitives.4.3.0\lib\net46\System.IO.FileSystem.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http, Version=4.1.1.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Net.Http.4.3.2\lib\net46\System.Net.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.7\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Sockets, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Net.Sockets.4.3.0\lib\net46\System.Net.Sockets.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.5.0.0\lib\net45\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.InteropServices.RuntimeInformation, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.InteropServices.RuntimeInformation.4.3.0\lib\net45\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Algorithms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.Algorithms.4.3.0\lib\net46\System.Security.Cryptography.Algorithms.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Encoding, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.Encoding.4.3.0\lib\net46\System.Security.Cryptography.Encoding.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Primitives, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.Primitives.4.3.0\lib\net46\System.Security.Cryptography.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.X509Certificates, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.X509Certificates.4.3.0\lib\net46\System.Security.Cryptography.X509Certificates.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Text.Encodings.Web, Version=5.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Text.Encodings.Web.5.0.0\lib\net461\System.Text.Encodings.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Text.Json, Version=5.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Text.Json.5.0.0\lib\net461\System.Text.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Web.Mobile" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xml.ReaderWriter, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Xml.ReaderWriter.4.3.0\lib\net46\System.Xml.ReaderWriter.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="2LG_CCLogo.jpg" />
+    <Content Include="2LG_ClickContinue.png" />
+    <Content Include="2LG_Letterhead.png" />
+    <Content Include="2LG_Logo.jpg" />
+    <Content Include="2LG_Logo.png" />
+    <Content Include="2LG_Banner.jpg" />
+    <Content Include="2LG_Contact.jpg" />
+    <Content Include="2LG_EmailFooter.jpg" />
+    <Content Include="2LG_Gradient.jpg" />
+    <Content Include="2LG_Logo_Small.jpg" />
+    <Content Include="2LG_QuoteBanner.PNG" />
+    <Content Include="2LG_SubmitGray.png" />
+    <Content Include="2LG_SubmitBlue.png" />
+    <Content Include="Application.aspx" />
+    <Content Include="chosen\chosen-sprite%402x.png" />
+    <Content Include="chosen\chosen-sprite.png" />
+    <Content Include="chosen\chosen.css" />
+    <Content Include="chosen\chosen.jquery.js" />
+    <Content Include="chosen\chosen.jquery.min.js" />
+    <Content Include="chosen\chosen.proto.js" />
+    <Content Include="chosen\chosen.proto.min.js" />
+    <Content Include="CustomerLogin.aspx" />
+    <Content Include="FollowUp.aspx" />
+    <Content Include="HomeGuardContract.aspx" />
+    <Content Include="Login.aspx" />
+    <Content Include="DataTables\css\demo_page.css" />
+    <Content Include="DataTables\css\demo_table.css" />
+    <Content Include="DataTables\css\demo_table_jui.css" />
+    <Content Include="DataTables\css\jquery.dataTables.css" />
+    <Content Include="DataTables\css\jquery.dataTables_themeroller.css" />
+    <Content Include="DataTables\images\back_disabled.png" />
+    <Content Include="DataTables\images\back_enabled.png" />
+    <Content Include="DataTables\images\back_enabled_hover.png" />
+    <Content Include="DataTables\images\favicon.ico" />
+    <Content Include="DataTables\images\forward_disabled.png" />
+    <Content Include="DataTables\images\forward_enabled.png" />
+    <Content Include="DataTables\images\forward_enabled_hover.png" />
+    <Content Include="DataTables\images\sort_asc.png" />
+    <Content Include="DataTables\images\sort_asc_disabled.png" />
+    <Content Include="DataTables\images\sort_both.png" />
+    <Content Include="DataTables\images\sort_desc.png" />
+    <Content Include="DataTables\images\sort_desc_disabled.png" />
+    <Content Include="DataTables\js\jquery.dataTables.js" />
+    <Content Include="DataTables\js\jquery.dataTables.min.js" />
+    <Content Include="DataTables\js\jquery.js" />
+    <Content Include="DataTables\src\api\api.internal.js" />
+    <Content Include="DataTables\src\api\api.methods.js" />
+    <Content Include="DataTables\src\api\api.static.js" />
+    <Content Include="DataTables\src\core\core.ajax.js" />
+    <Content Include="DataTables\src\core\core.columns.js" />
+    <Content Include="DataTables\src\core\core.constructor.js" />
+    <Content Include="DataTables\src\core\core.data.js" />
+    <Content Include="DataTables\src\core\core.draw.js" />
+    <Content Include="DataTables\src\core\core.filter.js" />
+    <Content Include="DataTables\src\core\core.info.js" />
+    <Content Include="DataTables\src\core\core.init.js" />
+    <Content Include="DataTables\src\core\core.length.js" />
+    <Content Include="DataTables\src\core\core.page.js" />
+    <Content Include="DataTables\src\core\core.processing.js" />
+    <Content Include="DataTables\src\core\core.scrolling.js" />
+    <Content Include="DataTables\src\core\core.sizing.js" />
+    <Content Include="DataTables\src\core\core.sort.js" />
+    <Content Include="DataTables\src\core\core.state.js" />
+    <Content Include="DataTables\src\core\core.support.js" />
+    <Content Include="DataTables\src\DataTables.js" />
+    <Content Include="DataTables\src\ext\ext.classes.js" />
+    <Content Include="DataTables\src\ext\ext.paging.js" />
+    <Content Include="DataTables\src\ext\ext.sorting.js" />
+    <Content Include="DataTables\src\ext\ext.types.js" />
+    <Content Include="DataTables\src\model\model.column.js" />
+    <Content Include="DataTables\src\model\model.defaults.columns.js" />
+    <Content Include="DataTables\src\model\model.defaults.js" />
+    <Content Include="DataTables\src\model\model.ext.js" />
+    <Content Include="DataTables\src\model\model.row.js" />
+    <Content Include="DataTables\src\model\model.search.js" />
+    <Content Include="DataTables\src\model\model.settings.js" />
+    <Content Include="DataTables\unit_testing\controller.js" />
+    <Content Include="DataTables\unit_testing\index.html" />
+    <Content Include="DataTables\unit_testing\performance\draw.html" />
+    <Content Include="DataTables\unit_testing\performance\page.html" />
+    <Content Include="DataTables\unit_testing\performance\sort.html" />
+    <Content Include="DataTables\unit_testing\tests\1_dom\_zero_config.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\-complex_header.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\-iDraw.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\2512.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\2530-2.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\2530.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\2569.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\2600.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\2608.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\2635.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\2746-stable-sort.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\2799.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\2840-restore-table-width.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\2914-state-save-sort.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\5396-fnUpdate-arrays-mData.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\5396-fnUpdate-arrays.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\5508-xscroll-zero-content.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\6776-scrolling-table-grows.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\aaSorting.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\aaSortingFixed.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\aoColumns.bSearchable.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\aoColumns.bSortable.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\aoColumns.bUseRendered.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\aoColumns.bVisible.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\aoColumns.bVisible2.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\aoColumns.fnRender.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\aoColumns.iDataSort.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\aoColumns.sClass.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\aoColumns.sName.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\aoColumns.sTitle.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\aoColumns.sWidth.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\aoSearchCols.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\asStripClasses.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\bAutoWidth.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\bFilter.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\bInfiniteScroll.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\bInfo.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\bJQueryUI.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\bLengthChange.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\bPaginate.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\bProcessing.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\bServerSide.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\bSort.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\bSortCellsTop.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\bSortClasses.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\fnCookieCallback.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\fnCreatedCell.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\fnCreatedRow.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\fnDeleteRow.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\fnDrawCallback.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\fnFilter.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\fnFooterCallback.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\fnHeaderCallback.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\fnInfoCallback.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\fnInitComplete.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\fnRowCallback.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\fnSetColumnVis.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\fnSetColumnVis2.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\html-autodetect-sort.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\iDisplayLength.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\oLanguage.oPaginate.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\oLanguage.sInfo.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\oLanguage.sInfoEmpty.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\oLanguage.sInfoPostFix.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\oLanguage.sLengthMenu.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\oLanguage.sProcessing.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\oLanguage.sSearch.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\oLanguage.sUrl.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\oLanguage.sZeroRecords.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\oSearch.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\sAjaxSource.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\sDom.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\sPaginationType.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\sScrollXY.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\th_in_body.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\_getDataFunctions.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\_setDataFunctions.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\1_dom\_zero_config.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\2_js\39-nested-null.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\2_js\6872-default-content-missing-props.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\2_js\8549--string-sorting-nonstrings.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\2_js\aaSorting.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\2_js\aaSortingFixed.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\2_js\aoColumns.bSearchable.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\2_js\aoColumns.bSortable.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\2_js\aoColumns.bUseRendered.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\2_js\aoColumns.bVisible.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\2_js\aoColumns.fnRender.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\2_js\aoColumns.iDataSort.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\2_js\aoColumns.sClass.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\2_js\aoColumns.sName.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\2_js\aoColumns.sTitle.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\2_js\aoColumns.sWidth.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\2_js\aoSearchCols.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\2_js\asStripClasses.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\2_js\bAutoWidth.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\2_js\bFilter.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\2_js\bInfo.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\2_js\bLengthChange.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\2_js\bPaginate.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\2_js\bProcessing.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\2_js\bServerSide.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\2_js\bSort.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\2_js\bSortClasses.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\2_js\fnCreatedCell.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\2_js\fnCreatedRow.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\2_js\fnDrawCallback.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\2_js\fnFooterCallback.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\2_js\fnHeaderCallback.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\2_js\fnInitComplete.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\2_js\fnRowCallback.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\2_js\iDisplayLength.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\2_js\js_data_mixed_types.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\2_js\oLanguage.oPaginate.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\2_js\oLanguage.sInfo.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\2_js\oLanguage.sInfoEmpty.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\2_js\oLanguage.sInfoPostFix.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\2_js\oLanguage.sLengthMenu.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\2_js\oLanguage.sProcessing.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\2_js\oLanguage.sSearch.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\2_js\oLanguage.sUrl.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\2_js\oLanguage.sZeroRecords.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\2_js\oSearch.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\2_js\sAjaxSource.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\2_js\sDom.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\2_js\sPaginationType.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\2_js\_zero_config.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\3_ajax\aaSorting.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\3_ajax\aaSortingFixed.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\3_ajax\aoColumns.bSearchable.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\3_ajax\aoColumns.bSortable.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\3_ajax\aoColumns.bUseRendered.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\3_ajax\aoColumns.bVisible.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\3_ajax\aoColumns.fnRender.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\3_ajax\aoColumns.iDataSort.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\3_ajax\aoColumns.sClass.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\3_ajax\aoColumns.sName.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\3_ajax\aoColumns.sTitle.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\3_ajax\aoColumns.sWidth.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\3_ajax\aoSearchCols.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\3_ajax\asStripClasses.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\3_ajax\bAutoWidth.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\3_ajax\bFilter.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\3_ajax\bInfo.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\3_ajax\bLengthChange.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\3_ajax\bPaginate.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\3_ajax\bProcessing.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\3_ajax\bServerSide.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\3_ajax\bSort.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\3_ajax\bSortClasses.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\3_ajax\fnCreatedCell.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\3_ajax\fnCreatedRow.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\3_ajax\fnDrawCallback.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\3_ajax\fnHeaderCallback.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\3_ajax\fnInitComplete.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\3_ajax\fnRowCallback.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\3_ajax\fnServerData.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\3_ajax\iDisplayLength.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\3_ajax\oLanguage.oPaginate.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\3_ajax\oLanguage.sInfo.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\3_ajax\oLanguage.sInfoEmpty.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\3_ajax\oLanguage.sInfoPostFix.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\3_ajax\oLanguage.sLengthMenu.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\3_ajax\oLanguage.sLoadingRecords.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\3_ajax\oLanguage.sProcessing.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\3_ajax\oLanguage.sSearch.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\3_ajax\oLanguage.sUrl.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\3_ajax\oLanguage.sZeroRecords.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\3_ajax\oSearch.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\3_ajax\sAjaxDataProp.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\3_ajax\sAjaxDataProp2.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\3_ajax\sAjaxSource.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\3_ajax\sDom.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\3_ajax\sPaginationType.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\3_ajax\_zero_config.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\4_server-side\-iDraw.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\4_server-side\2440.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\4_server-side\2569.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\4_server-side\2600.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\4_server-side\aaSorting.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\4_server-side\aaSortingFixed.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\4_server-side\aoColumns.bSearchable.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\4_server-side\aoColumns.bSortable.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\4_server-side\aoColumns.bUseRendered.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\4_server-side\aoColumns.bVisible.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\4_server-side\aoColumns.fnRender.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\4_server-side\aoColumns.sClass.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\4_server-side\aoColumns.sName.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\4_server-side\aoColumns.sTitle.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\4_server-side\aoColumns.sWidth.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\4_server-side\aoSearchCols.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\4_server-side\asStripClasses.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\4_server-side\bAutoWidth.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\4_server-side\bFilter.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\4_server-side\bInfiniteScroll.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\4_server-side\bInfo.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\4_server-side\bLengthChange.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\4_server-side\bPaginate.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\4_server-side\bProcessing.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\4_server-side\bServerSide.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\4_server-side\bSort.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\4_server-side\bSortClasses.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\4_server-side\fnCreatedCell.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\4_server-side\fnCreatedRow.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\4_server-side\fnDrawCallback.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\4_server-side\fnHeaderCallback.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\4_server-side\fnInitComplete.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\4_server-side\fnRowCallback.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\4_server-side\iDeferLoading.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\4_server-side\iDisplayLength.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\4_server-side\oLanguage.oPaginate.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\4_server-side\oLanguage.sInfo.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\4_server-side\oLanguage.sInfoEmpty.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\4_server-side\oLanguage.sInfoPostFix.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\4_server-side\oLanguage.sLengthMenu.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\4_server-side\oLanguage.sProcessing.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\4_server-side\oLanguage.sSearch.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\4_server-side\oLanguage.sUrl.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\4_server-side\oLanguage.sZeroRecords.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\4_server-side\oSearch.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\4_server-side\sAjaxDataProp.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\4_server-side\sAjaxSource.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\4_server-side\sDom.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\4_server-side\sPaginationType.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\4_server-side\_zero_config.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\5_ajax_objects\aaSorting.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\5_ajax_objects\aaSortingFixed.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\5_ajax_objects\aoColumns.bSearchable.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\5_ajax_objects\aoColumns.bSortable.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\5_ajax_objects\aoColumns.bUseRendered.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\5_ajax_objects\aoColumns.bVisible.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\5_ajax_objects\aoColumns.fnRender.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\5_ajax_objects\aoColumns.iDataSort.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\5_ajax_objects\aoColumns.sClass.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\5_ajax_objects\aoColumns.sName.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\5_ajax_objects\aoColumns.sTitle.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\5_ajax_objects\aoColumns.sWidth.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\5_ajax_objects\aoSearchCols.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\5_ajax_objects\asStripClasses.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\5_ajax_objects\bAutoWidth.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\5_ajax_objects\bFilter.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\5_ajax_objects\bInfo.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\5_ajax_objects\bLengthChange.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\5_ajax_objects\bPaginate.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\5_ajax_objects\bProcessing.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\5_ajax_objects\bServerSide.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\5_ajax_objects\bSort.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\5_ajax_objects\bSortClasses.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\5_ajax_objects\fnDrawCallback.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\5_ajax_objects\fnHeaderCallback.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\5_ajax_objects\fnInitComplete.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\5_ajax_objects\fnRowCallback.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\5_ajax_objects\fnServerData.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\5_ajax_objects\iDisplayLength.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\5_ajax_objects\oLanguage.oPaginate.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\5_ajax_objects\oLanguage.sInfo.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\5_ajax_objects\oLanguage.sInfoEmpty.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\5_ajax_objects\oLanguage.sInfoPostFix.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\5_ajax_objects\oLanguage.sLengthMenu.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\5_ajax_objects\oLanguage.sProcessing.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\5_ajax_objects\oLanguage.sSearch.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\5_ajax_objects\oLanguage.sUrl.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\5_ajax_objects\oLanguage.sZeroRecords.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\5_ajax_objects\oSearch.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\5_ajax_objects\sAjaxSource.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\5_ajax_objects\sDom.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\5_ajax_objects\sPaginationType.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\5_ajax_objects\_zero_config.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\5_ajax_objects\_zero_config_arrays_subobjects.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\5_ajax_objects\_zero_config_deep.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\5_ajax_objects\_zero_config_mDataProp.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\5_ajax_objects\_zero_config_null_source.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\5_ajax_objects\_zero_config_objects.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\5_ajax_objects\_zero_config_objects_subarrays.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\6_delayed_rendering\aaSorting.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\6_delayed_rendering\aaSortingFixed.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\6_delayed_rendering\aoColumns.bSearchable.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\6_delayed_rendering\aoColumns.bSortable.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\6_delayed_rendering\aoColumns.bUseRendered.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\6_delayed_rendering\aoColumns.bVisible.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\6_delayed_rendering\aoColumns.fnRender.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\6_delayed_rendering\aoColumns.iDataSort.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\6_delayed_rendering\aoColumns.sClass.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\6_delayed_rendering\aoColumns.sName.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\6_delayed_rendering\aoColumns.sTitle.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\6_delayed_rendering\aoColumns.sWidth.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\6_delayed_rendering\aoSearchCols.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\6_delayed_rendering\asStripClasses.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\6_delayed_rendering\bAutoWidth.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\6_delayed_rendering\bFilter.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\6_delayed_rendering\bInfo.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\6_delayed_rendering\bLengthChange.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\6_delayed_rendering\bPaginate.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\6_delayed_rendering\bProcessing.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\6_delayed_rendering\bServerSide.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\6_delayed_rendering\bSort.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\6_delayed_rendering\bSortClasses.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\6_delayed_rendering\fnDrawCallback.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\6_delayed_rendering\fnHeaderCallback.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\6_delayed_rendering\fnInitComplete.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\6_delayed_rendering\fnRowCallback.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\6_delayed_rendering\fnServerData.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\6_delayed_rendering\iDisplayLength.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\6_delayed_rendering\oLanguage.oPaginate.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\6_delayed_rendering\oLanguage.sInfo.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\6_delayed_rendering\oLanguage.sInfoEmpty.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\6_delayed_rendering\oLanguage.sInfoPostFix.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\6_delayed_rendering\oLanguage.sLengthMenu.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\6_delayed_rendering\oLanguage.sProcessing.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\6_delayed_rendering\oLanguage.sSearch.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\6_delayed_rendering\oLanguage.sUrl.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\6_delayed_rendering\oLanguage.sZeroRecords.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\6_delayed_rendering\oSearch.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\6_delayed_rendering\sAjaxDataProp.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\6_delayed_rendering\sAjaxDataProp2.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\6_delayed_rendering\sAjaxSource.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\6_delayed_rendering\sDom.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\6_delayed_rendering\sPaginationType.js" />
+    <Content Include="DataTables\unit_testing\tests_onhold\6_delayed_rendering\_zero_config.js" />
+    <Content Include="DataTables\unit_testing\unit_test.js" />
+    <Content Include="Default.aspx" />
+    <Content Include="favicon.ico" />
+    <Content Include="Global.asax" />
+    <Content Include="GoBack.aspx" />
+    <Content Include="JScript.js" />
+    <Content Include="2LG_MenuIcon.png" />
+    <Content Include="Partners.aspx" />
+    <Content Include="2LG_PortalLogo.jpg" />
+    <Content Include="Protected\Analytics.aspx" />
+    <Content Include="Protected\ApplicationEdit.aspx" />
+    <Content Include="Protected\ApplicationPrint.aspx" />
+    <Content Include="Protected\Appointments.aspx" />
+    <Content Include="Protected\AutoComplete.asmx" />
+    <Content Include="Protected\BidSheet.aspx" />
+    <Content Include="Protected\Calendar.aspx" />
+    <Content Include="Protected\ChartData.aspx" />
+    <Content Include="Protected\CleaningPacks.aspx" />
+    <Content Include="Protected\ContractorInfo.aspx" />
+    <Content Include="Protected\Contractors.aspx" />
+    <Content Include="Protected\Customers.aspx" />
+    <Content Include="Protected\DeleteAppointments.aspx" />
+    <Content Include="Protected\ExportExcel.aspx" />
+    <Content Include="Protected\FollowUp.aspx" />
+    <Content Include="Protected\Franchises.aspx" />
+    <Content Include="Protected\GiftCards.aspx" />
+    <Content Include="Protected\PartnersModify.aspx" />
+    <Content Include="Protected\Payments.aspx" />
+    <Content Include="Protected\Notes.aspx" />
+    <Content Include="Protected\PortalAccount.aspx" />
+    <Content Include="Protected\PortalAddTip.aspx" />
+    <Content Include="Protected\PortalAppointments.aspx" />
+    <Content Include="Protected\PortalGiftCards.aspx" />
+    <Content Include="Protected\PortalPartners.aspx" />
+    <Content Include="Protected\PortalReferral.aspx" />
+    <Content Include="Protected\PortalRequestService.aspx" />
+    <Content Include="Protected\PortalReview.aspx" />
+    <Content Include="Protected\Reports.aspx" />
+    <Content Include="Protected\Schedule.aspx" />
+    <Content Include="Protected\SendPromotions.aspx" />
+    <Content Include="Protected\Transaction.aspx" />
+    <Content Include="Protected\TransactionPrintout.aspx" />
+    <Content Include="Protected\Unavailable.aspx" />
+    <Content Include="Protected\Users.aspx" />
+    <Content Include="Protected\ViewReport.aspx" />
+    <Content Include="Protected\WebQuoteReply.aspx" />
+    <Content Include="Refresh.aspx" />
+    <Content Include="Scripts\jquery-2.0.3.js" />
+    <Content Include="Scripts\jquery.cookie.js" />
+    <Content Include="Scripts\jscharts.js" />
+    <Content Include="star-rating\delete.gif" />
+    <Content Include="star-rating\jquery.form.js" />
+    <Content Include="star-rating\jquery.js" />
+    <Content Include="star-rating\jquery.MetaData.js" />
+    <Content Include="star-rating\jquery.rating.css" />
+    <Content Include="star-rating\jquery.rating.js" />
+    <Content Include="star-rating\jquery.rating.pack.js" />
+    <Content Include="star-rating\star.gif" />
+    <Content Include="Styles\ApplicationPrint.css" />
+    <Content Include="Styles\FollowUpM.css" />
+    <Content Include="Styles\HomeGuardContract.css" />
+    <Content Include="Styles\LoginM.css" />
+    <Content Include="Styles\PartnersM.css" />
+    <Content Include="Styles\PortalAccountM.css" />
+    <Content Include="Styles\PortalAddTipM.css" />
+    <Content Include="Styles\PortalAddTip.css" />
+    <Content Include="Styles\PortalAppointmentsM.css" />
+    <Content Include="Styles\PortalGiftCardsM.css" />
+    <Content Include="Styles\PortalM.css" />
+    <Content Include="Styles\Application.css" />
+    <Content Include="Styles\Appointments.css" />
+    <Content Include="Styles\CleaningPacks.css" />
+    <Content Include="Styles\FollowUp.css" />
+    <Content Include="Styles\GiftCards.css" />
+    <Content Include="Styles\Login.css" />
+    <Content Include="Styles\Portal.css" />
+    <Content Include="Styles\Partners.css" />
+    <Content Include="Styles\PortalAccount.css" />
+    <Content Include="Styles\PortalAppointments.css" />
+    <Content Include="Styles\PortalGiftCards.css" />
+    <Content Include="Styles\PortalPartners.css" />
+    <Content Include="Styles\PortalPartnersM.css" />
+    <Content Include="Styles\PortalReferral.css" />
+    <Content Include="Styles\PortalReferralM.css" />
+    <Content Include="Styles\PortalRequestService.css" />
+    <Content Include="Styles\PortalRequestServiceM.css" />
+    <Content Include="Styles\PortalReview.css" />
+    <Content Include="Styles\PortalReviewM.css" />
+    <Content Include="Styles\Reports.css" />
+    <Content Include="Scripts\jquery-1.4.1-vsdoc.js" />
+    <Content Include="Scripts\jquery-1.4.1.js" />
+    <Content Include="Scripts\jquery-1.4.1.min.js" />
+    <Content Include="Styles\Schedule.css" />
+    <Content Include="Styles\SendPromotions.css" />
+    <Content Include="Styles\Site.css" />
+    <Content Include="Styles\TransactionPrintout.css" />
+    <Content Include="Styles\Unavailable.css" />
+    <Content Include="Styles\WebQuote.css" />
+    <Content Include="TestChosen.aspx" />
+    <Content Include="TestDataTables.aspx" />
+    <Content Include="ThankYou.aspx" />
+    <Content Include="Unsubscribe.aspx" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="WebQuote.aspx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Application.aspx.cs">
+      <DependentUpon>Application.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Application.aspx.designer.cs">
+      <DependentUpon>Application.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ApplicationService.ashx.cs">
+      <DependentUpon>ApplicationService.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Code\ApplicationModel.cs" />
+    <Compile Include="Code\CreditCard.cs" />
+    <Compile Include="Code\PayrollDoc.cs" />
+    <Compile Include="Code\PayTrace.cs" />
+    <Compile Include="Code\Retriever.cs" />
+    <Compile Include="Code\DialPadTexting.cs" />
+    <Compile Include="Code\Texting.cs" />
+    <Compile Include="Code\TransDoc.cs" />
+    <Compile Include="Code\Database.cs" />
+    <Compile Include="Code\GoogleMaps.cs" />
+    <Compile Include="Code\EzTexting.cs" />
+    <Compile Include="Code\WebQuoteModel.cs" />
+    <Compile Include="CustomerLogin.aspx.cs">
+      <DependentUpon>CustomerLogin.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CustomerLogin.aspx.designer.cs">
+      <DependentUpon>CustomerLogin.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerPortalMobile.Master.cs">
+      <DependentUpon>CustomerPortalMobile.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CustomerPortalMobile.Master.designer.cs">
+      <DependentUpon>CustomerPortalMobile.Master</DependentUpon>
+    </Compile>
+    <Compile Include="FollowUp.aspx.cs">
+      <DependentUpon>FollowUp.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="FollowUp.aspx.designer.cs">
+      <DependentUpon>FollowUp.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="HomeGuardContract.aspx.cs">
+      <DependentUpon>HomeGuardContract.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="HomeGuardContract.aspx.designer.cs">
+      <DependentUpon>HomeGuardContract.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Login.aspx.cs">
+      <DependentUpon>Login.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Login.aspx.designer.cs">
+      <DependentUpon>Login.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerPortal.Master.cs">
+      <DependentUpon>CustomerPortal.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CustomerPortal.Master.designer.cs">
+      <DependentUpon>CustomerPortal.Master</DependentUpon>
+    </Compile>
+    <Compile Include="Default.aspx.cs">
+      <SubType>ASPXCodeBehind</SubType>
+      <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Default.aspx.designer.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Code\ECreditCard.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Code\Globals.cs" />
+    <Compile Include="GoBack.aspx.cs">
+      <DependentUpon>GoBack.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GoBack.aspx.designer.cs">
+      <DependentUpon>GoBack.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Main.Master.cs">
+      <DependentUpon>Main.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Main.Master.designer.cs">
+      <DependentUpon>Main.Master</DependentUpon>
+    </Compile>
+    <Compile Include="Partners.aspx.cs">
+      <DependentUpon>Partners.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Partners.aspx.designer.cs">
+      <DependentUpon>Partners.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Protected\Analytics.aspx.cs">
+      <DependentUpon>Analytics.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Protected\Analytics.aspx.designer.cs">
+      <DependentUpon>Analytics.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Protected\ApplicationEdit.aspx.cs">
+      <DependentUpon>ApplicationEdit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Protected\ApplicationEdit.aspx.designer.cs">
+      <DependentUpon>ApplicationEdit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Protected\ApplicationPrint.aspx.cs">
+      <DependentUpon>ApplicationPrint.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Protected\ApplicationPrint.aspx.designer.cs">
+      <DependentUpon>ApplicationPrint.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Protected\Appointments.aspx.cs">
+      <DependentUpon>Appointments.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Protected\Appointments.aspx.designer.cs">
+      <DependentUpon>Appointments.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Protected\AutoComplete.asmx.cs">
+      <DependentUpon>AutoComplete.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Protected\BidSheet.aspx.cs">
+      <DependentUpon>BidSheet.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Protected\BidSheet.aspx.designer.cs">
+      <DependentUpon>BidSheet.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Protected\Calendar.aspx.cs">
+      <DependentUpon>Calendar.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Protected\Calendar.aspx.designer.cs">
+      <DependentUpon>Calendar.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Protected\ChartData.aspx.cs">
+      <DependentUpon>ChartData.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Protected\ChartData.aspx.designer.cs">
+      <DependentUpon>ChartData.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Protected\CleaningPacks.aspx.cs">
+      <DependentUpon>CleaningPacks.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Protected\CleaningPacks.aspx.designer.cs">
+      <DependentUpon>CleaningPacks.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Protected\ContractorInfo.aspx.cs">
+      <DependentUpon>ContractorInfo.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Protected\ContractorInfo.aspx.designer.cs">
+      <DependentUpon>ContractorInfo.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Protected\Contractors.aspx.cs">
+      <DependentUpon>Contractors.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Protected\Contractors.aspx.designer.cs">
+      <DependentUpon>Contractors.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Protected\Customers.aspx.cs">
+      <DependentUpon>Customers.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Protected\Customers.aspx.designer.cs">
+      <DependentUpon>Customers.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Protected\DeleteAppointments.aspx.cs">
+      <DependentUpon>DeleteAppointments.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Protected\DeleteAppointments.aspx.designer.cs">
+      <DependentUpon>DeleteAppointments.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Protected\ExportExcel.aspx.cs">
+      <DependentUpon>ExportExcel.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Protected\ExportExcel.aspx.designer.cs">
+      <DependentUpon>ExportExcel.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Protected\FollowUp.aspx.cs">
+      <DependentUpon>FollowUp.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Protected\FollowUp.aspx.designer.cs">
+      <DependentUpon>FollowUp.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Protected\Franchises.aspx.cs">
+      <DependentUpon>Franchises.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Protected\Franchises.aspx.designer.cs">
+      <DependentUpon>Franchises.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Protected\GiftCards.aspx.cs">
+      <DependentUpon>GiftCards.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Protected\GiftCards.aspx.designer.cs">
+      <DependentUpon>GiftCards.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Protected\PartnersModify.aspx.cs">
+      <DependentUpon>PartnersModify.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Protected\PartnersModify.aspx.designer.cs">
+      <DependentUpon>PartnersModify.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Protected\Payments.aspx.cs">
+      <DependentUpon>Payments.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Protected\Payments.aspx.designer.cs">
+      <DependentUpon>Payments.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Protected\Notes.aspx.cs">
+      <DependentUpon>Notes.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Protected\Notes.aspx.designer.cs">
+      <DependentUpon>Notes.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Protected\PortalAccount.aspx.cs">
+      <DependentUpon>PortalAccount.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Protected\PortalAccount.aspx.designer.cs">
+      <DependentUpon>PortalAccount.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Protected\PortalAddTip.aspx.cs">
+      <DependentUpon>PortalAddTip.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Protected\PortalAddTip.aspx.designer.cs">
+      <DependentUpon>PortalAddTip.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Protected\PortalAppointments.aspx.cs">
+      <DependentUpon>PortalAppointments.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Protected\PortalAppointments.aspx.designer.cs">
+      <DependentUpon>PortalAppointments.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Protected\PortalGiftCards.aspx.cs">
+      <DependentUpon>PortalGiftCards.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Protected\PortalGiftCards.aspx.designer.cs">
+      <DependentUpon>PortalGiftCards.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Protected\PortalPartners.aspx.cs">
+      <DependentUpon>PortalPartners.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Protected\PortalPartners.aspx.designer.cs">
+      <DependentUpon>PortalPartners.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Protected\PortalReferral.aspx.cs">
+      <DependentUpon>PortalReferral.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Protected\PortalReferral.aspx.designer.cs">
+      <DependentUpon>PortalReferral.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Protected\PortalRequestService.aspx.cs">
+      <DependentUpon>PortalRequestService.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Protected\PortalRequestService.aspx.designer.cs">
+      <DependentUpon>PortalRequestService.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Protected\PortalReview.aspx.cs">
+      <DependentUpon>PortalReview.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Protected\PortalReview.aspx.designer.cs">
+      <DependentUpon>PortalReview.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Protected\Reports.aspx.cs">
+      <DependentUpon>Reports.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Protected\Reports.aspx.designer.cs">
+      <DependentUpon>Reports.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Protected\Schedule.aspx.cs">
+      <DependentUpon>Schedule.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Protected\Schedule.aspx.designer.cs">
+      <DependentUpon>Schedule.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Protected\SendPromotions.aspx.cs">
+      <DependentUpon>SendPromotions.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Protected\SendPromotions.aspx.designer.cs">
+      <DependentUpon>SendPromotions.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Protected\Transaction.aspx.cs">
+      <DependentUpon>Transaction.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Protected\Transaction.aspx.designer.cs">
+      <DependentUpon>Transaction.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Protected\TransactionPrintout.aspx.cs">
+      <DependentUpon>TransactionPrintout.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Protected\TransactionPrintout.aspx.designer.cs">
+      <DependentUpon>TransactionPrintout.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Protected\Unavailable.aspx.cs">
+      <DependentUpon>Unavailable.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Protected\Unavailable.aspx.designer.cs">
+      <DependentUpon>Unavailable.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Protected\Users.aspx.cs">
+      <DependentUpon>Users.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Protected\Users.aspx.designer.cs">
+      <DependentUpon>Users.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Protected\ViewReport.aspx.cs">
+      <DependentUpon>ViewReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Protected\ViewReport.aspx.designer.cs">
+      <DependentUpon>ViewReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Protected\WebQuoteReply.aspx.cs">
+      <DependentUpon>WebQuoteReply.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Protected\WebQuoteReply.aspx.designer.cs">
+      <DependentUpon>WebQuoteReply.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Refresh.aspx.cs">
+      <DependentUpon>Refresh.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Refresh.aspx.designer.cs">
+      <DependentUpon>Refresh.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Code\SendEmail.cs" />
+    <Compile Include="Code\RingTexting.cs" />
+    <Compile Include="TestChosen.aspx.cs">
+      <DependentUpon>TestChosen.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="TestChosen.aspx.designer.cs">
+      <DependentUpon>TestChosen.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="TestDataTables.aspx.cs">
+      <DependentUpon>TestDataTables.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="TestDataTables.aspx.designer.cs">
+      <DependentUpon>TestDataTables.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ThankYou.aspx.cs">
+      <DependentUpon>ThankYou.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ThankYou.aspx.designer.cs">
+      <DependentUpon>ThankYou.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Unsubscribe.aspx.cs">
+      <DependentUpon>Unsubscribe.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Unsubscribe.aspx.designer.cs">
+      <DependentUpon>Unsubscribe.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WebQuote.aspx.cs">
+      <DependentUpon>WebQuote.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebQuote.aspx.designer.cs">
+      <DependentUpon>WebQuote.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WebQuoteService.ashx.cs">
+      <DependentUpon>WebQuoteService.ashx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resume\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Main.Master" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ReferralList\ReferralList.pdf" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="CustomerPortal.Master" />
+    <Content Include="CustomerPortalMobile.Master" />
+    <Content Include="ApplicationService.ashx" />
+    <None Include="DataTables\images\Sorting icons.psd" />
+    <None Include="DataTables\unit_testing\controller.php" />
+    <None Include="DataTables\unit_testing\performance\large.php" />
+    <None Include="DataTables\unit_testing\templates\-complex_header.php" />
+    <None Include="DataTables\unit_testing\templates\2512.php" />
+    <None Include="DataTables\unit_testing\templates\6776.php" />
+    <None Include="DataTables\unit_testing\templates\complex_header_2.php" />
+    <None Include="DataTables\unit_testing\templates\deferred_table.php" />
+    <None Include="DataTables\unit_testing\templates\dom_data.php" />
+    <None Include="DataTables\unit_testing\templates\dom_data_th.php" />
+    <None Include="DataTables\unit_testing\templates\dom_data_two_headers.php" />
+    <None Include="DataTables\unit_testing\templates\dymanic_table.php" />
+    <None Include="DataTables\unit_testing\templates\empty_table.php" />
+    <None Include="DataTables\unit_testing\templates\html_table.php" />
+    <None Include="DataTables\unit_testing\templates\js_data.php" />
+    <None Include="DataTables\unit_testing\templates\js_data_mixed_types.php" />
+    <None Include="DataTables\unit_testing\templates\two_tables.php" />
+    <Content Include="packages.config" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
+    <None Include="Properties\PublishProfiles\HostWay.pubxml" />
+    <None Include="Properties\PublishProfiles\LocalDesktop.pubxml" />
+    <None Include="Properties\PublishProfiles\WinHost.pubxml" />
+    <Content Include="WebQuoteService.ashx" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>52592</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>
+          </IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

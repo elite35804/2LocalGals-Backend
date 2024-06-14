@@ -1,0 +1,78 @@
+﻿table.Schedule
+{
+    margin: 0px auto 0px auto;
+    background-color: #DDD;
+    border-collapse: collapse;
+    width: 98%;
+}
+
+table.Schedule th
+{
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #003D66;
+    background-color: White;
+    margin-bottom: 15px;
+}
+
+table.Schedule td
+{
+    vertical-align: top;
+    padding: 3px;
+}
+
+table.ScheduleDay
+{
+    width: 100%;
+    font-size: 0.8em;
+    border-collapse: collapse;
+    background-color: White;
+}
+
+table.ScheduleDay caption
+{
+    font-weight: bold;
+    font-size: 1.4em;
+    margin: auto auto 2px auto;
+}
+
+table.ScheduleDay th
+{
+    border: 1px solid #2B2B2B;
+    padding: 0px 2px 2px 2px;
+    background-color: #666;
+    color: #ffffff;
+}
+
+table.ScheduleDay td
+{
+    color: Black;
+    border: 1px solid #2B2B2B;
+    padding: 2px 2px 2px 2px;
+}
+
+
+.ScheduleConTitle
+{
+    color: Black;
+    font-size: 1.2em;
+    font-weight: 800;
+    background-color: #DDD;
+    margin: 5px 20px 5px 20px;
+}
+
+.ScheduleConBlank
+{
+    Color: White;
+    background-color: White;
+    padding: 5px;
+}
+
+div.WeekTotal
+{
+    margin: 10px auto 10px auto;
+    text-align: center;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: Black;
+}

@@ -1,0 +1,17 @@
+﻿.AppointmentLabel
+{
+    font-size: 130%;
+}
+
+.TipTextBox
+{
+    font-size: 200%;
+    width: 200px;
+    margin: 30px auto 30px auto;
+    text-align: center;
+}
+
+.TipButton
+{
+    font-size: 140%;
+}

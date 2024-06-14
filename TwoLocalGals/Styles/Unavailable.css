@@ -1,0 +1,74 @@
+﻿div.UnCalendarMenu
+{
+    text-align: center;
+    font-size: 200%;
+    font-weight: bold;
+    margin-top: 20px;
+    color: Black;
+}
+
+.UnCalendarCaption
+{
+    margin: 0px 30px 0px 30px;
+}
+
+table.UnCalendar
+{
+    color: Black;
+    margin: 10px auto 20px auto;
+    background-color: #EEE;
+    border-collapse: collapse;
+    font-size: 130%;
+}
+
+table.UnCalendar th
+{
+    background-color: #DDD;
+    border: 2px solid #666;
+    height: 30px;
+    width: 120px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+table.UnCalendar td
+{
+    border: 2px solid #666;
+    height: 80px;
+    vertical-align: top;
+    width: 120px;
+    padding: 5px;
+    font-weight: bold;
+}
+
+span.UnavailableOld
+{
+    color: #666;
+    font-size: 70%;
+}
+
+a.UnavailableLink:link, a.UnavailableLink:visited, a.UnavailableLink:active
+{
+    color: #2E8AE6;
+	text-decoration: none;
+	font-size: 70%;
+}
+
+a.UnavailableLink:hover
+{
+    color: #8F0000;
+    text-decoration: none;
+}
+
+a.UnavailableRecurringLink:link, a.UnavailableRecurringLink:visited, a.UnavailableRecurringLink:active
+{
+    color: black;
+	text-decoration: none;
+	font-size: 70%;
+}
+
+a.UnavailableRecurringLink:hover
+{
+    color: #8F0000;
+    text-decoration: none;
+}

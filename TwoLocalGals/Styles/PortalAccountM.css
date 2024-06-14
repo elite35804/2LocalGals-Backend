@@ -1,0 +1,53 @@
+﻿div.AccountContainer
+{
+    margin: 20px 0px 0px 0px;
+    padding: 0;
+    width: 580px;
+    display: inline-block;
+    vertical-align: top;
+}
+
+table.AccountTable
+{
+    width: 100%;
+    border-collapse: collapse;
+    vertical-align: middle;
+    text-align: left;
+}
+
+table.AccountTable th
+{
+    padding: 0px 0px 10px 0px;
+    font-size: 200%;
+    font-weight: bold;
+    color: #005500;
+}
+
+table.AccountTable td
+{
+    padding: 0px 0px 8px 20px;
+    font-size: 120%;
+}
+
+.AccountEntryHeader
+{
+    color: #444;
+    width: 160px;
+}
+
+.AccountTextBox
+{
+    font-size: 120%;
+    width: 340px;
+}
+
+.AccountInput
+{
+    font-size: 110%;
+    text-align: center;
+}
+
+.AccountButtons
+{
+    font-size: 140%;
+}

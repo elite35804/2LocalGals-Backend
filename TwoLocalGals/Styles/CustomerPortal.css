@@ -1,0 +1,95 @@
+﻿body 
+{
+    margin: 0 auto 0 auto;
+    padding: 0;
+    background-image: url('/2LG_Gradient.jpg');
+    background-repeat: repeat-x;
+    background-color: #B3D3E2;
+    font-family: Helvetica;
+    text-align: center;
+}
+
+div.Page
+{
+    margin: 0 auto 50px auto;
+    padding: 0 0 30px 0;
+    width: 1000px;
+    background-color: White;
+    color: Black;
+    font-size: 0.9em;
+}
+
+.AlignCenter
+{
+    text-align: center;
+}
+
+
+div.MainMenuDiv
+{
+    width: 100%;
+    display: table;
+    clear: both;
+    padding: 0px 0px 0px 0px;
+    background: #077AB3;
+    clear: both;
+}
+
+div.MainMenuLinks
+{
+    float: left;
+    margin: 10px auto auto 20px;
+}
+
+a.MainMenuItem:link, a.MainMenuItem:visited, a.MainMenuItem:active
+{
+    display: inline-block;
+    text-decoration: none;
+    color: Black;
+    background-color: #C2E6B8;
+    padding: 6px 8px 6px 8px;
+    font-weight: bold;
+}
+
+a.MainMenuItem:hover
+{
+    text-decoration: none;
+    background-color: White;
+    color: black;
+}
+
+a.Login:link, a.Login:visited, a.Login:active
+{
+    font-weight: bold;
+    color: white;
+	text-decoration: none;
+}
+
+a.Login:hover
+{
+    color: Black;
+    text-decoration: none;
+}
+
+div.MainMenuLogin
+{
+    margin: 0px 6px auto 0px;
+    float: right;
+    text-align: right;
+    color: White;
+}
+
+div.TopMenuButtons
+{
+    text-align: center;
+    margin: 10px auto 20px auto;
+    width: 100%;
+}
+
+div.ErrorDiv
+{
+    color: Red;
+    text-align: center;
+    font-size: 1.0em;
+    font-weight: bold;
+}

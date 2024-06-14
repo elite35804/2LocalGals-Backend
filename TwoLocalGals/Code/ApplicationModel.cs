@@ -1,0 +1,70 @@
+﻿namespace TwoLocalGals.Code
+{
+    public class ApplicationModel
+    {
+        public int FranchiseID { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Address { get; set; }
+        public string City { get; set; }
+        public string State { get; set; }
+        public string Zip { get; set; }
+        public string BestPhone { get; set; }
+        public string AlternatePhone { get; set; }
+        public string Email { get; set; }
+        public string SSN { get; set; }
+        public string Birthday { get; set; }
+        public string FindUs { get; set; }
+        public string WorkedBefore { get; set; }
+        public string WorkedBeforeWhen { get; set; }
+        public string HowLongAddress { get; set; }
+        public string DriversLicense { get; set; }
+        public string DriversLicenseExpire { get; set; }
+        public string HaveCar { get; set; }
+        public string DaysAvailable { get; set; }
+        public string HighSchool { get; set; }
+        public string College { get; set; }
+        public string HighSchoolDiploma { get; set; }
+        public string Felony { get; set; }
+        public string FelonyDescription { get; set; }
+        public string RefOneName { get; set; }
+        public string RefOnePosition { get; set; }
+        public string RefOneCompany { get; set; }
+        public string RefOneAddress { get; set; }
+        public string RefOnePhoneNumber { get; set; }
+        public string RefTwoName { get; set; }
+        public string RefTwoPosition { get; set; }
+        public string RefTwoCompany { get; set; }
+        public string RefTwoAddress { get; set; }
+        public string RefTwoPhoneNumber { get; set; }
+        public string EmpOneName { get; set; }
+        public string EmpOneAddress { get; set; }
+        public string EmpOnePhoneNumber { get; set; }
+        public string EmpOneSupervisor { get; set; }
+        public string EmpOneStartDate { get; set; }
+        public string EmpOneEndDate { get; set; }
+        public string EmpOneJobTitle { get; set; }
+        public string EmpOneReasonLeave { get; set; }
+        public string EmpTwoName { get; set; }
+        public string EmpTwoAddress { get; set; }
+        public string EmpTwoPhoneNumber { get; set; }
+        public string EmpTwoSupervisor { get; set; }
+        public string EmpTwoStartDate { get; set; }
+        public string EmpTwoEndDate { get; set; }
+        public string EmpTwoJobTitle { get; set; }
+        public string EmpTwoReasonLeave { get; set; }
+        public string EmpThreeName { get; set; }
+        public string EmpThreeAddress { get; set; }
+        public string EmpThreePhoneNumber { get; set; }
+        public string EmpThreeSupervisor { get; set; }
+        public string EmpThreeStartDate { get; set; }
+        public string EmpThreeEndDate { get; set; }
+        public string EmpThreeJobTitle { get; set; }
+        public string EmpThreeReasonLeave { get; set; }
+        public string ContactEmployer { get; set; }
+        public string CoverLetterFilename { get; set; }
+        public byte[] CoverLetterBytes { get; set; }
+        public string ResumeFilename { get; set; }
+        public byte[] ResumeBytes { get; set; }
+    }
+}

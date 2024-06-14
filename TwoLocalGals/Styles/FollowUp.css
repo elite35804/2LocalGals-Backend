@@ -1,0 +1,59 @@
+﻿body 
+{
+    margin: 0 auto 0 auto;
+    padding: 0;
+    background-image: url('/2LG_Gradient.jpg');
+    background-repeat: repeat-x;
+    background-color: #B3D3E2;
+    font-family: Helvetica;
+    text-align: center;
+}
+
+div.Page
+{
+    margin: 0 auto 50px auto;
+    padding: 0 0 30px 0;
+    width: 1000px;
+    background-color: White;
+    color: Black;
+    font-size: 0.9em;
+}
+
+.AlignCenter
+{
+    text-align: center;
+}
+
+div.ErrorDiv
+{
+    color: Red;
+    text-align: center;
+    font-size: 1.0em;
+    font-weight: bold;
+}
+
+div.Title
+{
+    font-size: 1.4em;
+    font-weight: bold;
+    color: #005500;
+    margin-bottom: 5px;
+}
+
+div.ContentHolder
+{
+    text-align: left;
+    margin-left: 40px;
+}
+
+table.Review
+{
+    border-collapse: collapse;
+    text-align: left;
+    margin-top: 10px;
+}
+
+table.Review td
+{
+    padding-top: 8px;
+}

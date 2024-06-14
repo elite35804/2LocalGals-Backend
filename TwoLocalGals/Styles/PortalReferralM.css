@@ -1,0 +1,47 @@
+﻿div.Success
+{
+    font-weight: bold; 
+    color: #005500; 
+    font-size: 200%;
+}
+
+div.Normal
+{
+    margin: 20px 0px 0px 40px; 
+    width: 500px;
+    text-align: left;
+}
+
+div.Title
+{
+    font-weight: bold; 
+    color: #005500; 
+    font-size: 200%;
+}
+
+p
+{
+    font-size: 110%;
+}
+
+li
+{
+    font-size: 110%;
+}
+
+div.ReferralMenu
+{
+    font-size: 120%;
+    margin-top: 10px;
+}
+
+.ReferralTextBox
+{
+    font-size: 120%;
+    width: 350px;
+}
+
+.ReferralButton
+{
+    font-size: 140%;
+}

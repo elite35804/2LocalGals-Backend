@@ -1,0 +1,57 @@
+﻿div.SuccessDiv
+{
+    width: 100%;
+    text-align: center;
+    clear: both;
+    font-size: 110%;
+    font-weight: bold;
+}
+
+div.ContentHolder
+{
+    text-align: left;
+    margin-left: 40px;
+}
+
+div.Title
+{
+    font-size: 1.4em;
+    font-weight: bold;
+    color: #005500;
+    margin: 10px 0px 10px 0px;
+}
+
+div.PartnerDiv
+{
+    margin-bottom: 30px;
+}
+
+table.PartnerTable
+{
+    margin-top: 20px;
+    border-collapse: collapse;
+    vertical-align: middle;
+    text-align: left;
+}
+
+table.PartnerTable td
+{
+    padding: 0px 0px 8px 20px;
+}
+
+.PartnerEntryHeader
+{
+    color: #444;
+    width: 120px;
+}
+
+.PartnerTextBox
+{
+    width: 250px;
+    
+}
+
+.PartnerDescription
+{
+    width: 450px;
+}

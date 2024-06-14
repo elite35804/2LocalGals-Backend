@@ -1,0 +1,32 @@
+﻿div.SuccessDiv
+{
+    width: 100%;
+    text-align: center;
+    clear: both;
+    font-size: 110%;
+    font-weight: bold;
+}
+
+div.ContentHolder
+{
+    text-align: left;
+    margin-left: 40px;
+}
+
+div.Title
+{
+    font-size: 1.4em;
+    font-weight: bold;
+    color: #005500;
+    margin: 10px 0px 10px 0px;
+}
+
+.GiftCardTextBox
+{
+    width: 250px;
+}
+
+.GiftCardInput
+{
+    text-align: center;
+}

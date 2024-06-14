@@ -1,0 +1,71 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="CustomerPortal.master.cs" Inherits="TwoLocalGals.CustomerPortal" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <link href="/Styles/PortalM.css" media="screen and (max-width: 800px)" rel="stylesheet" type="text/css" />
+    <link href="/Styles/Portal.css" media="screen and (min-width: 800px)" rel="stylesheet" type="text/css" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <script src="/JScript.js" language="javascript" type="text/javascript"></script>
+    <link href="/chosen/chosen.css" rel="stylesheet" type="text/css" />
+    <script src="/Scripts/jquery-2.0.3.js" type="text/javascript"></script>
+    <script src="/Scripts/jquery.cookie.js" type="text/javascript"></script>
+    <script src="/chosen/chosen.jquery.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        jQuery(document).ready(function () {
+            jQuery(".chzn-select").chosen();
+        });
+    </script>
+    <meta name="viewport" content="width=600" />
+    <asp:ContentPlaceHolder ID="HeadContent" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <script language="javascript" type="text/javascript">
+    function JsMenuToggle() {
+        if (document.getElementById('<%=MainMenuLinks.ClientID%>').style.display == 'block')
+            document.getElementById('<%=MainMenuLinks.ClientID%>').style.display = 'none';
+        else
+            document.getElementById('<%=MainMenuLinks.ClientID%>').style.display = 'block';
+        return false;
+    }
+    </script>
+    <form runat="server" autocomplete="off">
+    <div class="Page">
+        <div class="MainMenuDiv" runat="server">
+            <img class="Logo" src="/2LG_PortalLogo.jpg" alt="None" />
+            <div class="MainMenuLogin">
+                <asp:LoginView ID="HeadLoginView" runat="server" EnableViewState="false">
+                    <AnonymousTemplate>
+                        [ <a href="~/Login.aspx" id="HeadLoginStatus" class="Login" runat="server">Log In</a> ]
+                    </AnonymousTemplate>
+                    <LoggedInTemplate>
+                        Welcome <span>
+                            <asp:LoginName ID="HeadLoginName" runat="server" />
+                        </span>[
+                        <asp:LoginStatus ID="HeadLoginStatus" runat="server" LogoutAction="Redirect" CssClass="Login" LogoutText="Log Out" LogoutPageUrl="~/Login.aspx?logout=true" />
+                        ]
+                    </LoggedInTemplate>
+                </asp:LoginView>
+                <div id="CustomerPoints" runat="server">You have <span style="font-weight: bold;">-</span> customer points</div>
+            </div>
+            <div class="MainMenuButton">
+                <a id="MainMenuButton" href="#" onclick="JsMenuToggle()" class="MainMenuButton"><img src="/2LG_MenuIcon.png" alt="None" class="MainMenuButton" /> Menu</a>
+            </div>
+            <div id="MainMenuLinks" class="MainMenuLinks" runat="server">
+                <asp:LinkButton ID="HomeMainMenuButton" CssClass="MainMenuItem" Text="Home" CommandArgument="https://www.2localgals.com/" OnCommand="LinkSaveCommand" runat="server" />
+                <asp:LinkButton ID="AppointmentsMainMenuButton" CssClass="MainMenuItem" Text="Appointments" CommandArgument="~/Protected/PortalAppointments.aspx" OnCommand="LinkSaveCommand" runat="server" />
+                <asp:LinkButton ID="AccountMainMenuButton" CssClass="MainMenuItem" Text="My Information" CommandArgument="~/Protected/PortalAccount.aspx" OnCommand="LinkSaveCommand" runat="server" />
+                <asp:LinkButton ID="RequestServiceMainMenuButton" CssClass="MainMenuItem" Text="Request Service" CommandArgument="~/Protected/PortalRequestService.aspx" OnCommand="LinkSaveCommand" runat="server" />
+                <asp:LinkButton ID="GiftCardMainMenuButton" CssClass="MainMenuItem" Text="Gift Cards" CommandArgument="~/Protected/PortalGiftCards.aspx" OnCommand="LinkSaveCommand" runat="server" />
+                <asp:LinkButton ID="ReferralMainMenuButton" CssClass="MainMenuItem" Text="Referrals" CommandArgument="~/Protected/PortalReferral.aspx" OnCommand="LinkSaveCommand" runat="server" />
+                <asp:LinkButton ID="PartnersMainMenuButton" CssClass="MainMenuItem" Text="Partners" CommandArgument="~/Protected/PortalPartners.aspx" OnCommand="LinkSaveCommand" runat="server" />
+            </div>
+        </div>
+        <asp:ContentPlaceHolder ID="MainContent" runat="server">    
+        </asp:ContentPlaceHolder>
+    </div>
+    </form>
+</body>
+</html>

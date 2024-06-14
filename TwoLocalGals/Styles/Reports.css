@@ -1,0 +1,305 @@
+﻿body
+{
+    font-size: 1.0em;
+    font-family: Helvetica;
+    color: Black;
+}
+
+a:link, a:visited, a:active
+{
+    color: inherit;
+    text-decoration: none;
+}
+
+a:hover
+{
+    color: #8F0000;
+    text-decoration: underline;
+}
+
+div.Error
+{
+    width: 100%;
+    text-align: center;
+    clear: both;
+    font-size: 1.2em;
+    color: Red;
+}
+
+div.ReportTitle
+{
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+div.DateRange
+{
+    font-size: 0.8em;
+    margin: 5px auto auto auto;
+}
+
+table.Main
+{
+    margin: 20px auto auto auto;
+    border-collapse: collapse;
+    text-align: left;
+    vertical-align: middle;
+    page-break-inside: auto;
+}
+
+table.Main tr
+{
+    page-break-inside: avoid;
+    page-break-after: auto;
+}
+
+table.Main th
+{
+    font-size: 0.9em;
+    border-bottom: 4px solid #2B2B2B;
+    padding: 5px 0px 5px 10px;
+}
+
+table.Main td
+{
+    font-size: 0.8em;
+    padding: 5px 0px 5px 5px;
+}
+
+/* Appointments by Contractor */
+
+table.Project
+{
+    width: 100%;
+    margin: 20px auto auto auto;
+    text-align: left;
+    vertical-align: middle;
+    page-break-after: always;
+    page-break-inside: auto;
+}
+
+table.Project tr
+{
+    page-break-inside: avoid;
+    page-break-after: auto;
+}
+
+table.Project td
+{
+    font-size: 0.8em;
+    padding: 5px 0px 5px 5px;
+}
+
+.ProjectFooter
+{
+    text-align: center;
+    font-size: 1.3em;
+    font-weight: bold;
+}
+
+table.ProjectInfo
+{
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table.ProjectInfo th
+{
+    font-size: 0.9em;
+    font-weight: bold;
+    border: 1px solid #2B2B2B;
+    padding: 2px 2px 2px 2px;
+}
+
+table.ProjectInfo td
+{
+    font-size: 0.9em;
+    padding: 2px 2px 2px 2px;
+}
+
+/* Payroll Report */
+
+table.PayrollApp
+{
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+table.PayrollApp caption
+{
+    padding: 10px 0px 20px 0px;
+    text-align: left;
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
+table.PayrollApp th
+{
+    font-size: 1.0em;
+    font-weight: bold;
+    border-bottom: 3px solid #2B2B2B;
+}
+
+table.PayrollApp td
+{
+    padding: 3px 0px 3px 0px;
+    font-size: 1.0em;
+    border-bottom: 1px solid #2B2B2B;
+}
+
+table.PayrollAppSummary
+{
+    page-break-after: always;
+    margin-top: 20px;
+    margin-bottom: 100px;
+    width: 100%;
+    border-collapse: collapse;
+    text-align: right;
+}
+
+table.PayrollAppSummary td
+{
+    padding: 3px 0px 0px 0px;
+    font-size: 1.0em;
+}
+
+table.PayrollConTotal
+{
+    margin-bottom: 100px;
+    page-break-after: always;
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+table.PayrollConTotal caption
+{
+    padding: 10px 0px 20px 0px;
+    text-align: center;
+    font-size: 1.3em;
+    font-weight: bold;
+}
+
+table.PayrollConTotal th
+{
+    font-size: 1.0em;
+    font-weight: bold;
+    border-bottom: 3px solid #2B2B2B;
+}
+
+table.PayrollConTotal td
+{
+    padding: 3px 0px 3px 0px;
+    font-size: 1.0em;
+    border: 1px solid #2B2B2B;
+}
+
+table.PayrollTotals
+{
+    margin-bottom: 100px;
+    width: 600px;
+    text-align: right;
+}
+
+table.PayrollTotals caption
+{
+    padding: 10px 0px 20px 0px;
+    text-align: center;
+    font-size: 1.3em;
+    font-weight: bold;
+}
+
+table.PayrollTotals td
+{
+    padding: 3px 0px 3px 0px;
+    font-size: 1.2em;
+}
+
+/* AppointmentSchedule */
+
+table.AppSchedule
+{
+    margin-bottom: 50px;
+    page-break-after: always;
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+table.AppSchedule caption
+{
+    padding: 0px 0px 20px 0px;
+    text-align: center;
+    font-size: 1.3em;
+    font-weight: bold;
+}
+
+table.AppSchedule th
+{
+    font-size: 1.0em;
+    font-weight: bold;
+    border-bottom: 3px solid #2B2B2B;
+}
+
+table.AppSchedule td
+{
+    padding: 3px 0px 3px 0px;
+    font-size: 1.0em;
+}
+
+/* ReviewScoresReport */
+
+table.ContractorScore
+{
+    margin-top: 20px;
+    margin-bottom: 20px;
+    page-break-after: always;
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+table.ContractorScore caption
+{
+    text-align: left;
+    padding: 0px 0px 20px 0px;
+    font-size: 120%;
+    font-weight: bold;
+}
+
+table.ContractorScore th
+{
+    font-weight: bold;
+    border-bottom: 3px solid #2B2B2B;
+    padding: 8px;
+}
+
+table.ContractorScore td
+{
+    border: 1px solid #2B2B2B;
+    padding: 8px;
+}
+
+table.ReviewScoresTotal
+{
+    margin: 0px 10px 100px auto;
+    text-align: right;
+    width: 600px;
+}
+
+table.ReviewScoresTotal caption
+{
+    font-size: 150%;
+    font-weight: bold;
+    text-align: right;
+}
+
+@media print 
+{
+    table.Main
+    {
+        min-width: 8.5in;
+        font-size: 80%;
+    }
+}

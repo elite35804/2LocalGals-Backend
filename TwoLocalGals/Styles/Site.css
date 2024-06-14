@@ -1,0 +1,577 @@
+﻿
+/* Main Master Page */
+
+body
+{
+    background: #b6b7bc;
+    font-size: .80em;
+    font-family: Helvetica;
+    color: #696969;
+}
+
+a:link, a:visited, a:active
+{
+    color: black;
+    text-decoration: none;
+}
+
+a:hover
+{
+    color: #8F0000;
+    text-decoration: underline;
+}
+
+a.login:link, a.login:visited, a.login:active
+{
+    color: white;
+}
+
+a.login:hover
+{
+    color: orange;
+    text-decoration: none;
+}
+
+div.page
+{
+    background: white;
+    width: 970px;
+    margin: 0px auto 20px 20px;
+    border: 2px solid #496077;
+}
+
+div.MainHeader {
+    clear: both;
+    background: #2F9EFA;
+    width: 100%;
+}
+
+div.MainMenuDiv
+{
+    width: 100%;
+    display: table;
+    clear: both;
+    padding: 2px 0px 2px 0px;
+    background: #3a4f63;
+    clear: both;
+}
+
+div.MainMenuLinks
+{
+    float: left;
+}
+
+div.MainMenuLogin
+{
+    margin: 4px 6px auto auto;
+    float: right;
+    text-align: right;
+    color: White;
+}
+
+a.navMenu:link, a.navMenu:visited, a.navMenu:active
+{
+    display: inline-block;
+    text-decoration: none;
+    color: #dde4ec;
+    background-color: #465c71;
+    border: 1px #4e667d solid;
+    padding: 4px 8px 4px 8px;
+}
+
+a.navMenu:hover
+{
+    text-decoration: none;
+    background-color: #bfcbd6;
+    color: #465c71;
+}
+
+div.PageTitle
+{
+    color: Black;
+    font-size: 2em;
+    margin: 10px 0px 5px 10px;
+}
+
+div.CustomerTitle
+{
+    color: Black;
+    width: 100%;
+    font-size: 2em;
+    margin: 15px 0px 0px 10px;
+}
+
+div.CustomerTitleExtra
+{
+    color: Black;
+    width: 99%;
+    font-size: 1.3em;
+    text-align: right;
+}
+
+/* Common */
+
+.errorDiv
+{
+    width: 100%;
+    text-align: center;
+    clear: both;
+}
+
+.errorLabel
+{
+    font-size: 1.2em;
+    color: Red;
+}
+
+.clear
+{
+    clear: both;
+}
+
+.CenterHorizontal
+{
+    text-align: center;
+}
+
+.AlignCenter
+{
+    text-align: center;
+}
+
+fieldset.EntryField
+{
+    font-weight: 600;
+    margin: 8px 8px 8px 8px;
+    padding: 10px 10px 10px 15px;
+    color: Black;
+}
+
+div.EntryLine
+{
+    display: table;
+    clear: both;
+    color: #696969;
+}
+
+div.EntryHeader
+{
+    width: 160px;
+    display: table-cell;
+    vertical-align: middle;
+    padding: 2px 5px 2px 0px;
+    color: #696969;
+}
+
+div.EntryValue
+{
+    display: table-cell;
+    vertical-align: middle;
+    padding: 4px 5px 4px 0px;
+    color: #696969;
+}
+
+/* Account Login Page */
+
+span.loginLabel
+{
+    width: 400px;
+    text-align: right;
+    color: Red;
+}
+
+input.logonButton
+{
+    margin: 0px auto 0px 72px;
+    width: 100px;
+}
+
+input.loginTextEntry
+{
+    width: 250px;
+    border: 1px solid #ccc;
+}
+
+/* Customer Page */
+
+.CreditCard
+{
+    width: 45px;
+    text-align: center;
+}
+
+div.customerPanelLeft
+{
+    vertical-align: top;
+    display: inline-block;
+    width: 49%;
+}
+
+div.customerPanelRight
+{
+    vertical-align: top;
+    display: inline-block;
+    width: 49%;
+}
+
+div.TopMenuButtons
+{
+    text-align: center;
+    margin: 5px auto 5px auto;
+    width: 100%;
+    clear: both;
+}
+
+input.entryDropDownList
+{
+    border: 1px solid #ccc;
+}
+
+input.entryTextBox
+{
+    width: 250px;
+    border: 1px solid #ccc;
+}
+
+input.entryTextBoxCenter
+{
+    width: 250px;
+    border: 1px solid #ccc;
+    text-align: center;
+}
+
+div.AppTable
+{
+    padding: 20px 0px 20px 0px;
+    width: 100%;
+    text-align: center;
+}
+
+table.AppTable
+{
+    border-collapse: collapse;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: left;
+    color: #000000;
+}
+
+table.AppTable th
+{
+    border: 1px solid #2B2B2B;
+    padding: 0px 2px 2px 2px;
+    font-size: 1.0em;
+    background-color: #666666;
+    color: #ffffff;
+}
+
+table.AppTable td
+{
+    font-size: .90em;
+    border: 1px solid #2B2B2B;
+    padding: 3px 2px 2px 2px;
+}
+
+/* Appointments Page */
+
+div.AppServiceFee
+{
+    font-size: 1.0em;
+    color: Black;
+    text-align: center;
+    margin: 0px auto 20px auto;
+}
+
+div.PageTitleApp
+{
+    text-align: center;
+    color: Black;
+    font-size: 2em;
+    margin: 10px auto 0px auto;
+}
+
+table.AppDateTime
+{
+    margin: 5px auto 5px auto;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+td.AppDateTime
+{
+    color: Black;
+    font-size: 1.0em;
+    border: none;
+    vertical-align: middle;
+    padding: 4px;
+}
+
+td.AppDateTimeHeader
+{
+    color: #696969;
+    font-size: 1.0em;
+    border: none;
+    vertical-align: middle;
+    padding: 4px;
+    text-align: right;
+}
+
+input.AppEntryCenter
+{
+    width: 170px;
+    border: 1px solid #ccc;
+    text-align: center;
+}
+
+/* Calendar */
+
+table.CalendarOutside
+{
+    background-color: #DDD;
+    font-size: 1.0em;
+    font-family: Verdana;
+    border: none;
+    margin: 10px 5px 10px 5px;
+    text-align: center;
+}
+
+table.CalendarOutside caption
+{
+    font-weight: bold;
+    font-size: 1.4em;
+    margin: auto auto 2px auto;
+}
+
+table.CalendarOutside td
+{
+    vertical-align: top;
+}
+
+table.CalendarInside
+{
+    font-size: 0.8em;
+    border-collapse: collapse;
+    background-color: White;
+}
+
+table.CalendarInside caption
+{
+    font-weight: bold;
+    font-size: 1.4em;
+    margin: auto auto 2px auto;
+}
+
+table.CalendarInside th
+{
+    border: 1px solid #2B2B2B;
+    padding: 0px 2px 2px 2px;
+    background-color: #666666;
+    color: #ffffff;
+}
+
+table.CalendarInside td
+{
+    color: Black;
+    border: 1px solid #2B2B2B;
+    padding: 2px 2px 2px 2px;
+}
+
+table.CalendarMenu
+{
+    margin: 5px auto 5px 50px;
+}
+
+.CalendarScrollPanel
+{
+    height: 350px;
+}
+
+/* Notes Page */
+
+table.NotesTable
+{
+    background-color: #F0F0F0;
+    text-align: left;
+    margin: 20px 30px 30px 30px;
+    padding: 10px 10px 10px 10px;
+}
+
+table.NotesTable caption
+{
+    font-weight: bold;
+    font-size: 1.4em;
+}
+
+/* Web Quote Reply */
+
+.WebQuoteHeader
+{
+    color: #666666;
+}
+
+.WebQuoteFooter
+{
+}
+
+
+/* Standard Entry */
+
+fieldset.Entry
+{
+    color: Black;
+    font-weight: 600;
+    margin: 10px auto 10px auto;
+    padding: 10px 10px 10px 15px;
+}
+
+
+table.Entry
+{
+    margin: 0px auto 0px auto;
+    vertical-align: middle;
+}
+
+td.EntryHeader
+{
+    color: #696969;
+    text-align: right;
+}
+
+td.EntryCenter
+{
+    text-align: center;
+}
+
+.FranchiseCheckbox
+{
+    margin: auto 5px auto 5px;
+}
+
+/* Bid Sheet */
+
+table.BidSheet
+{
+    width: 100%;
+    margin: 0px auto 0px auto;
+    text-align: left;
+    vertical-align: middle;
+}
+
+td.BidSheetHeader
+{
+    width: 500px;
+    color: #696969;
+}
+
+
+/* Payments */
+
+div.Invoces
+{
+    margin: 10px 10px 10px 10px;
+    background: white;
+    text-align:center;
+    color:Black;
+    font-size: 1.0em;
+    clear:both;
+}
+
+a.paymentButton:link, a.paymentButton:visited, a.paymentButton:active
+{
+    font-size: 130%;
+    display: inline-block;
+    text-decoration: none;
+    color: Black;
+    background-color: #F8F8F8;
+    border: 2px #989898 solid;
+    padding: 4px 7px 4px 7px;
+    margin: 2px;
+}
+
+a.paymentButton:hover
+{
+    text-decoration: none;
+    background-color: #bfcbd6;
+}
+
+a.unavailableButton:link, a.unavailableButton:visited, a.unavailableButton:active
+{
+    display: inline-block;
+    text-decoration: none;
+    color: Black;
+    background-color: #F8F8F8;
+    border: 2px #989898 solid;
+    padding: 2px 6px 2px 6px;
+    margin: 2px;
+}
+
+a.unavailableButton:hover
+{
+    text-decoration: none;
+    background-color: #bfcbd6;
+}
+
+div.PaymentContractorItem
+{
+    color: Black;
+}
+
+div.PaymentSaleItem
+{
+    color: Green;
+    font-weight: bold;
+}
+
+div.PaymentReturnItem
+{
+    color: Red;
+    font-weight: bold;
+}
+
+div.PaymentInvoiceItem
+{
+    color: Blue;
+    font-weight: bold;
+}
+
+div.PaymentVoidItem
+{
+    color: Purple;
+    font-weight: bold;
+}
+
+div.PaymentOpenAuthItem 
+{
+    color: Orange;
+    font-weight: bold;
+}
+
+
+/* Transaction */
+
+div.TransactionItem
+{
+    display: inline;
+}
+
+div.TransactionSet
+{
+    text-align: center;
+    font-weight: normal;
+    display: block;
+}
+
+fieldset.TransactionField
+{
+    text-align: left;
+    font-weight: bold;
+    width: 600px;
+    margin: 20px auto 10px auto;
+}
+
+table.TransactionTable
+{
+    text-align: right; 
+    margin: auto;
+    font-weight: normal;
+}

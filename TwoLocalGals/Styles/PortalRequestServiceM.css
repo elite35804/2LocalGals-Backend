@@ -1,0 +1,67 @@
+﻿div.ContentHolder
+{
+    text-align: left;
+}
+
+div.Title
+{
+    margin-left: 40px;
+    font-size: 200%;
+    font-weight: bold;
+    color: #005500;
+}
+
+table.DataTable
+{
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+    text-align: center;
+    color: #000000;
+    background-color: #EEE;
+}
+
+table.DataTable th
+{
+    font-size: 120%;
+    padding: 5px 10px 5px 10px;
+    font-size: 1.0em;
+    background-color: #666;
+    color: #FFF;
+}
+
+table.DataTable td
+{
+    font-size: 110%;
+    padding: 5px 10px 5px 10px;
+}
+
+table.ServiceMenuTable
+{
+    margin-top: 10px;
+    font-size: 120%;
+}
+
+.ServiceTextBox
+{
+    font-size: 120%;
+    width: 200px;
+    margin: 6px 0px 6px 0px;
+}
+
+.ServiceDropDown
+{
+    font-size: 120%;
+}
+
+.ServiceNotes
+{
+    font-size: 120%;
+    width: 400px;
+    margin: 6px 0px 6px 0px;
+}
+
+.ServiceButton
+{
+    font-size: 120%;
+}

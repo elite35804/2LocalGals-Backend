@@ -1,0 +1,63 @@
+﻿body 
+{
+    background-image: url('/2LG_Gradient.jpg');
+    background-repeat: repeat-x;
+    background-color: #B3D3E2;
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+}
+
+div.Page {
+    margin: 20px auto 50px auto;
+    text-align: center;
+    background: #FFFFFF;
+    font-size: 1.5em;
+    font-weight: bold;
+    padding: 0 0 10px 0;
+    width: 860px;
+}
+
+div.ContactIcon
+{
+    float: left;
+    margin: 10px 10px 10px 10px;
+}
+
+div.FormData
+{
+    float: left;
+    font-size: 0.6em;
+    color: #666666;
+}
+
+span.Required
+{
+    color: Red;
+    margin-left: 5px;
+}
+
+span.EntryCaption
+{
+    font-size: 1.1em;
+    color: Black;
+}
+
+.Center
+{
+    text-align: center;
+}
+
+.SubmitButton
+{
+    font-size: 1.2em;
+    margin-right: 20px;
+    width: 75px;
+    height: 30px;
+}
+
+div.ErrorMessage
+{
+    color: Red;
+    text-align: center;
+    font-size: 0.8em;
+    margin: 10px 0px 20px 0px;
+}

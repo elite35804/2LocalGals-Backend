@@ -1,0 +1,27 @@
+﻿table.ContractorTable
+{
+    margin: 10px auto 0px auto;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table.ContractorTable td
+{
+    padding: 2px;
+}
+
+.ContractorRow
+{
+    display: none;
+}
+
+.ContractorEntry
+{
+    text-align: center;
+    width: 60px;
+}
+
+.ExtraCell
+{
+    font-weight: normal;
+}

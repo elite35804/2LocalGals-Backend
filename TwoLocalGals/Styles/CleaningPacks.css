@@ -1,0 +1,34 @@
+﻿
+div.CleaningPackSubTitle
+{
+    margin: 5px auto 0px auto;
+    text-align: center;
+    font-size: 120%;
+    color: Black;
+}
+
+table.CleaningPacks
+{
+    margin: 20px auto 0px auto;
+    text-align: right;
+    border-collapse: collapse;
+    border: 2px solid #ccc;
+}
+
+table.CleaningPacks td
+{
+    padding: 6px;
+}
+
+.CleaningPacksTextBox
+{
+    width: 150px;
+    border: 1px solid #ccc;
+    text-align: center;
+}
+
+.CleaningPacksDropDown
+{
+    width: 152px;
+    border: 1px solid #ccc;
+}

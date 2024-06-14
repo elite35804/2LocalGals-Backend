@@ -1,0 +1,71 @@
+﻿body 
+{
+    margin: 0;
+    padding: 20px 5px 100px 5px;
+    background-image: url('/2LG_Gradient.jpg');
+    background-repeat: repeat-x;
+    background-color: #B3D3E2;
+    font-family: Helvetica;
+    text-align: center;
+    font-size: 130%;
+}
+
+a:link, a:visited, a:active
+{
+    color: #3298C7;
+    text-decoration: none;
+}
+
+a:hover
+{
+    color: black;
+    text-decoration: underline;
+}
+
+div.LoginBox
+{
+    text-align: center;
+    width: 500px;
+    margin: 0px auto auto auto;
+    background-color: White;
+    border: 1px solid black;
+}
+
+table.LoginTable
+{
+    margin: 30px auto 30px auto;
+    text-align: center;
+    border-collapse:collapse;
+}
+
+table.LoginTable td
+{
+    padding: 3px;
+}
+
+.Error
+{
+    color: Red;
+    text-align: center;
+    max-width: 100px;
+}
+
+.LoginHeader
+{
+    font-weight: bold;
+    text-align: left;
+}
+
+input.LoginTextBox
+{
+    width: 330px;
+    border: 1px solid #ccc;
+    font-size: 1.1em;
+}
+
+input.LogonButton
+{
+    margin: 10px auto 0px auto;
+    width: 140px;
+    font-size: 140%;
+}

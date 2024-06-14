@@ -1,0 +1,53 @@
+﻿
+div.FrequencyLabel
+{
+    text-align: left;
+    margin-bottom: 5px;
+}
+
+div.DataTable
+{
+    width: 100%;
+}
+
+div.DataTableTitle
+{
+    margin: 10px;
+    font-size: 200%;
+    font-weight: bold;
+    text-align: left;
+    color: #005500;
+}
+
+table.DataTable
+{
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+    color: #000000;
+    background-color: #EEE;
+}
+
+table.DataTable th
+{
+    padding: 5px 10px 5px 10px;
+    font-size: 120%;
+    background-color: #666;
+    color: #FFF;
+}
+
+table.DataTable td
+{
+    font-size: 110%;
+    padding: 15px 5px 15px 5px;
+}
+
+div.Contractor
+{
+    margin: 10px 0px 10px 0px;
+}
+
+div.Tip
+{
+    margin: 10px 12px 10px 0px;
+}

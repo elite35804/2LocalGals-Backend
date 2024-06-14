@@ -1,0 +1,131 @@
+﻿body 
+{
+    margin: 0;
+    padding: 0;
+    background-repeat: repeat-x;
+    background-color: #B3D3E2;
+    font-family: Helvetica;
+    text-align: center;
+}
+
+a:link, a:visited, a:active
+{
+    color: blue;
+    font-size: 110%;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+a:hover
+{
+    text-decoration: underline;
+}
+
+div.Page
+{
+    margin: 0;
+    padding: 0px 0px 20px 0px;
+    width: 100%;
+    background-color: White;
+    color: Black;
+    font-size: 100%;
+}
+
+div.MainMenuDiv
+{
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    background: #077AB3;
+    color: White;
+}
+
+.Logo
+{
+    width: 100%; 
+}
+
+a.Login:link, a.Login:visited, a.Login:active
+{
+    font-weight: bold;
+    color: white;
+	text-decoration: none;
+}
+
+a.Login:hover
+{
+    color: Black;
+    text-decoration: none;
+}
+
+div.MainMenuLogin
+{
+    margin: 0;
+    padding: 0 10px 10px 0px;
+    text-align: right;
+    font-size: 140%;
+}
+
+img.MainMenuButton
+{
+    width: 30px;
+}
+
+div.MainMenuButton
+{
+    margin: 0;
+    text-align: left;
+    font-size: 180%;
+    background-color: #31475E;
+    padding: 15px 0px 15px 30px;
+}
+
+a.MainMenuButton:link, a.MainMenuButton:visited, a.MainMenuButton:active, a.MainMenuButton:hover
+{
+    display: block;
+    text-decoration: none;
+    color: White;
+}
+
+div.MainMenuLinks
+{
+    display: none;
+    margin: 0;
+    padding: 0;
+    font-size: 160%;
+    background-color: #4791DA;
+    text-align: left;
+}
+
+a.MainMenuItem:link, a.MainMenuItem:visited, a.MainMenuItem:active a.MainMenuItem:hover
+{
+    display: block;
+    text-decoration: none;
+    color: White;
+    padding: 10px 0px 10px 20px;
+}
+
+a.MainMenuItemActive:link, a.MainMenuItemActive:visited, a.MainMenuItemActive:active a.MainMenuItemActive:hover
+{
+    display: block;
+    text-decoration: none;
+    color: White;
+    padding: 10px 0px 10px 20px;
+    background-color: #31475E;
+}
+
+div.TopMenuButtons
+{
+    text-align: center;
+    margin: 20px auto 0px auto;
+    width: 100%;
+}
+
+div.ErrorDiv
+{
+    color: Red;
+    text-align: center;
+    font-size: 150%;
+    font-weight: bold;
+    margin-top: 10px;
+}
