@@ -431,6 +431,11 @@ namespace TwoLocalGals.Protected
                             {
                                 dayRow.Style["background-color"] = "#FFA0A0";
                             }
+                            if (Math.Round(TimeSpan.FromSeconds((double)route.travelTime).TotalMinutes) == 10 || Math.Round(TimeSpan.FromSeconds((double)route.travelTime).TotalMinutes) == -10)
+                            {
+                                dayRow.Style["background-color"] = "#72D9FA";
+
+                            }
 
                             dayRow.Cells.Add(Globals.FormatedTableCell(@"<a href=""Appointments.aspx?appID=" + app.appointmentID + @""">" + app.startTime.ToString("HH:mm") + @"</a>"));
                             dayRow.Cells.Add(Globals.FormatedTableCell(@"<a href=""Appointments.aspx?appID=" + app.appointmentID + @""">" + app.endTime.ToString("HH:mm") + @"</a>"));
