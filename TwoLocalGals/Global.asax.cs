@@ -1,10 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Microsoft.IdentityModel.Tokens;
+using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using System.Threading;
 using System.Web;
-using System.Web.Security;
-using System.Web.SessionState;
-using Nexus;
+using System.Web.Http;
+using System.Web.Mvc;
+using System.Web.Optimization;
+using System.Web.Routing;
 
 namespace TwoLocalGals
 {
@@ -13,6 +17,11 @@ namespace TwoLocalGals
 
         protected void Application_Start(object sender, EventArgs e)
         {
+            //AreaRegistration.RegisterAllAreas();
+            //RouteConfig.RegisterRoutes(RouteTable.Routes);
+            //FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
+            //BundleConfig.RegisterBundles(BundleTable.Bundles);
+            GlobalConfiguration.Configure(WebApiConfig.Register);
             //Database.LogThis("Application_Start", null);
         }
 
@@ -21,14 +30,59 @@ namespace TwoLocalGals
             //Database.LogThis("Session_Start", null);
         }
 
+        //protected void Application_BeginRequest(object sender, EventArgs e)
+        //{
+        //    //Database.LogThis("Application_BeginRequest", null);
+        //}
+
         protected void Application_BeginRequest(object sender, EventArgs e)
         {
-            //Database.LogThis("Application_BeginRequest", null);
+            //var token = HttpContext.Current.Request.Headers["Authorization"];
+            //if (!string.IsNullOrEmpty(token))
+            //{
+            //    token = token.Replace("Bearer ", string.Empty);
+
+            //    var handler = new JwtSecurityTokenHandler();
+            //    var jwtToken = handler.ReadJwtToken(token);
+            //    var identity = new ClaimsIdentity(jwtToken.Claims, "Jwt");
+
+            //    HttpContext.Current.User = new ClaimsPrincipal(identity);
+            //}
         }
+
 
         protected void Application_AuthenticateRequest(object sender, EventArgs e)
         {
-            //Database.LogThis("Application_AuthenticateRequest", null);
+            var authHeader = HttpContext.Current.Request.Headers["Authorization"];
+            if (authHeader != null && authHeader.StartsWith("Bearer "))
+            {
+                var token = authHeader.Substring("Bearer ".Length).Trim();
+
+                try
+                {
+                    var key = Convert.FromBase64String(Convert.ToBase64String(Encoding.UTF8.GetBytes("@#2LocalGals1qaz!QAZ"))); 
+                    var tokenHandler = new JwtSecurityTokenHandler();
+                    var validationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(key),
+                        ValidateLifetime = true
+                    };
+
+                    SecurityToken validatedToken;
+                    var principal = tokenHandler.ValidateToken(token, validationParameters, out validatedToken);
+
+                    // Set the principal for the current request
+                    HttpContext.Current.User = principal;
+                    Thread.CurrentPrincipal = principal;
+                }
+                catch (Exception)
+                {
+                    // Token validation failed, user will remain unauthenticated
+                }
+            }
         }
 
         protected void Application_Error(object sender, EventArgs e)

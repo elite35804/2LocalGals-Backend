@@ -431,12 +431,17 @@ namespace TwoLocalGals.Protected
                             {
                                 dayRow.Style["background-color"] = "#FFA0A0";
                             }
+                            if (Math.Round(TimeSpan.FromSeconds((double)route.travelTime).TotalMinutes) == 10 || Math.Round(TimeSpan.FromSeconds((double)route.travelTime).TotalMinutes) == -10)
+                            {
+                                dayRow.Style["background-color"] = "#72D9FA";
+
+                            }
 
                             dayRow.Cells.Add(Globals.FormatedTableCell(@"<a href=""Appointments.aspx?appID=" + app.appointmentID + @""">" + app.startTime.ToString("HH:mm") + @"</a>"));
                             dayRow.Cells.Add(Globals.FormatedTableCell(@"<a href=""Appointments.aspx?appID=" + app.appointmentID + @""">" + app.endTime.ToString("HH:mm") + @"</a>"));
                             dayRow.Cells.Add(Globals.FormatedTableCell(@"<a href=""Appointments.aspx?appID=" + app.appointmentID + @""">" + hours.ToString() + @"</a>"));
                             if (userAccess <= 2) dayRow.Cells.Add(Globals.FormatedTableCell(app.customerTitle + @" <b><a href=""" + routeLink + @""">" + route.distance.ToString("N1") + @" mi (" + Math.Round(TimeSpan.FromSeconds((double)route.travelTime).TotalMinutes) + @" min)</a></b>"));
-                            else dayRow.Cells.Add(Globals.FormatedTableCell(@"<a href=""Customers.aspx?custID=" + app.customerID + @""">" + app.customerTitle + @" (" + app.customerCity + @")</a> <b><a href=""" + routeLink + @""">" + route.distance.ToString("N1") + @" mi (" + Math.Round(TimeSpan.FromSeconds((double)route.travelTime).TotalMinutes) + @" min)</a> <a href=""Schedule.aspx?replaceID=" + app.appointmentID + @""">[R]</a></b>"));
+                            else dayRow.Cells.Add(Globals.FormatedTableCell(@"<a href=""Customers.aspx?custID=" + app.customerID + @""">" + app.customerTitle + @" (" + app.customerCity + @")</a> <b><a href=""" + routeLink + @""">" + route.distance.ToString("N1") + @" mi (" + Math.Round(TimeSpan.FromSeconds((double)route.travelTime).TotalMinutes) + @" min)</a> <a href=""Schedule.aspx?replaceID=" + app.appointmentID + @""">[R]</a> <i class=""fa fa-image""></i>  <i class=""fa fa-book""></i> <i class=""fa fa-location-arrow""></i></b>" + "" ));
                             midTime = Globals.TimeOnly(app.startTime);
                             endTime = Globals.TimeOnly(app.endTime);
                             if (app.customerAccountStatus != "Ignored" && app.appType == contractorSubType)

@@ -12,6 +12,7 @@
         @import "/DataTables/css/jquery.dataTables.css";
     </style>
     <link href="/chosen/chosen.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
     <script src="/Scripts/jquery-2.0.3.js" type="text/javascript"></script>
     <script src="/Scripts/jquery.cookie.js" type="text/javascript"></script>
     <script src="/chosen/chosen.jquery.min.js" type="text/javascript"></script>

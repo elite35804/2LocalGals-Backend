@@ -1,0 +1,361 @@
+{
+	"info": {
+		"_postman_id": "04289b41-fca7-4ea0-a66e-7d6680628a08",
+		"name": "2LocalGals",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "36526794"
+	},
+	"item": [
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"Username\": \"admin\",\r\n    \"Password\":\"test123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:52592/api/v1/user/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "52592",
+					"path": [
+						"api",
+						"v1",
+						"user",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get User Info",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImFkbWluIiwiYWNjZXNzIjoiOSIsImNvbnRyYWN0b3JJRCI6IjEwMDUwMCIsIm5iZiI6MTcxODQwMTQyOSwiZXhwIjoxNzE4NDA1MDI5LCJpYXQiOjE3MTg0MDE0Mjl9.4e9iCv9lvcw0h0jdv0Om3okLpGHHvhAhDUCGsxNmQS8",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:52592/api/v1/users/admin",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "52592",
+					"path": [
+						"api",
+						"v1",
+						"users",
+						"admin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Job Info",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImFkbWluIiwiYWNjZXNzIjoiOSIsImNvbnRyYWN0b3JJRCI6IjEwMDUwMCIsIm5iZiI6MTcxODQwMTQyOSwiZXhwIjoxNzE4NDA1MDI5LCJpYXQiOjE3MTg0MDE0Mjl9.4e9iCv9lvcw0h0jdv0Om3okLpGHHvhAhDUCGsxNmQS8",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:52592/api/v1/jobinfo/1000000",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "52592",
+					"path": [
+						"api",
+						"v1",
+						"jobinfo",
+						"1000000"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Contractor Info",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImFkbWluIiwiYWNjZXNzIjoiOSIsImNvbnRyYWN0b3JJRCI6IjEwMDUwMCIsIm5iZiI6MTcxODUzMTI5OSwiZXhwIjoxNzE4NTM0ODk5LCJpYXQiOjE3MTg1MzEyOTl9.w-AxQIAR6OkZZNXugcGPLR4cvMka0o9ng3w9H2k7M0A",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:52592/api/v1/GetContractorInfo/100500",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "52592",
+					"path": [
+						"api",
+						"v1",
+						"GetContractorInfo",
+						"100500"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Contractor Info",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImFkbWluIiwiYWNjZXNzIjoiOSIsImNvbnRyYWN0b3JJRCI6IjEwMDUwMCIsIm5iZiI6MTcxODUzMTI5OSwiZXhwIjoxNzE4NTM0ODk5LCJpYXQiOjE3MTg1MzEyOTl9.w-AxQIAR6OkZZNXugcGPLR4cvMka0o9ng3w9H2k7M0A",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "ContractorPic",
+							"type": "file",
+							"src": "/C:/Users/User/Pictures/Screenshot.png"
+						},
+						{
+							"key": "businessName",
+							"value": " My Test Bussiness Name",
+							"type": "text"
+						},
+						{
+							"key": "address",
+							"value": "Test Address",
+							"type": "text"
+						},
+						{
+							"key": "city",
+							"value": "City testing",
+							"type": "text"
+						},
+						{
+							"key": "state",
+							"value": "State testing",
+							"type": "text"
+						},
+						{
+							"key": "zip",
+							"value": "1234",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:52592/api/v1/UpdateContractorInfo/100500",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "52592",
+					"path": [
+						"api",
+						"v1",
+						"UpdateContractorInfo",
+						"100500"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Payment By Date Range",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:52592/api/v1/Payment/GetPaymentByDateRange?StartDate=6%2f17%2f2024&EndDate=6%2f23%2f2024",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "52592",
+					"path": [
+						"api",
+						"v1",
+						"Payment",
+						"GetPaymentByDateRange"
+					],
+					"query": [
+						{
+							"key": "StartDate",
+							"value": "6%2f17%2f2024"
+						},
+						{
+							"key": "EndDate",
+							"value": "6%2f23%2f2024"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetUnavailibility",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImNvbnQiLCJhY2Nlc3MiOiIyIiwiY29udHJhY3RvcklEIjoiMTAwNTAwIiwiZnJhbmNoaXNlTWFzayI6Ii0xIiwibmJmIjoxNzE5MDg5MzIxLCJleHAiOjE3MTkwOTI5MjEsImlhdCI6MTcxOTA4OTMyMX0.RpzMORuRRuN64j7pj_HmH1iuRFNHbD1KY4Ng1pami7M",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:52592/api/v1/Schedule/GetUnavailibility?FromDate=5%2f22%2f2022&ToDate=6%2f21%2f2025",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "52592",
+					"path": [
+						"api",
+						"v1",
+						"Schedule",
+						"GetUnavailibility"
+					],
+					"query": [
+						{
+							"key": "FromDate",
+							"value": "5%2f22%2f2022"
+						},
+						{
+							"key": "ToDate",
+							"value": "6%2f21%2f2025"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AddUnavailibility",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImNvbnQiLCJhY2Nlc3MiOiIyIiwiY29udHJhY3RvcklEIjoiMTAwNTAwIiwiZnJhbmNoaXNlTWFzayI6Ii0xIiwibmJmIjoxNzE5MDkzMzU5LCJleHAiOjE3MTkwOTY5NTksImlhdCI6MTcxOTA5MzM1OX0.0ReTtuvKFVkSSsXE7IQinD8JhFcuyramFu2aUDmAI08",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"dateRequested\": \"2024-06-22 14:28:29.580\",\r\n    \"startTime\": \"2024-06-22 14:28:29.580\",\r\n    \"endTime\": \"2024-06-23 14:28:29.580\",\r\n    \"recurrenceID\": \"2\",\r\n    \"recurrenceType\": \"2\"\r\n\r\n\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:52592/api/v1/Schedule/AddUnavailibility",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "52592",
+					"path": [
+						"api",
+						"v1",
+						"Schedule",
+						"AddUnavailibility"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetSchedule",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImFkbWluIiwiYWNjZXNzIjoiOSIsImNvbnRyYWN0b3JJRCI6IjAiLCJmcmFuY2hpc2VNYXNrIjoiMSIsIm5iZiI6MTcxOTI2NDcxMCwiZXhwIjoxNzE5MjY4MzEwLCJpYXQiOjE3MTkyNjQ3MTB9.WvfXpoQJqHDyqfDGCeLbGz0TsKmzpAMrjR8Ttoo0MLU",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:52592/api/v1/Schedule/GetSchedule?startDate=6/17/2024&endDate=6/23/2024",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "52592",
+					"path": [
+						"api",
+						"v1",
+						"Schedule",
+						"GetSchedule"
+					],
+					"query": [
+						{
+							"key": "startDate",
+							"value": "6/17/2024"
+						},
+						{
+							"key": "endDate",
+							"value": "6/23/2024"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

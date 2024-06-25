@@ -448,7 +448,7 @@ namespace Nexus
 
                 Globals.CleanAllCookies();
 
-                page.Response.Redirect("https://www.2localgals.com/");
+                page.Response.Redirect("http://localhost:52592/");
             }
             catch { }
         }

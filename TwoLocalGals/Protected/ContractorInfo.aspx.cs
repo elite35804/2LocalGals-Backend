@@ -155,7 +155,8 @@ namespace TwoLocalGals.Protected
                 {
                     try
                     {
-                        string filename = Path.GetFileName(UploadPic.FileName);
+                        var getExtension = Path.GetExtension(UploadPic.FileName);
+                        var fileName = Guid.NewGuid().ToString() + getExtension;
                         string folderPath = Server.MapPath("~/ContratorPics/");
 
                         if (!Directory.Exists(folderPath))
@@ -163,8 +164,8 @@ namespace TwoLocalGals.Protected
                             Directory.CreateDirectory(folderPath);
                         }
                         UploadPic.Width = 25;
-                        UploadPic.SaveAs(Path.Combine(folderPath, Guid.NewGuid().ToString().Split('-').Last() + filename));
-                        row.SetValue("ContractorPic", UploadPic.FileName);
+                        UploadPic.SaveAs(Path.Combine(folderPath, fileName));
+                        row.SetValue("ContractorPic", fileName);
 
                     }
                     catch (Exception ex)
@@ -188,5 +189,22 @@ namespace TwoLocalGals.Protected
 
 
         }
+
+
+        protected void UploadButton_Click(object sender, EventArgs e)
+        {
+            if (UploadPic.HasFile)
+            {
+                string[] allowedExtensions = { ".jpg", ".jpeg", ".png" };
+                string fileExtension = Path.GetExtension(UploadPic.FileName).ToLower();
+
+                if (Array.Exists(allowedExtensions, extension => extension == fileExtension))
+                {
+
+                }
+
+            }
+        }
+
     }
 }
