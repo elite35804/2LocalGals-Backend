@@ -37,17 +37,13 @@ namespace TwoLocalGals
 
         protected void Application_BeginRequest(object sender, EventArgs e)
         {
-            //var token = HttpContext.Current.Request.Headers["Authorization"];
-            //if (!string.IsNullOrEmpty(token))
-            //{
-            //    token = token.Replace("Bearer ", string.Empty);
+            if (HttpContext.Current.Request.HttpMethod == "OPTIONS")
+            {
+                HttpContext.Current.Response.StatusCode = 200;
+                HttpContext.Current.Response.End();
+            }
 
-            //    var handler = new JwtSecurityTokenHandler();
-            //    var jwtToken = handler.ReadJwtToken(token);
-            //    var identity = new ClaimsIdentity(jwtToken.Claims, "Jwt");
 
-            //    HttpContext.Current.User = new ClaimsPrincipal(identity);
-            //}
         }
 
 

@@ -356,6 +356,290 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "GetAppointment",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImFkbWluIiwiYWNjZXNzIjoiOSIsImNvbnRyYWN0b3JJRCI6IjAiLCJmcmFuY2hpc2VNYXNrIjoiMSIsIm5iZiI6MTcxOTU4ODYxOCwiZXhwIjoxNzE5NTkyMjE4LCJpYXQiOjE3MTk1ODg2MTh9.q-w3A8BUS84qgRK3NqlAmWa79cCbVaFlb3LCfpu22J8",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:52592/api/v1/Schedule/GetAppointment/100000000",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "52592",
+					"path": [
+						"api",
+						"v1",
+						"Schedule",
+						"GetAppointment",
+						"100000000"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Appointment Notes and Pictures",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImFkbWluIiwiYWNjZXNzIjoiOSIsImNvbnRyYWN0b3JJRCI6IjAiLCJmcmFuY2hpc2VNYXNrIjoiMSIsIm5iZiI6MTcxOTU5NzIwNiwiZXhwIjoxNzE5NjAwODA2LCJpYXQiOjE3MTk1OTcyMDZ9.6jugg51BbkBxQHg98mxtLzzctd_rBMPzuT7fG2CDlIE",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "",
+							"type": "file",
+							"src": [
+								"/C:/Users/User/Pictures/Screenshot.png",
+								"/C:/Users/User/Pictures/Screenshots/Screenshot 2023-03-01 161828.png",
+								"/C:/Users/User/Pictures/Screenshots/Screenshot 2023-03-02 140051.png",
+								"/C:/Users/User/Pictures/Screenshots/Screenshot 2023-03-03 162756.png"
+							]
+						},
+						{
+							"key": "notes",
+							"value": "This is note from user for this appointment",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:52592/api/v1/schedule/UpdateAppointment/100000000",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "52592",
+					"path": [
+						"api",
+						"v1",
+						"schedule",
+						"UpdateAppointment",
+						"100000000"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "StartJob",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImFkbWluIiwiYWNjZXNzIjoiOSIsImNvbnRyYWN0b3JJRCI6IjAiLCJmcmFuY2hpc2VNYXNrIjoiMSIsIm5iZiI6MTcxOTYwNTY0NCwiZXhwIjoxNzE5NjA5MjQ0LCJpYXQiOjE3MTk2MDU2NDR9.Zd_rnUj3Y9eZx3_N-XSZ_p_yQLkcSYlt8lJ9uVU5n0o",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:52592/api/v1/schedule/StartJob/100000001",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "52592",
+					"path": [
+						"api",
+						"v1",
+						"schedule",
+						"StartJob",
+						"100000001"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "endJob",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImFkbWluIiwiYWNjZXNzIjoiOSIsImNvbnRyYWN0b3JJRCI6IjAiLCJmcmFuY2hpc2VNYXNrIjoiMSIsIm5iZiI6MTcxOTYwNTY0NCwiZXhwIjoxNzE5NjA5MjQ0LCJpYXQiOjE3MTk2MDU2NDR9.Zd_rnUj3Y9eZx3_N-XSZ_p_yQLkcSYlt8lJ9uVU5n0o",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:52592/api/v1/schedule/endJob/100000001",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "52592",
+					"path": [
+						"api",
+						"v1",
+						"schedule",
+						"endJob",
+						"100000001"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Coordinates",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImFkbWluIiwiYWNjZXNzIjoiOSIsImNvbnRyYWN0b3JJRCI6IjAiLCJmcmFuY2hpc2VNYXNrIjoiMSIsIm5iZiI6MTcxOTY5NjE3OCwiZXhwIjoxNzE5Njk5Nzc4LCJpYXQiOjE3MTk2OTYxNzh9.vxrVBQE8__zy2IA17v9YdxMSbjiHgp-K7gtAc5DPqY8",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n \"latitude\": \"123.5465\",\r\n \"longitude\": \"12343.121\"\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:52592/api/v1/Schedule/UpdateCoordinates/100000001",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "52592",
+					"path": [
+						"api",
+						"v1",
+						"Schedule",
+						"UpdateCoordinates",
+						"100000001"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetJobLogs",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImNvbnQiLCJhY2Nlc3MiOiIyIiwiY29udHJhY3RvcklEIjoiMTAwNTAwIiwiZnJhbmNoaXNlTWFzayI6Ii0xIiwibmJmIjoxNzIxMDc5OTY0LCJleHAiOjE3MjEwODM1NjQsImlhdCI6MTcyMTA3OTk2NH0.eGPgTHYTYM-5LBsv8m0YJmBJcAIcNrnfnU7wfCQdFsw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:52592/api/v1/schedule/GetJobLogs?AppointmentId=100000002&contractorID=100500&isGeneral=true",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "52592",
+					"path": [
+						"api",
+						"v1",
+						"schedule",
+						"GetJobLogs"
+					],
+					"query": [
+						{
+							"key": "AppointmentId",
+							"value": "100000002"
+						},
+						{
+							"key": "contractorID",
+							"value": "100500"
+						},
+						{
+							"key": "isGeneral",
+							"value": "true"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UpdateJobLog",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImNvbnQiLCJhY2Nlc3MiOiIyIiwiY29udHJhY3RvcklEIjoiMTAwNTAwIiwiZnJhbmNoaXNlTWFzayI6Ii0xIiwibmJmIjoxNzIxMDc5OTY0LCJleHAiOjE3MjEwODM1NjQsImlhdCI6MTcyMTA3OTk2NH0.eGPgTHYTYM-5LBsv8m0YJmBJcAIcNrnfnU7wfCQdFsw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"id\": 0,\r\n  \"contractorId\": 100500,\r\n  \"customerId\": 1000000,\r\n  \"appointmentId\": 100000002,\r\n  \"content\": \"TEst\",\r\n  \"checked\": true,\r\n  \"checkedBy\": \"cont\",\r\n  \"isGeneral\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:52592/api/v1/schedule/UpdateJobLog",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "52592",
+					"path": [
+						"api",
+						"v1",
+						"schedule",
+						"UpdateJobLog"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }

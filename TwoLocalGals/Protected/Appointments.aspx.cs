@@ -6,6 +6,8 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Drawing;
 using System.Threading;
+using System.IO;
+using Image = System.Web.UI.WebControls.Image;
 
 namespace Nexus.Protected
 {
@@ -718,7 +720,7 @@ namespace Nexus.Protected
                     // Create a Label
                     Label locationShare = new Label();
                     locationShare.ID = "locationShare" + i;
-                    locationShare.Text = "No";
+                    locationShare.Text = contractor.ShareLocation ? "Yes" : "No";
                     PlaceHolder1.Controls.Add(locationShare);
 
                     PlaceHolder1.Controls.Add(new LiteralControl("<br/>"));
@@ -733,7 +735,7 @@ namespace Nexus.Protected
                     // Create a Label
                     Label StartJobTime = new Label();
                     StartJobTime.ID = "StartJobTime" + i;
-                    StartJobTime.Text = "";
+                    StartJobTime.Text = sameApps[i].jobStartTime?.ToString("T");
                     PlaceHolder1.Controls.Add(StartJobTime);
 
                     PlaceHolder1.Controls.Add(new LiteralControl("<br/>"));
@@ -748,7 +750,7 @@ namespace Nexus.Protected
                     // Create a Label
                     Label endJobTime = new Label();
                     endJobTime.ID = "endJobTime" + i;
-                    endJobTime.Text = "";
+                    endJobTime.Text = sameApps[i].jobEndTime?.ToString("T");
                     PlaceHolder1.Controls.Add(endJobTime);
 
                     PlaceHolder1.Controls.Add(new LiteralControl("<br/>"));
@@ -763,7 +765,7 @@ namespace Nexus.Protected
                     // Create a Label
                     Label jobCompleted = new Label();
                     jobCompleted.ID = "jobCompleted" + i;
-                    jobCompleted.Text = "No";
+                    jobCompleted.Text = sameApps[i].jobEndTime.HasValue ? "Yes" : "No";
                     PlaceHolder1.Controls.Add(jobCompleted);
 
                     PlaceHolder1.Controls.Add(new LiteralControl("<br/>"));
@@ -793,7 +795,7 @@ namespace Nexus.Protected
                     // Create a Label
                     Label Notes = new Label();
                     Notes.ID = "Notes" + i;
-                    Notes.Text = "";
+                    Notes.Text = sameApps[i].Notes;
                     PlaceHolder1.Controls.Add(Notes);
 
                     PlaceHolder1.Controls.Add(new LiteralControl("<br/>"));
@@ -807,6 +809,22 @@ namespace Nexus.Protected
                     PlaceHolder1.Controls.Add(Pictureslbl);
 
 
+                    foreach (var img in Database.GetAppointmentAttachments(sameApps[i].appointmentID))
+                    {
+
+                        var fileName = Path.GetFileName(img.ImageURL);
+                        var imageUrl = "~/ContratorPics/" + fileName;
+                        var image = new Image
+                        {
+                            ImageUrl = imageUrl,
+                            CssClass = "galleryImage"
+                        };
+                        PlaceHolder1.Controls.Add(image);
+                    }
+
+
+
+                        
 
                     // Optionally add a line break
                     PlaceHolder1.Controls.Add(new LiteralControl("<br/>"));

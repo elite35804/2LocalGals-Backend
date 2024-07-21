@@ -1,5 +1,7 @@
 ﻿using Nexus;
+using System.Web;
 using System.Web.Http;
+using System.Web.Http.Cors;
 using TwoLocalGals.DTO;
 
 namespace TwoLocalGals.APIs
@@ -9,19 +11,33 @@ namespace TwoLocalGals.APIs
     {
         [HttpPost]
         [Route("user/login")]
+        [EnableCors(origins: "*", headers:"*", methods: "*")]
         public IHttpActionResult Login([FromBody] LoginRequest request)
         {
             if (request == null) return BadRequest("Invalid user data");
 
             UserStruct user = Database.ValidateUser(request.Username.Trim(), request.Password ?? "");
-            if (user.access > 0)
+            if (string.IsNullOrEmpty(user.username))
             {
-                var token = JwtManager.GenerateToken(request.Username, user.contractorID, user.access, user.franchiseMask);
-                return Ok(new { Token = token });
+                return BadRequest("Incorrect Username or Password.");
+
+            }
+            if (user.access > 0 && user.contractorID > 0)
+            {
+                var contractorActive = Database.GetContractorByID(user.contractorID);
+                if (contractorActive.active)
+                {
+                    var token = JwtManager.GenerateToken(request.Username, user.contractorID, user.access, user.franchiseMask);
+                    return Ok(new { Token = token });
+                }
+                else
+                {
+                    return BadRequest("Invalid login attempt. Please contact the main office");
+                }
             }
             else
             {
-                return Unauthorized();
+                return BadRequest("Invalid login attempt. Please contact the main office");
             }
         }
 
@@ -30,7 +46,7 @@ namespace TwoLocalGals.APIs
         [Route(("users/{userID}"))]
         public IHttpActionResult GetUserById(string userID)
         {
-            Users user = Database.GetUserById(userID);
+            UsersDTO user = Database.GetUserById(userID);
 
             return Ok(user);
         }

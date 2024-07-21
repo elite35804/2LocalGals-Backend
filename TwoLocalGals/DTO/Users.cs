@@ -1,6 +1,6 @@
 ﻿namespace TwoLocalGals.DTO
 {
-    public class Users
+    public class UsersDTO
     {
         public string username { get; set; }
         public int franchiseMask { get; set; }

@@ -15,6 +15,10 @@ using System.Drawing;
 using System.Globalization;
 using System.Data;
 using System.Web.Routing;
+using System.Drawing.Imaging;
+using System.Net.Http;
+using System.Windows.Forms.VisualStyles;
+using RingCentral;
 
 
 namespace TwoLocalGals.Controllers.APIs
@@ -529,6 +533,19 @@ namespace TwoLocalGals.Controllers.APIs
         }
 
 
+        [HttpDelete]
+        [Route("Schedule/DeleteUnavailibility/{UnAvailbeId:int}")]
+        public IHttpActionResult DeleteUnavailablity(int UnAvailbeId)
+        {
+            var data = Database.DeleteUnavailable(UnAvailbeId);
+            if (data == null)
+            {
+                return Ok("Record deleted successfully.");
+            }
+
+            return BadRequest(data);
+        }
+
         [HttpGet]
         [Route("Schedule/GetSchedule")]
         public IHttpActionResult LoadSchedule(DateTime startDate, DateTime endDate)
@@ -587,7 +604,8 @@ namespace TwoLocalGals.Controllers.APIs
                 Debug.WriteLine("Distance: " + route.distance + ", Time: " + TimeSpan.FromSeconds((double)route.travelTime));
 
 
-
+                CustomerStruct customer = new CustomerStruct();
+                var customerStruct = Database.GetCustomerByID(franchiseMask, item.customerID, out customer);
 
 
                 ScheduleDTO schedule = new ScheduleDTO();
@@ -601,7 +619,71 @@ namespace TwoLocalGals.Controllers.APIs
                 schedule.Miles = route.distance.ToString("N1") + @" mi ";
                 schedule.Minutes = Math.Round(TimeSpan.FromSeconds((double)route.travelTime).TotalMinutes);
                 schedule.Keys = item.keysReturned;
-
+                schedule.AproxPay = (item.customerRate * item.customerHours);
+                schedule.JobCompleted = item.JobCompleted;
+                schedule.alternatePhoneOne = customer.alternatePhoneOne;
+                schedule.bestPhone = customer.bestPhone;
+                schedule.bestPhoneCell = customer.bestPhoneCell;
+                schedule.alternatePhoneTwo = customer.alternatePhoneTwo;
+                schedule.alternatePhoneTwoCell = customer.alternatePhoneTwoCell;
+                schedule.alternatePhoneOneCell = customer.alternatePhoneOneCell;
+                schedule.locationAddress = customer.locationAddress;
+                schedule.locationCity = customer.locationCity;
+                schedule.locationState = customer.locationState;
+                schedule.locationZip = customer.locationZip;
+                schedule.CustomerId = item.customerID;
+                schedule.paymentType = customer.paymentType;
+                schedule.TakePic = customer.TakePic;
+                schedule.Bathrooms = customer.NC_Bathrooms;
+                schedule.Bedrooms = customer.NC_Bedrooms;
+                schedule.SquareFootage = customer.NC_SquareFootage;
+                schedule.NewlyConstructed = customer.newBuilding;
+                schedule.NC_Vacuum = customer.NC_Vacuum;
+                schedule.NC_DoDishes = customer.NC_DoDishes;
+                schedule.NC_ChangeBed = customer.NC_ChangeBed;
+                schedule.PetsCount = customer.NC_Pets;
+                schedule.NC_FlooringCarpet = customer.NC_FlooringCarpet;
+                schedule.NC_FlooringHardwood = customer.NC_FlooringHardwood;
+                schedule.NC_FlooringTile = customer.NC_FlooringTile;
+                schedule.NC_FlooringLinoleum = customer.NC_FlooringLinoleum;
+                schedule.NC_FlooringSlate = customer.NC_FlooringSlate;
+                schedule.NC_FlooringMarble = customer.NC_FlooringMarble;
+                schedule.HowtoEnterHome = customer.NC_EnterHome;
+                schedule.NC_Organize = customer.NC_Organize;
+                schedule.CleanRating = customer.NC_CleanRating;
+                schedule.NC_CleaningType = customer.NC_CleaningType;
+                schedule.GateCode = customer.NC_GateCode;
+                schedule.GarageCode = customer.NC_GarageCode;
+                schedule.NC_DoorCode = customer.NC_DoorCode;
+                schedule.NC_RequestEcoCleaners = customer.NC_RequestEcoCleaners;
+                schedule.DC_Blinds = customer.DC_Blinds;
+                schedule.DC_BlindsAmount = customer.DC_BlindsAmount;
+                schedule.DC_BlindsCondition = customer.DC_BlindsCondition;
+                schedule.DC_Windows = customer.DC_Windows;
+                schedule.DC_WindowsAmount = customer.DC_WindowsAmount;
+                schedule.DC_WindowsSills = customer.DC_WindowsSills;
+                schedule.DC_Walls = customer.DC_Walls;
+                schedule.DC_WallsDetail = customer.DC_WallsDetail;
+                schedule.DC_Baseboards = customer.DC_Baseboards;
+                schedule.DC_DoorFrames = customer.DC_DoorFrames;
+                schedule.DC_LightSwitches = customer.DC_LightSwitches;
+                schedule.DC_VentCovers = customer.DC_VentCovers;
+                schedule.DC_InsideVents = customer.DC_InsideVents;
+                schedule.DC_Pantry = customer.DC_Pantry;
+                schedule.DC_LaundryRoom = customer.DC_LaundryRoom;
+                schedule.DC_CeilingFans = customer.DC_CeilingFans;
+                schedule.DC_CeilingFansAmount = customer.DC_CeilingFansAmount;
+                schedule.DC_LightFixtures = customer.DC_LightFixtures;
+                schedule.DC_KitchenCuboards = customer.DC_KitchenCuboards;
+                schedule.DC_KitchenCuboardsDetail = customer.DC_KitchenCuboardsDetail;
+                schedule.DC_BathroomCuboards = customer.DC_BathroomCuboards;
+                schedule.DC_BathroomCuboardsDetail = customer.DC_BathroomCuboardsDetail;
+                schedule.DC_Oven = customer.DC_Oven;
+                schedule.DC_Refrigerator = customer.DC_Refrigerator;
+                schedule.DC_OtherOne = customer.DC_OtherOne;
+                schedule.DC_OtherTwo = customer.DC_OtherTwo;
+                schedule.Details = customer.NC_Details;
+                schedule.JobCompleted = item.JobCompleted;
                 scheduleDTOs.Add(schedule);
             }
 
@@ -609,5 +691,259 @@ namespace TwoLocalGals.Controllers.APIs
             return Ok(scheduleDTOs);
         }
 
+
+        [HttpGet]
+        [Route("schedule/GetAppointment/{appId:int}")]
+        public IHttpActionResult GetAppointment(int appId)
+        {
+            var claims = System.Security.Claims.ClaimsPrincipal.Current;
+            int userAccess = Convert.ToInt32(claims.FindFirst("access")?.Value);
+            int userContractorID = Convert.ToInt32(claims.FindFirst("contractorID")?.Value);
+            int franchiseMask = Convert.ToInt32(claims.FindFirst("franchiseMask")?.Value);
+
+            ContractorStruct contractor = Database.GetContractorByID(userContractorID);
+
+            int contractorSubType = contractor.contractorType;
+
+            List<ScheduleDTO> scheduleDTOs = new List<ScheduleDTO>();
+            AppStruct item;
+            Database.GetApointmentpByID(franchiseMask, appId, out item);
+
+            List<string> routeData = new List<string>();
+            string lastRouteAddr = Globals.CleanAddr(contractor.address) + "," + Globals.CleanAddr(contractor.city) + "," + Globals.CleanAddr(contractor.state) + "," + Globals.CleanAddr(contractor.zip);
+            routeData.Add(lastRouteAddr);
+
+
+            DrivingRoute route = new DrivingRoute();
+            route.travelTime = 1800;
+
+            decimal hours = (decimal)(item.endTime - item.startTime).TotalMinutes / 60;
+            if (hours < 0) hours = 0;
+
+            string routeAddr = Globals.CleanAddr(item.customerAddress) + "," + Globals.CleanAddr(item.customerCity) + "," + Globals.CleanAddr(item.customerState) + "," + Globals.CleanAddr(item.customerZip);
+            route = GoogleMaps.GetDrivingRoute(lastRouteAddr, routeAddr);
+            if (route.travelTime <= 0 && lastRouteAddr != routeAddr) route.travelTime = 1800;
+            string routeLink = GoogleMaps.GetDrivingLink(new string[] { lastRouteAddr, routeAddr });
+            lastRouteAddr = routeAddr;
+            routeData.Add(routeAddr);
+            Debug.WriteLine("Distance: " + route.distance + ", Time: " + TimeSpan.FromSeconds((double)route.travelTime));
+
+            CustomerStruct customer = new CustomerStruct();
+            var customerStruct = Database.GetCustomerByID(franchiseMask, item.customerID, out customer);
+
+
+
+            ScheduleDTO schedule = new ScheduleDTO();
+            schedule.AppointmentId = item.appointmentID;
+            schedule.CustomerName = item.customerTitleCustomNote;
+            schedule.CustomerCity = item.customerCity;
+            schedule.ScheduleDate = item.appointmentDate.Date;
+            schedule.startTime = item.startTime.ToString("t");
+            schedule.endTime = item.endTime.ToString("t");
+            schedule.Hours = item.customerHours;
+            schedule.Miles = route.distance.ToString("N1") + @" mi ";
+            schedule.Minutes = Math.Round(TimeSpan.FromSeconds((double)route.travelTime).TotalMinutes);
+            schedule.Keys = customer.NC_RequiresKeys;
+            schedule.AproxPay = (item.customerRate * item.customerHours);
+            schedule.CustomerId = item.customerID;
+            schedule.alternatePhoneOne = customer.alternatePhoneOne;
+            schedule.bestPhone = customer.bestPhone;
+            schedule.bestPhoneCell = customer.bestPhoneCell;
+            schedule.alternatePhoneTwo = customer.alternatePhoneTwo;
+            schedule.alternatePhoneTwoCell = customer.alternatePhoneTwoCell;
+            schedule.alternatePhoneOneCell = customer.alternatePhoneOneCell;
+            schedule.locationAddress = customer.locationAddress;
+            schedule.locationCity = customer.locationCity;
+            schedule.locationState = customer.locationState;
+            schedule.locationZip = customer.locationZip;
+            schedule.paymentType = customer.paymentType;
+            schedule.TakePic = customer.TakePic;
+            schedule.Bathrooms = customer.NC_Bathrooms;
+            schedule.Bedrooms = customer.NC_Bedrooms;
+            schedule.SquareFootage = customer.NC_SquareFootage;
+            schedule.NewlyConstructed = customer.newBuilding;
+            schedule.NC_Vacuum = customer.NC_Vacuum;
+            schedule.NC_DoDishes = customer.NC_DoDishes;
+            schedule.NC_ChangeBed = customer.NC_ChangeBed;
+            schedule.PetsCount = customer.NC_Pets;
+            schedule.NC_FlooringCarpet = customer.NC_FlooringCarpet;
+            schedule.NC_FlooringHardwood = customer.NC_FlooringHardwood;
+            schedule.NC_FlooringTile = customer.NC_FlooringTile;
+            schedule.NC_FlooringLinoleum = customer.NC_FlooringLinoleum;
+            schedule.NC_FlooringSlate = customer.NC_FlooringSlate;
+            schedule.NC_FlooringMarble = customer.NC_FlooringMarble;
+            schedule.HowtoEnterHome = customer.NC_EnterHome;
+            schedule.NC_Organize = customer.NC_Organize;
+            schedule.CleanRating = customer.NC_CleanRating;
+            schedule.NC_CleaningType = customer.NC_CleaningType;
+            schedule.GateCode = customer.NC_GateCode;
+            schedule.GarageCode = customer.NC_GarageCode;
+            schedule.NC_DoorCode = customer.NC_DoorCode;
+            schedule.NC_RequestEcoCleaners = customer.NC_RequestEcoCleaners;
+            schedule.DC_Blinds = customer.DC_Blinds;
+            schedule.DC_BlindsAmount = customer.DC_BlindsAmount;
+            schedule.DC_BlindsCondition = customer.DC_BlindsCondition;
+            schedule.DC_Windows = customer.DC_Windows;
+            schedule.DC_WindowsAmount = customer.DC_WindowsAmount;
+            schedule.DC_WindowsSills = customer.DC_WindowsSills;
+            schedule.DC_Walls = customer.DC_Walls;
+            schedule.DC_WallsDetail = customer.DC_WallsDetail;
+            schedule.DC_Baseboards = customer.DC_Baseboards;
+            schedule.DC_DoorFrames = customer.DC_DoorFrames;
+            schedule.DC_LightSwitches = customer.DC_LightSwitches;
+            schedule.DC_VentCovers = customer.DC_VentCovers;
+            schedule.DC_InsideVents = customer.DC_InsideVents;
+            schedule.DC_Pantry = customer.DC_Pantry;
+            schedule.DC_LaundryRoom = customer.DC_LaundryRoom;
+            schedule.DC_CeilingFans = customer.DC_CeilingFans;
+            schedule.DC_CeilingFansAmount = customer.DC_CeilingFansAmount;
+            schedule.DC_LightFixtures = customer.DC_LightFixtures;
+            schedule.DC_KitchenCuboards = customer.DC_KitchenCuboards;
+            schedule.DC_KitchenCuboardsDetail = customer.DC_KitchenCuboardsDetail;
+            schedule.DC_BathroomCuboards = customer.DC_BathroomCuboards;
+            schedule.DC_BathroomCuboardsDetail = customer.DC_BathroomCuboardsDetail;
+            schedule.DC_Oven = customer.DC_Oven;
+            schedule.DC_Refrigerator = customer.DC_Refrigerator;
+            schedule.DC_OtherOne = customer.DC_OtherOne;
+            schedule.DC_OtherTwo = customer.DC_OtherTwo;
+            schedule.Details = customer.NC_Details;
+            schedule.JobCompleted = item.JobCompleted;
+            schedule.Partners = new List<PartnerDTO>();
+
+            var rows = Database.GetPartnersByCategory(null, franchiseMask, "companyName");
+            if (rows != null)
+            {
+                foreach (var p in rows)
+                {
+                    PartnerDTO partner = new PartnerDTO();
+                    partner.Name = p.GetString("companyName");
+                    partner.category = p.GetString("category");
+                    partner.phoneNumber = p.GetString("phoneNumber");
+                    partner.webAddress = p.GetString("webAddress");
+                    partner.description = p.GetString("description");
+                    partner.approved = p.GetBool("approved");
+                    schedule.Partners.Add(partner);
+                }
+            }
+
+
+            return Ok(schedule);
+
+        }
+
+        [HttpPost]
+        [Route("schedule/UpdateAppointment/{appId:int}")]
+        public IHttpActionResult Upload(int appId)
+        {
+
+            if (!Request.Content.IsMimeMultipartContent())
+                return BadRequest("Unsupported media type");
+
+            var httpRequest = HttpContext.Current.Request;
+            var files = httpRequest.Files;
+            var note = httpRequest.Form["notes"];
+
+
+            var filePath = Path.Combine(HttpContext.Current.Server.MapPath("~/ContratorPics/"));
+            if (!Directory.Exists(filePath))
+            {
+                Directory.CreateDirectory(filePath);
+            }
+            try
+            {
+
+                List<string> images = new List<string>();
+                for (int file = 0; file < files.Count; file++)
+                {
+
+                    var postedFile = httpRequest.Files[file];
+                    var getExtension = Path.GetExtension(postedFile.FileName);
+                    var fileName = Guid.NewGuid().ToString() + getExtension;
+
+                    postedFile.SaveAs(Path.Combine(filePath, fileName));
+
+                    images.Add(fileName);
+                }
+
+
+                var response = Database.UpdateAppointmentFromAPI(appId, images, note);
+                return Ok(new { Message = "Files uploaded successfully", Note = note });
+
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+        }
+
+        [HttpPost]
+        [Route("schedule/StartJob/{appId:int}")]
+        public IHttpActionResult StartJobByAppId(int appId)
+        {
+            var error = Database.StartJobByAppId(appId);
+            if (error == null)
+            {
+                return Ok("Job Started successfully!");
+            }
+
+            return BadRequest(error);
+        }
+        [HttpPost]
+        [Route("schedule/EndJob/{appId:int}")]
+        public IHttpActionResult EndJobByAppId(int appId)
+        {
+            var error = Database.EndJobByAppId(appId);
+            if (error == null)
+            {
+                return Ok("Job Ended successfully!");
+            }
+
+            return BadRequest(error);
+        }
+
+
+        [HttpPost]
+        [Route("schedule/UpdateCoordinates/{appId:int}")]
+        public IHttpActionResult EndJobByAppId(int appId, Location location)
+        {
+            var error = Database.JobCoordinatesByAppId(appId, location.latitude, location.longitude);
+            if (error == null)
+            {
+                return Ok("Job location updated successfully!");
+            }
+
+            return BadRequest(error);
+        }
+
+
+        [HttpGet]
+        [Route("schedule/GetJobLogs")]
+        public IHttpActionResult GetJobLogs(int AppointmentId, int contractorID, bool isGeneral)
+        {
+
+            var data = Database.GetJobLogs(AppointmentId, contractorID, isGeneral);
+            return Ok(data);
+        }
+        
+        [HttpPost]
+        [Route("schedule/UpdateJobLog")]
+        public IHttpActionResult GetJobLogs(JobLogsStruct job)
+        {
+            var data = Database.updateJobLog(job);
+            if (data == null)
+            return Ok("Record updated successfully.");
+
+            return BadRequest(data);
+        }
+
+
+        public class Location
+        {
+            public string latitude { get; set; }
+            public string longitude { get; set; }
+        }
     }
 }

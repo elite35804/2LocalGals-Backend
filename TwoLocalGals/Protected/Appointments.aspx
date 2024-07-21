@@ -4,8 +4,16 @@
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
 <asp:Content ContentPlaceHolderID="HeadContent" runat="server">
     <link href="/Styles/Appointments.css" rel="stylesheet" type="text/css" />
+    <style>
+        .galleryImage {
+            max-width: 75px;
+            width: 75px;
+            padding: 5px 0px 0px 10px;
+        }
+    </style>
 </asp:Content>
 <asp:Content ID="BodyContent" runat="server" ContentPlaceHolderID="MainContent">
+
     <script language="javascript" type="text/javascript">
 
         var oldStartTimeArray = [];
@@ -188,7 +196,7 @@
                     }
                 }
             }
-       
+
             if (field != null) {
                 JsCalcMoneyChanged(field);
             }
@@ -293,6 +301,8 @@
     </script>
     <asp:ScriptManager ID="ToolkitScriptManager" runat="server">
     </asp:ScriptManager>
+
+
     <!-- Menu Bar -->
     <div class="TopMenuButtons">
         <asp:Button ID="FollowUpButton" OnClick="FollowUpClick" Text="Follow Up" runat="server" />
@@ -311,79 +321,70 @@
     </div>
     <div id="CustomerServiceFee" class="AppServiceFee" runat="server">
         Customer Service Fee:
+   
     </div>
     <asp:HiddenField ID="DiscountReferral" Value="0" runat="server" />
     <asp:Panel ID="AppointmentPanel" runat="server" DefaultButton="SaveButton">
         <table class="AppDateTime">
             <tr>
-                <td class="AppDateTimeHeader">
-                    Date:
+                <td class="AppDateTimeHeader">Date:
                 </td>
                 <td class="AppDateTime">
                     <asp:TextBox ID="AppDate" runat="server" CssClass="entryTextBoxCenter" Width="110px"
                         onchange="JsAppDateChanged(this)"></asp:TextBox>
-                    <asp:CalendarExtender ID="CalendarExtenderAppDate" TargetControlID="AppDate" runat="server">
-                    </asp:CalendarExtender>
+                    <asp:CalendarExtender ID="CalendarExtenderAppDate" TargetControlID="AppDate" runat="server"></asp:CalendarExtender>
+                </td>
+                <td>Status:
                 </td>
                 <td>
-                Status:
-                </td>
-                <td>
-                <asp:DropDownList ID="AppStatus" ClientIDMode="Static" Width="105px" runat="server" onchange="JsFormValueChanged(this)">
-                    <asp:ListItem>Active</asp:ListItem>
-                    <asp:ListItem>Rescheduled</asp:ListItem>
-                    <asp:ListItem>Canceled</asp:ListItem>
-                </asp:DropDownList>
+                    <asp:DropDownList ID="AppStatus" ClientIDMode="Static" Width="105px" runat="server" onchange="JsFormValueChanged(this)">
+                        <asp:ListItem>Active</asp:ListItem>
+                        <asp:ListItem>Rescheduled</asp:ListItem>
+                        <asp:ListItem>Canceled</asp:ListItem>
+                    </asp:DropDownList>
                 </td>
             </tr>
         </table>
         <table class="AppDateTime" style="border: 1px solid #AAA;">
             <tr>
-                <td class="AppDateTimeHeader">
-                    Hours Billed:
+                <td class="AppDateTimeHeader">Hours Billed:
                 </td>
                 <td class="AppDateTime">
                     <asp:TextBox ID="HoursBilled" runat="server" onchange="JsCalcHoursChanged(this)"
                         CssClass="AppEntryCenter" />
                 </td>
-                <td class="AppDateTimeHeader">
-                    Hourly Rate:
+                <td class="AppDateTimeHeader">Hourly Rate:
                 </td>
                 <td class="AppDateTime">
                     <asp:TextBox ID="HourlyRate" runat="server" CssClass="AppEntryCenter" onchange="JsCalcMoneyChanged(this)" />
                 </td>
             </tr>
             <tr>
-                <td class="AppDateTimeHeader">
-                    Service Fee:
+                <td class="AppDateTimeHeader">Service Fee:
                 </td>
                 <td class="AppDateTime">
                     <asp:TextBox ID="ServiceFee" runat="server" CssClass="AppEntryCenter" onchange="JsCustomerServiceFeeChanged(this)" />
                 </td>
-                <td class="AppDateTimeHeader">
-                    Tips:
+                <td class="AppDateTimeHeader">Tips:
                 </td>
                 <td class="AppDateTime">
                     <asp:TextBox ID="Tips" runat="server" CssClass="AppEntryCenter" onchange="JsCustomerTipsChanged(this)" />
                 </td>
             </tr>
             <tr>
-                <td class="AppDateTimeHeader">
-                    Discount %:
+                <td class="AppDateTimeHeader">Discount %:
                 </td>
                 <td class="AppDateTime">
                     <asp:TextBox ID="DiscountPercent" runat="server" CssClass="AppEntryCenter" onchange="JsCalcPercentChanged(this)" />
                 </td>
-                <td class="AppDateTimeHeader">
-                    Discount $:
+                <td class="AppDateTimeHeader">Discount $:
                 </td>
                 <td class="AppDateTime">
                     <asp:TextBox ID="DiscountAmount" runat="server" CssClass="AppEntryCenter" onchange="JsCalcMoneyChanged(this)" />
                 </td>
             </tr>
-                   <tr>
-                <td class="AppDateTimeHeader">
-                    Sales Tax %:
+            <tr>
+                <td class="AppDateTimeHeader">Sales Tax %:
                 </td>
                 <td class="AppDateTime">
                     <asp:TextBox ID="SalesTax" runat="server" CssClass="AppEntryCenter" onchange="JsCalcPercentNoRoundChanged(this)" />
@@ -392,14 +393,12 @@
         </table>
         <table class="AppDateTime" style="margin: 15px auto 20px auto;">
             <tr>
-                <td class="AppDateTimeHeader" style="width: auto; font-weight: bold;">
-                    Sub Contractors:
+                <td class="AppDateTimeHeader" style="width: auto; font-weight: bold;">Sub Contractors:
                 </td>
                 <td class="AppDateTime">
                     <asp:Label ID="SubContractors" runat="server" CssClass="AppEntryCenter" Width="70px">$0.0</asp:Label>
                 </td>
-                <td class="AppDateTimeHeader" style="width: auto; font-weight: bold;">
-                    Customer Total:
+                <td class="AppDateTimeHeader" style="width: auto; font-weight: bold;">Customer Total:
                 </td>
                 <td class="AppDateTime">
                     <asp:Label ID="CustomerTotal" runat="server" CssClass="AppEntryCenter" Width="70px">$0.0</asp:Label>
@@ -449,9 +448,12 @@
                         <asp:DropDownList ID="ContractorAdjustmentType_0" ClientIDMode="Static" class="chzn-select" Width="130px" runat="server" />
                     </asp:TableCell><asp:TableCell>
                         <asp:TextBox ID="ContractorAdjustment_0" ClientIDMode="Static" CssClass="ContractorEntry" onchange="JsFormMoneyChanged(this)" runat="server" />
-                    </asp:TableCell></asp:TableRow><asp:TableRow ID="ContractorRowExtra_0" ClientIDMode="Static" CssClass="ContractorRow" Style="background-color: #B2E6FF;" runat="server">
+                    </asp:TableCell>
+                </asp:TableRow>
+                <asp:TableRow ID="ContractorRowExtra_0" ClientIDMode="Static" CssClass="ContractorRow" Style="background-color: #B2E6FF;" runat="server">
                     <asp:TableCell ColumnSpan="9" CssClass="ExtraCell">
                         Recurrence:
+                       
                         <asp:DropDownList ID="ContractorRecurrenceType_0" ClientIDMode="Static" CssClass="entryDropDownList" Width="75px" onchange="JsContractorRecurrenceTypeChanged(0)"
                             runat="server">
                             <asp:ListItem>None</asp:ListItem>
@@ -483,7 +485,9 @@
                         </asp:DropDownList>
                         <asp:Label ID="ContractorApplyToFutureLabel_0" ClientIDMode="Static" runat="server"> Re-Make Future: </asp:Label>
                         <asp:CheckBox ID="ContractorApplyToFuture_0" ClientIDMode="Static" OnClick="JsFormValueChanged(this)" runat="server" />
-                    </asp:TableCell></asp:TableRow><asp:TableRow ID="ContractorRow_1" ClientIDMode="Static" CssClass="ContractorRow" Style="background-color:#E8F7FF;" runat="server">
+                    </asp:TableCell>
+                </asp:TableRow>
+                <asp:TableRow ID="ContractorRow_1" ClientIDMode="Static" CssClass="ContractorRow" Style="background-color: #E8F7FF;" runat="server">
                     <asp:TableCell>
                         <asp:Button ID="ContractorRemoveButton_1" OnClick="RemoveContractorClick" Text="X" runat="server" />
                     </asp:TableCell><asp:TableCell>
@@ -504,9 +508,12 @@
                         <asp:DropDownList ID="ContractorAdjustmentType_1" ClientIDMode="Static" class="chzn-select" Width="130px" runat="server" />
                     </asp:TableCell><asp:TableCell>
                         <asp:TextBox ID="ContractorAdjustment_1" ClientIDMode="Static" CssClass="ContractorEntry" onchange="JsFormMoneyChanged(this)" runat="server" />
-                    </asp:TableCell></asp:TableRow><asp:TableRow ID="ContractorRowExtra_1" ClientIDMode="Static" CssClass="ContractorRow" Style="background-color: #E8F7FF;" runat="server">
+                    </asp:TableCell>
+                </asp:TableRow>
+                <asp:TableRow ID="ContractorRowExtra_1" ClientIDMode="Static" CssClass="ContractorRow" Style="background-color: #E8F7FF;" runat="server">
                     <asp:TableCell ColumnSpan="9" CssClass="ExtraCell">
                         Recurrence:
+                       
                         <asp:DropDownList ID="ContractorRecurrenceType_1" ClientIDMode="Static" CssClass="entryDropDownList" Width="75px" onchange="JsContractorRecurrenceTypeChanged(1)"
                             runat="server">
                             <asp:ListItem>None</asp:ListItem>
@@ -538,7 +545,9 @@
                         </asp:DropDownList>
                         <asp:Label ID="ContractorApplyToFutureLabel_1" ClientIDMode="Static" runat="server"> Re-Make Future: </asp:Label>
                         <asp:CheckBox ID="ContractorApplyToFuture_1" ClientIDMode="Static" OnClick="JsFormValueChanged(this)" runat="server" />
-                    </asp:TableCell></asp:TableRow><asp:TableRow ID="ContractorRow_2" ClientIDMode="Static" CssClass="ContractorRow" Style="background-color:#B2E6FF;" runat="server">
+                    </asp:TableCell>
+                </asp:TableRow>
+                <asp:TableRow ID="ContractorRow_2" ClientIDMode="Static" CssClass="ContractorRow" Style="background-color: #B2E6FF;" runat="server">
                     <asp:TableCell>
                         <asp:Button ID="ContractorRemoveButton_2" OnClick="RemoveContractorClick" Text="X" runat="server" />
                     </asp:TableCell><asp:TableCell>
@@ -559,9 +568,12 @@
                         <asp:DropDownList ID="ContractorAdjustmentType_2" ClientIDMode="Static" class="chzn-select" Width="130px" runat="server" />
                     </asp:TableCell><asp:TableCell>
                         <asp:TextBox ID="ContractorAdjustment_2" ClientIDMode="Static" CssClass="ContractorEntry" onchange="JsFormMoneyChanged(this)" runat="server" />
-                    </asp:TableCell></asp:TableRow><asp:TableRow ID="ContractorRowExtra_2" ClientIDMode="Static" CssClass="ContractorRow" Style="background-color: #B2E6FF;" runat="server">
+                    </asp:TableCell>
+                </asp:TableRow>
+                <asp:TableRow ID="ContractorRowExtra_2" ClientIDMode="Static" CssClass="ContractorRow" Style="background-color: #B2E6FF;" runat="server">
                     <asp:TableCell ColumnSpan="9" CssClass="ExtraCell">
                         Recurrence:
+                       
                         <asp:DropDownList ID="ContractorRecurrenceType_2" ClientIDMode="Static" CssClass="entryDropDownList" Width="75px" onchange="JsContractorRecurrenceTypeChanged(2)"
                             runat="server">
                             <asp:ListItem>None</asp:ListItem>
@@ -593,8 +605,10 @@
                         </asp:DropDownList>
                         <asp:Label ID="ContractorApplyToFutureLabel_2" ClientIDMode="Static" runat="server"> Re-Make Future: </asp:Label>
                         <asp:CheckBox ID="ContractorApplyToFuture_2" ClientIDMode="Static" OnClick="JsFormValueChanged(this)" runat="server" />
-                    </asp:TableCell></asp:TableRow><asp:TableRow ID="ContractorRow_3" ClientIDMode="Static" CssClass="ContractorRow" Style="background-color:#E8F7FF;" runat="server">
-                     <asp:TableCell>
+                    </asp:TableCell>
+                </asp:TableRow>
+                <asp:TableRow ID="ContractorRow_3" ClientIDMode="Static" CssClass="ContractorRow" Style="background-color: #E8F7FF;" runat="server">
+                    <asp:TableCell>
                         <asp:Button ID="ContractorRemoveButton_3" OnClick="RemoveContractorClick" Text="X" runat="server" />
                     </asp:TableCell><asp:TableCell>
                         <asp:HiddenField ID="ContractorType_3" ClientIDMode="Static" runat="server" Value="-1" />
@@ -614,9 +628,12 @@
                         <asp:DropDownList ID="ContractorAdjustmentType_3" ClientIDMode="Static" class="chzn-select" Width="130px" runat="server" />
                     </asp:TableCell><asp:TableCell>
                         <asp:TextBox ID="ContractorAdjustment_3" ClientIDMode="Static" CssClass="ContractorEntry" onchange="JsFormMoneyChanged(this)" runat="server" />
-                    </asp:TableCell></asp:TableRow><asp:TableRow ID="ContractorRowExtra_3" ClientIDMode="Static" CssClass="ContractorRow" Style="background-color: #E8F7FF;" runat="server">
+                    </asp:TableCell>
+                </asp:TableRow>
+                <asp:TableRow ID="ContractorRowExtra_3" ClientIDMode="Static" CssClass="ContractorRow" Style="background-color: #E8F7FF;" runat="server">
                     <asp:TableCell ColumnSpan="9" CssClass="ExtraCell">
                         Recurrence:
+                       
                         <asp:DropDownList ID="ContractorRecurrenceType_3" ClientIDMode="Static" CssClass="entryDropDownList" Width="75px" onchange="JsContractorRecurrenceTypeChanged(3)"
                             runat="server">
                             <asp:ListItem>None</asp:ListItem>
@@ -648,7 +665,9 @@
                         </asp:DropDownList>
                         <asp:Label ID="ContractorApplyToFutureLabel_3" ClientIDMode="Static" runat="server"> Re-Make Future: </asp:Label>
                         <asp:CheckBox ID="ContractorApplyToFuture_3" ClientIDMode="Static" OnClick="JsFormValueChanged(this)" runat="server" />
-                    </asp:TableCell></asp:TableRow><asp:TableRow ID="ContractorRow_4" ClientIDMode="Static" CssClass="ContractorRow" Style="background-color:#B2E6FF;" runat="server">
+                    </asp:TableCell>
+                </asp:TableRow>
+                <asp:TableRow ID="ContractorRow_4" ClientIDMode="Static" CssClass="ContractorRow" Style="background-color: #B2E6FF;" runat="server">
                     <asp:TableCell>
                         <asp:Button ID="ContractorRemoveButton_4" OnClick="RemoveContractorClick" Text="X" runat="server" />
                     </asp:TableCell><asp:TableCell>
@@ -669,9 +688,12 @@
                         <asp:DropDownList ID="ContractorAdjustmentType_4" ClientIDMode="Static" class="chzn-select" Width="130px" runat="server" />
                     </asp:TableCell><asp:TableCell>
                         <asp:TextBox ID="ContractorAdjustment_4" ClientIDMode="Static" CssClass="ContractorEntry" onchange="JsFormMoneyChanged(this)" runat="server" />
-                    </asp:TableCell></asp:TableRow><asp:TableRow ID="ContractorRowExtra_4" ClientIDMode="Static" CssClass="ContractorRow" Style="background-color: #B2E6FF;" runat="server">
+                    </asp:TableCell>
+                </asp:TableRow>
+                <asp:TableRow ID="ContractorRowExtra_4" ClientIDMode="Static" CssClass="ContractorRow" Style="background-color: #B2E6FF;" runat="server">
                     <asp:TableCell ColumnSpan="9" CssClass="ExtraCell">
                         Recurrence:
+                       
                         <asp:DropDownList ID="ContractorRecurrenceType_4" ClientIDMode="Static" CssClass="entryDropDownList" Width="75px" onchange="JsContractorRecurrenceTypeChanged(4)"
                             runat="server">
                             <asp:ListItem>None</asp:ListItem>
@@ -703,7 +725,9 @@
                         </asp:DropDownList>
                         <asp:Label ID="ContractorApplyToFutureLabel_4" ClientIDMode="Static" runat="server"> Re-Make Future: </asp:Label>
                         <asp:CheckBox ID="ContractorApplyToFuture_4" ClientIDMode="Static" OnClick="JsFormValueChanged(this)" runat="server" />
-                    </asp:TableCell></asp:TableRow><asp:TableRow ID="ContractorRow_5" ClientIDMode="Static" CssClass="ContractorRow" Style="background-color:#E8F7FF;" runat="server">
+                    </asp:TableCell>
+                </asp:TableRow>
+                <asp:TableRow ID="ContractorRow_5" ClientIDMode="Static" CssClass="ContractorRow" Style="background-color: #E8F7FF;" runat="server">
                     <asp:TableCell>
                         <asp:Button ID="ContractorRemoveButton_5" OnClick="RemoveContractorClick" Text="X" runat="server" />
                     </asp:TableCell><asp:TableCell>
@@ -724,9 +748,12 @@
                         <asp:DropDownList ID="ContractorAdjustmentType_5" ClientIDMode="Static" class="chzn-select" Width="130px" runat="server" />
                     </asp:TableCell><asp:TableCell>
                         <asp:TextBox ID="ContractorAdjustment_5" ClientIDMode="Static" CssClass="ContractorEntry" onchange="JsFormMoneyChanged(this)" runat="server" />
-                    </asp:TableCell></asp:TableRow><asp:TableRow ID="ContractorRowExtra_5" ClientIDMode="Static" CssClass="ContractorRow" Style="background-color: #E8F7FF;" runat="server">
+                    </asp:TableCell>
+                </asp:TableRow>
+                <asp:TableRow ID="ContractorRowExtra_5" ClientIDMode="Static" CssClass="ContractorRow" Style="background-color: #E8F7FF;" runat="server">
                     <asp:TableCell ColumnSpan="9" CssClass="ExtraCell">
                         Recurrence:
+                       
                         <asp:DropDownList ID="ContractorRecurrenceType_5" ClientIDMode="Static" CssClass="entryDropDownList" Width="75px" onchange="JsContractorRecurrenceTypeChanged(5)"
                             runat="server">
                             <asp:ListItem>None</asp:ListItem>
@@ -758,7 +785,9 @@
                         </asp:DropDownList>
                         <asp:Label ID="ContractorApplyToFutureLabel_5" ClientIDMode="Static" runat="server"> Re-Make Future: </asp:Label>
                         <asp:CheckBox ID="ContractorApplyToFuture_5" ClientIDMode="Static" OnClick="JsFormValueChanged(this)" runat="server" />
-                    </asp:TableCell></asp:TableRow><asp:TableRow ID="ContractorRow_6" ClientIDMode="Static" CssClass="ContractorRow" Style="background-color:#B2E6FF;" runat="server">
+                    </asp:TableCell>
+                </asp:TableRow>
+                <asp:TableRow ID="ContractorRow_6" ClientIDMode="Static" CssClass="ContractorRow" Style="background-color: #B2E6FF;" runat="server">
                     <asp:TableCell>
                         <asp:Button ID="ContractorRemoveButton_6" OnClick="RemoveContractorClick" Text="X" runat="server" />
                     </asp:TableCell><asp:TableCell>
@@ -779,9 +808,12 @@
                         <asp:DropDownList ID="ContractorAdjustmentType_6" ClientIDMode="Static" class="chzn-select" Width="130px" runat="server" />
                     </asp:TableCell><asp:TableCell>
                         <asp:TextBox ID="ContractorAdjustment_6" ClientIDMode="Static" CssClass="ContractorEntry" onchange="JsFormMoneyChanged(this)" runat="server" />
-                    </asp:TableCell></asp:TableRow><asp:TableRow ID="ContractorRowExtra_6" ClientIDMode="Static" CssClass="ContractorRow" Style="background-color: #B2E6FF;" runat="server">
+                    </asp:TableCell>
+                </asp:TableRow>
+                <asp:TableRow ID="ContractorRowExtra_6" ClientIDMode="Static" CssClass="ContractorRow" Style="background-color: #B2E6FF;" runat="server">
                     <asp:TableCell ColumnSpan="9" CssClass="ExtraCell">
                         Recurrence:
+                       
                         <asp:DropDownList ID="ContractorRecurrenceType_6" ClientIDMode="Static" CssClass="entryDropDownList" Width="75px" onchange="JsContractorRecurrenceTypeChanged(6)"
                             runat="server">
                             <asp:ListItem>None</asp:ListItem>
@@ -813,7 +845,9 @@
                         </asp:DropDownList>
                         <asp:Label ID="ContractorApplyToFutureLabel_6" ClientIDMode="Static" runat="server"> Re-Make Future: </asp:Label>
                         <asp:CheckBox ID="ContractorApplyToFuture_6" ClientIDMode="Static" OnClick="JsFormValueChanged(this)" runat="server" />
-                    </asp:TableCell></asp:TableRow><asp:TableRow ID="ContractorRow_7" ClientIDMode="Static" CssClass="ContractorRow" Style="background-color:#E8F7FF;" runat="server">
+                    </asp:TableCell>
+                </asp:TableRow>
+                <asp:TableRow ID="ContractorRow_7" ClientIDMode="Static" CssClass="ContractorRow" Style="background-color: #E8F7FF;" runat="server">
                     <asp:TableCell>
                         <asp:Button ID="ContractorRemoveButton_7" OnClick="RemoveContractorClick" Text="X" runat="server" />
                     </asp:TableCell><asp:TableCell>
@@ -834,9 +868,12 @@
                         <asp:DropDownList ID="ContractorAdjustmentType_7" ClientIDMode="Static" class="chzn-select" Width="130px" runat="server" />
                     </asp:TableCell><asp:TableCell>
                         <asp:TextBox ID="ContractorAdjustment_7" ClientIDMode="Static" CssClass="ContractorEntry" onchange="JsFormMoneyChanged(this)" runat="server" />
-                    </asp:TableCell></asp:TableRow><asp:TableRow ID="ContractorRowExtra_7" ClientIDMode="Static" CssClass="ContractorRow" Style="background-color: #E8F7FF;" runat="server">
+                    </asp:TableCell>
+                </asp:TableRow>
+                <asp:TableRow ID="ContractorRowExtra_7" ClientIDMode="Static" CssClass="ContractorRow" Style="background-color: #E8F7FF;" runat="server">
                     <asp:TableCell ColumnSpan="9" CssClass="ExtraCell">
                         Recurrence:
+                       
                         <asp:DropDownList ID="ContractorRecurrenceType_7" ClientIDMode="Static" CssClass="entryDropDownList" Width="75px" onchange="JsContractorRecurrenceTypeChanged(7)"
                             runat="server">
                             <asp:ListItem>None</asp:ListItem>
@@ -868,7 +905,9 @@
                         </asp:DropDownList>
                         <asp:Label ID="ContractorApplyToFutureLabel_7" ClientIDMode="Static" runat="server"> Re-Make Future: </asp:Label>
                         <asp:CheckBox ID="ContractorApplyToFuture_7" ClientIDMode="Static" OnClick="JsFormValueChanged(this)" runat="server" />
-                    </asp:TableCell></asp:TableRow><asp:TableRow ID="ContractorRow_8" ClientIDMode="Static" CssClass="ContractorRow" Style="background-color:#B2E6FF;" runat="server">
+                    </asp:TableCell>
+                </asp:TableRow>
+                <asp:TableRow ID="ContractorRow_8" ClientIDMode="Static" CssClass="ContractorRow" Style="background-color: #B2E6FF;" runat="server">
                     <asp:TableCell>
                         <asp:Button ID="ContractorRemoveButton_8" OnClick="RemoveContractorClick" Text="X" runat="server" />
                     </asp:TableCell><asp:TableCell>
@@ -889,9 +928,12 @@
                         <asp:DropDownList ID="ContractorAdjustmentType_8" ClientIDMode="Static" class="chzn-select" Width="130px" runat="server" />
                     </asp:TableCell><asp:TableCell>
                         <asp:TextBox ID="ContractorAdjustment_8" ClientIDMode="Static" CssClass="ContractorEntry" onchange="JsFormMoneyChanged(this)" runat="server" />
-                    </asp:TableCell></asp:TableRow><asp:TableRow ID="ContractorRowExtra_8" ClientIDMode="Static" CssClass="ContractorRow" Style="background-color: #B2E6FF;" runat="server">
+                    </asp:TableCell>
+                </asp:TableRow>
+                <asp:TableRow ID="ContractorRowExtra_8" ClientIDMode="Static" CssClass="ContractorRow" Style="background-color: #B2E6FF;" runat="server">
                     <asp:TableCell ColumnSpan="9" CssClass="ExtraCell">
                         Recurrence:
+                       
                         <asp:DropDownList ID="ContractorRecurrenceType_8" ClientIDMode="Static" CssClass="entryDropDownList" Width="75px" onchange="JsContractorRecurrenceTypeChanged(8)"
                             runat="server">
                             <asp:ListItem>None</asp:ListItem>
@@ -923,7 +965,9 @@
                         </asp:DropDownList>
                         <asp:Label ID="ContractorApplyToFutureLabel_8" ClientIDMode="Static" runat="server"> Re-Make Future: </asp:Label>
                         <asp:CheckBox ID="ContractorApplyToFuture_8" ClientIDMode="Static" OnClick="JsFormValueChanged(this)" runat="server" />
-                    </asp:TableCell></asp:TableRow><asp:TableRow ID="ContractorRow_9" ClientIDMode="Static" CssClass="ContractorRow" Style="background-color:#E8F7FF;" runat="server">
+                    </asp:TableCell>
+                </asp:TableRow>
+                <asp:TableRow ID="ContractorRow_9" ClientIDMode="Static" CssClass="ContractorRow" Style="background-color: #E8F7FF;" runat="server">
                     <asp:TableCell>
                         <asp:Button ID="ContractorRemoveButton_9" OnClick="RemoveContractorClick" Text="X" runat="server" />
                     </asp:TableCell><asp:TableCell>
@@ -944,9 +988,12 @@
                         <asp:DropDownList ID="ContractorAdjustmentType_9" ClientIDMode="Static" class="chzn-select" Width="130px" runat="server" />
                     </asp:TableCell><asp:TableCell>
                         <asp:TextBox ID="ContractorAdjustment_9" ClientIDMode="Static" CssClass="ContractorEntry" onchange="JsFormMoneyChanged(this)" runat="server" />
-                    </asp:TableCell></asp:TableRow><asp:TableRow ID="ContractorRowExtra_9" ClientIDMode="Static" CssClass="ContractorRow" Style="background-color: #E8F7FF;" runat="server">
+                    </asp:TableCell>
+                </asp:TableRow>
+                <asp:TableRow ID="ContractorRowExtra_9" ClientIDMode="Static" CssClass="ContractorRow" Style="background-color: #E8F7FF;" runat="server">
                     <asp:TableCell ColumnSpan="9" CssClass="ExtraCell">
                         Recurrence:
+                       
                         <asp:DropDownList ID="ContractorRecurrenceType_9" ClientIDMode="Static" CssClass="entryDropDownList" Width="75px" onchange="JsContractorRecurrenceTypeChanged(9)"
                             runat="server">
                             <asp:ListItem>None</asp:ListItem>
@@ -978,6 +1025,12 @@
                         </asp:DropDownList>
                         <asp:Label ID="ContractorApplyToFutureLabel_9" ClientIDMode="Static" runat="server"> Re-Make Future: </asp:Label>
                         <asp:CheckBox ID="ContractorApplyToFuture_9" ClientIDMode="Static" OnClick="JsFormValueChanged(this)" runat="server" />
-                    </asp:TableCell></asp:TableRow></asp:Table><asp:PlaceHolder ID="PlaceHolder1" runat="server"></asp:PlaceHolder></fieldset>
-     </asp:Panel><asp:Button ID="DeleteButton" OnClick="DeleteClick" Text="Delete Appointment" runat="server" />
-    © 2015 2LocalGalsHouseKeeping </asp:Content>
+                    </asp:TableCell>
+                </asp:TableRow>
+            </asp:Table>
+            <asp:PlaceHolder ID="PlaceHolder1" runat="server"></asp:PlaceHolder>
+        </fieldset>
+    </asp:Panel>
+    <asp:Button ID="DeleteButton" OnClick="DeleteClick" Text="Delete Appointment" runat="server" />
+    © 2015 2LocalGalsHouseKeeping
+</asp:Content>
