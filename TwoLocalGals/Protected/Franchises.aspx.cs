@@ -57,7 +57,11 @@ namespace Nexus.Protected
                     SMSUsername.Text = franchise.smsUsername;
                     SMSPassword.Text = franchise.smsPassword;
                     ReviewUsLink.Text = franchise.reviewUsLink;
-
+                    if (!string.IsNullOrEmpty(franchise.FranchiseImg))
+                    {
+                        DefaultPic.Visible = true;
+                        DefaultPic.ImageUrl = "~/ContratorPics/" + franchise.FranchiseImg;
+                    }
                     AdvertisementList.Text = franchise.advertisementList;
                     if (string.IsNullOrEmpty(AdvertisementList.Text))
                         AdvertisementList.Text = @"Google Search|Google Maps|Google Top/Side|Angies List|Word Of Mouth|Yellow Pages|Unknown|Other";
@@ -193,6 +197,31 @@ namespace Nexus.Protected
                 franchise.smsUsername = SMSUsername.Text;
                 franchise.smsPassword = SMSPassword.Text;
                 franchise.reviewUsLink = ReviewUsLink.Text;
+
+                if (FranchiseImg.HasFile)
+                {
+                    try
+                    {
+                        string extension = Path.GetExtension(FranchiseImg.FileName);
+                        string fileName = Guid.NewGuid().ToString().Split('-').Last() + extension;
+                        string folderPath = Server.MapPath("~/ContratorPics/");
+
+                        if (!Directory.Exists(folderPath))
+                        {
+                            Directory.CreateDirectory(folderPath);
+                        }
+                        FranchiseImg.Width = 25;
+                        FranchiseImg.SaveAs(Path.Combine(folderPath,fileName));
+                        franchise.FranchiseImg = fileName;
+
+                    }
+                    catch (Exception ex)
+                    {
+
+
+
+                    }
+                }
 
                 if (string.IsNullOrEmpty(franchise.franchiseName)) return true;
                 if (Globals.GetUserAccess(this) < 9 && (Globals.IDToMask(franchiseID) & Globals.GetFranchiseMask()) == 0) return true;

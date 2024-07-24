@@ -6,6 +6,8 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Drawing;
 using System.Threading;
+using System.IO;
+using Image = System.Web.UI.WebControls.Image;
 
 namespace Nexus.Protected
 {
@@ -687,7 +689,158 @@ namespace Nexus.Protected
                     foreach (string type in adjustmentTypes)
                         adjustmentTypeDropDown.Items.Add(type);
                     adjustmentTypeDropDown.SelectedValue = sameApps[i].contractorAdjustType;
+
+
+
+                    PlaceHolder1.Controls.Add(new LiteralControl("<br/>"));
+                    PlaceHolder1.Controls.Add(new LiteralControl("<br/>"));
+
+                    // Create a Label
+                    Label lbl = new Label();
+                    lbl.ID = "ContNamelbl" + i;
+                    lbl.Text = "Name: ";
+                    PlaceHolder1.Controls.Add(lbl);
+
+                    // Create a Label
+                    Label ContractorName = new Label();
+                    ContractorName.ID = "ContName" + i;
+                    ContractorName.Text = sameApps[i].contractorTitle;
+                    PlaceHolder1.Controls.Add(ContractorName);
+
+                    PlaceHolder1.Controls.Add(new LiteralControl("<br/>"));
+                    PlaceHolder1.Controls.Add(new LiteralControl("<br/>"));
+
+
+                    // Create a Label
+                    Label locationSharelbl = new Label();
+                    locationSharelbl.ID = "locationSharelbl" + i;
+                    locationSharelbl.Text = "Location Sharing: ";
+                    PlaceHolder1.Controls.Add(locationSharelbl);
+
+                    // Create a Label
+                    Label locationShare = new Label();
+                    locationShare.ID = "locationShare" + i;
+                    locationShare.Text = contractor.ShareLocation ? "Yes" : "No";
+                    PlaceHolder1.Controls.Add(locationShare);
+
+                    PlaceHolder1.Controls.Add(new LiteralControl("<br/>"));
+                    PlaceHolder1.Controls.Add(new LiteralControl("<br/>"));
+
+                    // Create a Label
+                    Label startTimelbl = new Label();
+                    startTimelbl.ID = "StartJobTimelbl" + i;
+                    startTimelbl.Text = "Start Job time: ";
+                    PlaceHolder1.Controls.Add(startTimelbl);
+
+                    // Create a Label
+                    Label StartJobTime = new Label();
+                    StartJobTime.ID = "StartJobTime" + i;
+                    StartJobTime.Text = sameApps[i].jobStartTime?.ToString("T");
+                    PlaceHolder1.Controls.Add(StartJobTime);
+
+                    PlaceHolder1.Controls.Add(new LiteralControl("<br/>"));
+                    PlaceHolder1.Controls.Add(new LiteralControl("<br/>"));
+
+                    // Create a Label
+                    Label endTimelbl = new Label();
+                    endTimelbl.ID = "endJobTimelbl" + i;
+                    endTimelbl.Text = "Finish Job time: ";
+                    PlaceHolder1.Controls.Add(endTimelbl);
+
+                    // Create a Label
+                    Label endJobTime = new Label();
+                    endJobTime.ID = "endJobTime" + i;
+                    endJobTime.Text = sameApps[i].jobEndTime?.ToString("T");
+                    PlaceHolder1.Controls.Add(endJobTime);
+
+                    PlaceHolder1.Controls.Add(new LiteralControl("<br/>"));
+                    PlaceHolder1.Controls.Add(new LiteralControl("<br/>"));
+
+                    // Create a Label
+                    Label jobCompletedlbl = new Label();
+                    jobCompletedlbl.ID = "jobCompletedlbl" + i;
+                    jobCompletedlbl.Text = "job Completed: ";
+                    PlaceHolder1.Controls.Add(jobCompletedlbl);
+
+                    // Create a Label
+                    Label jobCompleted = new Label();
+                    jobCompleted.ID = "jobCompleted" + i;
+                    jobCompleted.Text = sameApps[i].jobEndTime.HasValue ? "Yes" : "No";
+                    PlaceHolder1.Controls.Add(jobCompleted);
+
+                    PlaceHolder1.Controls.Add(new LiteralControl("<br/>"));
+                    PlaceHolder1.Controls.Add(new LiteralControl("<br/>"));
+
+                    // Create a Label
+                    Label AreasCompletedlbl = new Label();
+                    AreasCompletedlbl.ID = "AreasCompletedlbl" + i;
+                    AreasCompletedlbl.Text = "Areas Completed: ";
+                    PlaceHolder1.Controls.Add(AreasCompletedlbl);
+
+                    // Create a Label
+                    Label AreasCompleted = new Label();
+                    AreasCompleted.ID = "AreasCompleted" + i;
+                    AreasCompleted.Text = "";
+                    PlaceHolder1.Controls.Add(AreasCompleted);
+
+                    PlaceHolder1.Controls.Add(new LiteralControl("<br/>"));
+                    PlaceHolder1.Controls.Add(new LiteralControl("<br/>"));
+                    
+                    // Create a Label
+                    Label Noteslbl = new Label();
+                    Noteslbl.ID = "Noteslbl" + i;
+                    Noteslbl.Text = "Notes: ";
+                    PlaceHolder1.Controls.Add(Noteslbl);
+
+                    // Create a Label
+                    Label Notes = new Label();
+                    Notes.ID = "Notes" + i;
+                    Notes.Text = sameApps[i].Notes;
+                    PlaceHolder1.Controls.Add(Notes);
+
+                    PlaceHolder1.Controls.Add(new LiteralControl("<br/>"));
+                    PlaceHolder1.Controls.Add(new LiteralControl("<br/>"));
+
+                    
+                    // Create a Label
+                    Label Pictureslbl = new Label();
+                    Pictureslbl.ID = "Pictures" + i;
+                    Pictureslbl.Text = "Pictures: ";
+                    PlaceHolder1.Controls.Add(Pictureslbl);
+
+
+                    foreach (var img in Database.GetAppointmentAttachments(sameApps[i].appointmentID))
+                    {
+
+                        var fileName = Path.GetFileName(img.ImageURL);
+                        var imageUrl = "~/ContratorPics/" + fileName;
+                        var image = new Image
+                        {
+                            ImageUrl = imageUrl,
+                            CssClass = "galleryImage"
+                        };
+                        PlaceHolder1.Controls.Add(image);
+                    }
+
+
+
+                        
+
+                    // Optionally add a line break
+                    PlaceHolder1.Controls.Add(new LiteralControl("<br/>"));
+                    PlaceHolder1.Controls.Add(new LiteralControl("<br/>"));
+
+                    PlaceHolder1.Controls.Add(new LiteralControl("<hr>"));
+
+
+                    // Optionally add a line break
+                    PlaceHolder1.Controls.Add(new LiteralControl("<br/>"));
+                    PlaceHolder1.Controls.Add(new LiteralControl("<br/>"));
+
                 }
+
+
+
 
                 HoursBilled.Text = Globals.FormatHours(hoursBilled);
                 ServiceFee.Text = Globals.FormatMoney(Math.Round(serviceFee, 1));

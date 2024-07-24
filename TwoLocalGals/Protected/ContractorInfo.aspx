@@ -196,7 +196,7 @@
                     Upload Picture:
                 </td>
                 <td>
-        <asp:FileUpload ID="UploadPic" runat="server" />
+        <asp:FileUpload ID="UploadPic" runat="server" text="Upload Image" />
 
                 </td>
             </tr>
@@ -204,3 +204,4 @@
     </fieldset>
     © 2015 2LocalGalsHouseKeeping
 </asp:Content>
+

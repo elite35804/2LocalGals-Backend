@@ -29,9 +29,11 @@ namespace Nexus
         //public const string baseUrl = @"http://beta.2localgals.net/";
         //public const string baseUrlSecure = @"https://beta.2localgals.net/";
 
-        public const string baseUrl = @"http://localhost:52592/";
-        public const string baseUrlSecure = @"http://localhost:52592/";
+        public const string baseUrl = @"http://45.61.128.213:3000/";
+        public const string baseUrlSecure = @"http://45.61.128.213:3000/";
 
+        //public const string baseUrl = @"http://167.88.164.32:3000/";
+        //public const string baseUrlSecure = @"http://167.88.164.32:3000/";
         #region UtcToMst
         public static DateTime UtcToMst(DateTime utc)
         {
@@ -448,7 +450,7 @@ namespace Nexus
 
                 Globals.CleanAllCookies();
 
-                page.Response.Redirect("https://www.2localgals.com/");
+                page.Response.Redirect("http://45.61.128.213:3000/");
             }
             catch { }
         }

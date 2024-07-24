@@ -7,6 +7,9 @@ using System.Diagnostics;
 using System.Reflection;
 using System.IO;
 using System.Web.UI.WebControls;
+using TwoLocalGals.DTO;
+using Nexus.Protected;
+using TwoLocalGals.Protected;
 
 namespace Nexus
 {
@@ -57,6 +60,7 @@ namespace Nexus
         public string smsUsername;
         public string smsPassword;
         public string reviewUsLink;
+        public string FranchiseImg;
     }
 
     public struct ContractorStruct
@@ -103,7 +107,11 @@ namespace Nexus
         public DateTime lastPayroll;
         public int customerFreuqency;
         public bool SendSchedulesByEmail;
-        public string ContractorPic; 
+        public string ContractorPic;
+        public string longitude;
+        public string latitude;
+        public bool ShareLocation;
+
     }
 
     public struct CustomerStruct
@@ -342,6 +350,22 @@ namespace Nexus
         public string username;
         public bool usernameBooked;
         public decimal salesTax;
+        public bool ShareLocation;
+        public bool JobCompleted;
+        public string Notes;
+        public DateTime? jobStartTime;
+        public DateTime? jobEndTime;
+        public string longitude;
+        public string latitude;
+
+    }
+
+
+    public struct AppAttachments
+    {
+        public int id;
+        public int AppointmentId;
+        public string ImageURL;
     }
 
     public struct ConAppStruct
@@ -494,6 +518,20 @@ namespace Nexus
     {
         public decimal distance;
         public decimal travelTime;
+    }
+
+
+    public struct JobLogsStruct
+    {
+        public int id;
+        public int ContractorId;
+        public int CustomerId;
+        public int AppointmentId;
+        public string Content;
+        public bool Checked;
+        public string CheckedBy;
+        public DateTime CreatedAt;
+        public bool IsGeneral;
     }
 
     #region DBRow
@@ -905,6 +943,59 @@ namespace Nexus
             return ret;
         }
         #endregion
+        #region GetUserByID
+        public static UsersDTO GetUserById(string userId)
+        {
+
+            SqlConnection sqlConnection = null;
+            SqlDataReader sqlDataReader = null;
+            UsersDTO user = new UsersDTO();
+
+            try
+            {
+
+                sqlConnection = new SqlConnection(connString);
+                sqlConnection.Open();
+
+                string cmdText = @"
+                SELECT
+                    Users.username,
+                    Users.access,
+                    Users.contractorID,
+	                Users.franchiseMask AS userMask,
+	                Contractors.franchiseMask AS contractorMask
+                FROM
+                    Users
+LEFT OUTER JOIN Contractors ON Users.contractorID = Contractors.contractorID
+                where Users.username = " + $"'{userId}'";
+
+                SqlCommand cmd = new SqlCommand(cmdText, sqlConnection);
+                sqlDataReader = cmd.ExecuteReader();
+
+                while (sqlDataReader.Read())
+                {
+                    user.username = (string)sqlDataReader["username"];
+                    user.access = (int)sqlDataReader["access"];
+                    user.contractorID = sqlDataReader["contractorID"] == DBNull.Value ? 0 : (int)sqlDataReader["contractorID"];
+                    user.franchiseMask = (int)sqlDataReader["userMask"];
+                    if (user.franchiseMask == -1)
+                        user.franchiseMask = sqlDataReader["contractorMask"] == DBNull.Value ? 0 : (int)sqlDataReader["contractorMask"];
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            finally
+            {
+                if (sqlDataReader != null)
+                    sqlDataReader.Close();
+                if (sqlConnection != null)
+                    sqlConnection.Close();
+            }
+            return user;
+        }
+        #endregion
 
         #region SetUser
         public static string SetUser(string username, UserStruct user)
@@ -1074,6 +1165,7 @@ namespace Nexus
                     franchise.smsUsername = Globals.SafeSqlString(sqlDataReader["smsUsername"]);
                     franchise.smsPassword = Globals.SafeSqlString(sqlDataReader["smsPassword"]);
                     franchise.reviewUsLink = Globals.SafeSqlString(sqlDataReader["reviewUsLink"]);
+                    franchise.FranchiseImg = Globals.SafeSqlString(sqlDataReader["FranchiseImg"]);
                     ret.Add(franchise);
                 }
             }
@@ -1140,7 +1232,8 @@ namespace Nexus
                             scheduleFeeString = @scheduleFeeString,
                             smsUsername = @smsUsername,
                             smsPassword = @smsPassword,
-                            reviewUsLink = @reviewUsLink
+                            reviewUsLink = @reviewUsLink,
+                            FranchiseImg =@FranchiseImg
 	                    WHERE
 		                    franchiseID = @franchiseID;
                         SELECT @franchiseID AS franchiseID;
@@ -1181,7 +1274,8 @@ namespace Nexus
                             scheduleFeeString,
                             smsUsername,
                             smsPassword,
-                            reviewUsLink)
+                            reviewUsLink,
+FranchiseImg)
 	                    VALUES
                             (@franchiseID,
                             @franchiseName,
@@ -1215,7 +1309,8 @@ namespace Nexus
                             @scheduleFeeString,
                             @smsUsername,
                             @smsPassword,
-                            @reviewUsLink)
+                            @reviewUsLink,
+@FranchiseImg)
                         SELECT @franchiseID AS franchiseID;
                     END";
 
@@ -1253,6 +1348,7 @@ namespace Nexus
                 cmd.Parameters.Add(new SqlParameter(@"smsUsername", (object)franchise.smsUsername ?? DBNull.Value));
                 cmd.Parameters.Add(new SqlParameter(@"smsPassword", (object)franchise.smsPassword ?? DBNull.Value));
                 cmd.Parameters.Add(new SqlParameter(@"reviewUsLink", (object)franchise.reviewUsLink ?? DBNull.Value));
+                cmd.Parameters.Add(new SqlParameter(@"FranchiseImg", (object)franchise.FranchiseImg ?? DBNull.Value));
 
                 sqlDataReader = cmd.ExecuteReader();
 
@@ -1539,6 +1635,67 @@ namespace Nexus
         }
         #endregion
 
+        #region GetCustomerById
+
+        public static JobInfo GetJobInfoCustomerById(int CustomerId)
+        {
+            JobInfo customer = new JobInfo();
+
+            SqlConnection sqlConnection = null;
+            SqlDataReader sqlDataReader = null;
+            try
+            {
+                sqlConnection = new SqlConnection(connString);
+                sqlConnection.Open();
+
+                string cmdText = @"
+                    SELECT
+businessName,
+                        firstName,
+                        lastName,
+                        bestPhone,
+bestPhoneCell,
+                        alternatePhoneOne,
+alternatePhoneOneCell,
+                        alternatePhoneTwo,
+alternatePhoneTwoCell
+
+                    FROM
+                        Customers
+                    WHERE
+                       CustomerId = " + $"'{CustomerId}'";
+
+                SqlCommand cmd = new SqlCommand(cmdText, sqlConnection);
+                sqlDataReader = cmd.ExecuteReader();
+
+                while (sqlDataReader.Read())
+                {
+                    customer.customerName = Globals.FormatCustomerTitle(sqlDataReader["firstName"], sqlDataReader["lastName"], sqlDataReader["businessName"]);
+                    customer.bestPhone = Globals.SafeSqlString(sqlDataReader["bestPhone"]);
+                    customer.alternatePhoneOne = Globals.SafeSqlString(sqlDataReader["alternatePhoneOne"]);
+                    customer.alternatePhoneTwo = Globals.SafeSqlString(sqlDataReader["alternatePhoneTwo"]);
+                    customer.bestPhoneCell = Convert.ToBoolean(sqlDataReader["bestPhoneCell"]);
+                    customer.alternatePhoneTwoCell = Convert.ToBoolean(sqlDataReader["alternatePhoneTwoCell"]);
+                    customer.alternatePhoneOneCell = Convert.ToBoolean(sqlDataReader["alternatePhoneOneCell"]);
+                }
+            }
+            catch (Exception ex) { }
+            finally
+            {
+                if (sqlDataReader != null)
+                    sqlDataReader.Close();
+                if (sqlConnection != null)
+                    sqlConnection.Close();
+            }
+            return customer;
+        }
+
+
+
+
+        #endregion
+
+
         #region GetContractorList
         public static List<ContractorStruct> GetContractorList(int franchiseMask, int contractorType, bool onlyReps, bool onlyActive, bool onlyScheduled, bool showApplicants, string orderBy = "firstName, lastName")
         {
@@ -1619,12 +1776,16 @@ namespace Nexus
                     contractor.sendPayroll = (bool)sqlDataReader["sendPayroll"];
                     contractor.lastPayroll = (DateTime)sqlDataReader["lastPayroll"];
                     contractor.SendSchedulesByEmail = (bool)sqlDataReader["SendSchedulesByEmail"];
-                    contractor.ContractorPic = (string)sqlDataReader["ContractorPic"];
+                    contractor.ContractorPic = Convert.ToString(sqlDataReader["ContractorPic"]);
+                    contractor.longitude = Convert.ToString(sqlDataReader["longitude"]);
+                    contractor.latitude = Convert.ToString(sqlDataReader["latitude"]);
+                    contractor.ShareLocation = (bool)sqlDataReader["ShareLocation"];
 
                     ret.Add(contractor);
                 }
             }
-            catch { }
+            catch (Exception ex) {
+            }
             finally
             {
                 if (sqlDataReader != null)
@@ -1706,6 +1867,9 @@ namespace Nexus
                     contractor.lastPayroll = (DateTime)sqlDataReader["lastPayroll"];
                     contractor.SendSchedulesByEmail = (bool)sqlDataReader["SendSchedulesByEmail"];
 
+                    contractor.longitude = Convert.ToString(sqlDataReader["longitude"]);
+                    contractor.latitude = Convert.ToString(sqlDataReader["latitude"]);
+                    contractor.ShareLocation = (bool)sqlDataReader["ShareLocation"];
                 }
             }
             catch { }
@@ -1720,6 +1884,241 @@ namespace Nexus
             return contractor;
         }
         #endregion
+        #region GetContractorByID
+        public static ContractorStruct GetContractorByID(int contractorID)
+        {
+            ContractorStruct contractor = new ContractorStruct();
+
+            SqlConnection sqlConnection = null;
+            SqlDataReader sqlDataReader = null;
+            try
+            {
+                sqlConnection = new SqlConnection(connString);
+                sqlConnection.Open();
+
+                string cmdText = @"
+                    SELECT
+                        *
+                    FROM
+                        Contractors
+                    WHERE
+                        @contractorID = contractorID";
+
+                SqlCommand cmd = new SqlCommand(cmdText, sqlConnection);
+                cmd.Parameters.Add(new SqlParameter("contractorID", contractorID));
+                sqlDataReader = cmd.ExecuteReader();
+
+                if (sqlDataReader.Read())
+                {
+                    contractor.contractorID = (int)sqlDataReader["contractorID"];
+                    contractor.contractorType = (int)sqlDataReader["contractorType"];
+                    contractor.franchiseMask = (int)sqlDataReader["franchiseMask"];
+                    contractor.title = Globals.FormatContractorTitle(sqlDataReader["firstName"], sqlDataReader["lastName"], sqlDataReader["businessName"]);
+                    contractor.firstName = Globals.SafeSqlString(sqlDataReader["firstName"]);
+                    contractor.lastName = Globals.SafeSqlString(sqlDataReader["lastName"]);
+                    contractor.businessName = Globals.SafeSqlString(sqlDataReader["businessName"]);
+                    contractor.address = Globals.SafeSqlString(sqlDataReader["address"]);
+                    contractor.city = Globals.SafeSqlString(sqlDataReader["city"]);
+                    contractor.state = Globals.SafeSqlString(sqlDataReader["state"]);
+                    contractor.zip = Globals.SafeSqlString(sqlDataReader["zip"]);
+                    contractor.bestPhone = Globals.SafeSqlString(sqlDataReader["bestPhone"]);
+                    contractor.alternatePhone = Globals.SafeSqlString(sqlDataReader["alternatePhone"]);
+                    contractor.email = Globals.SafeSqlString(sqlDataReader["email"]);
+                    contractor.ssn = Globals.Decrypt(Globals.SafeSqlString(sqlDataReader["ssn"]));
+                    contractor.paymentType = Globals.SafeSqlString(sqlDataReader["paymentType"]);
+                    contractor.paymentDay = Globals.SafeSqlString(sqlDataReader["paymentDay"]);
+                    contractor.notes = Globals.SafeSqlString(sqlDataReader["notes"]);
+                    contractor.team = Globals.SafeSqlString(sqlDataReader["team"]);
+                    contractor.startDay = (DateTime)sqlDataReader["startDay"];
+                    contractor.endDay = (DateTime)sqlDataReader["endDay"];
+                    contractor.score = (decimal)sqlDataReader["score"];
+                    contractor.hourlyRate = (decimal)sqlDataReader["hourlyRate"];
+                    contractor.serviceSplit = (decimal)sqlDataReader["serviceSplit"];
+                    contractor.hireDate = (DateTime)sqlDataReader["hireDate"];
+                    contractor.birthday = (DateTime)sqlDataReader["birthday"];
+                    contractor.waiverDate = (DateTime)sqlDataReader["waiverDate"];
+                    contractor.waiverUpdateDate = (DateTime)sqlDataReader["waiverUpdateDate"];
+                    contractor.insuranceDate = (DateTime)sqlDataReader["insuranceDate"];
+                    contractor.insuranceUpdateDate = (DateTime)sqlDataReader["insuranceUpdateDate"];
+                    contractor.backgroundCheck = (DateTime)sqlDataReader["backgroundCheck"];
+                    contractor.accountRep = (bool)sqlDataReader["accountRep"];
+                    contractor.applicant = (bool)sqlDataReader["applicant"];
+                    contractor.active = (bool)sqlDataReader["active"];
+                    contractor.scheduled = (bool)sqlDataReader["scheduled"];
+                    contractor.sendSchedules = (bool)sqlDataReader["sendSchedules"];
+                    contractor.lastSchedule = (DateTime)sqlDataReader["lastSchedule"];
+                    contractor.sendPayroll = (bool)sqlDataReader["sendPayroll"];
+                    contractor.lastPayroll = (DateTime)sqlDataReader["lastPayroll"];
+                    contractor.SendSchedulesByEmail = (bool)sqlDataReader["SendSchedulesByEmail"];
+                    contractor.ContractorPic = Convert.ToString(sqlDataReader["ContractorPic"]);
+
+                    contractor.longitude = Convert.ToString(sqlDataReader["longitude"]);
+                    contractor.latitude = Convert.ToString(sqlDataReader["latitude"]);
+                    contractor.ShareLocation = (bool)sqlDataReader["ShareLocation"];
+                }
+            }
+            catch { }
+            finally
+            {
+                if (sqlDataReader != null)
+                    sqlDataReader.Close();
+                if (sqlConnection != null)
+                    sqlConnection.Close();
+            }
+
+            return contractor;
+        }
+        #endregion
+
+        #region ------------------Job Logs-----------------
+
+        public static List<JobLogsStruct> GetJobLogs(int AppointmentId, int contractorID, bool isGeneral)
+        {
+            SqlConnection sqlConnection = null;
+            SqlDataReader sqlDataReader = null;
+            try
+            {
+                sqlConnection = new SqlConnection(connString);
+                sqlConnection.Open();
+
+                string cmdText = @"
+                    SELECT
+                        *
+                    FROM
+                        JobLogs
+                    WHERE
+                        AppointmentId = @AppointmentId and
+                        @contractorID = contractorID and 
+                        IsGeneral = @IsGeneral";
+
+                SqlCommand cmd = new SqlCommand(cmdText, sqlConnection);
+                cmd.Parameters.Add(new SqlParameter("AppointmentId", AppointmentId));
+                cmd.Parameters.Add(new SqlParameter("contractorID", contractorID));
+                cmd.Parameters.Add(new SqlParameter("IsGeneral", isGeneral));
+                sqlDataReader = cmd.ExecuteReader();
+                List<JobLogsStruct> jobLogs = new List<JobLogsStruct>();
+                while (sqlDataReader.Read())
+                {
+                    JobLogsStruct log = new JobLogsStruct();
+                    log.id = (int)sqlDataReader["id"];
+                    log.CustomerId = (int)sqlDataReader["CustomerId"];
+                    log.AppointmentId = (int)sqlDataReader["AppointmentId"];
+                    log.ContractorId = (int)sqlDataReader["ContractorId"];
+                    log.Content = (string)sqlDataReader["content"];
+                    log.Checked = (bool)sqlDataReader["Checked"];
+                    log.CheckedBy = (string)sqlDataReader["CheckedBy"];
+                    log.CreatedAt = (DateTime)sqlDataReader["CreatedAt"];
+                    log.IsGeneral = (bool)sqlDataReader["IsGeneral"];
+                    jobLogs.Add(log);
+                }
+                return jobLogs;
+            }
+            catch { }
+            finally
+            {
+                if (sqlDataReader != null)
+                    sqlDataReader.Close();
+                if (sqlConnection != null)
+                    sqlConnection.Close();
+            }
+            return null;
+        }
+
+        public static string updateJobLog(JobLogsStruct job)
+        {
+
+            SqlConnection sqlConnection = null;
+            try
+            {
+                SqlDataReader sqlDataReader = null;
+                sqlConnection = new SqlConnection(connString);
+                sqlConnection.Open();
+
+                string cmdText = @"
+                Select * from JobLogs where 
+                        AppointmentId = @AppointmentId and
+                        @contractorID = contractorID and 
+                        Content = @content";
+
+                SqlCommand cmd = new SqlCommand(cmdText, sqlConnection);
+                cmd.Parameters.Add(new SqlParameter(@"AppointmentId", job.AppointmentId));
+                cmd.Parameters.Add(new SqlParameter(@"contractorID", job.ContractorId));
+                cmd.Parameters.Add(new SqlParameter(@"Content", job.Content));
+                sqlDataReader = cmd.ExecuteReader();
+
+             
+
+                if (sqlDataReader.HasRows)
+                {
+                    sqlDataReader.Read();
+                    var id = (int)sqlDataReader["id"];
+                    if (sqlConnection != null)
+                        sqlConnection.Close();
+
+                    sqlConnection.Open();
+
+                    string cmdText1 = @"
+                    Update JobLogs set  Checked = @Checked,  CreatedAt = GetDate(), CheckedBy = @CreatedBy  , IsGeneral = @IsGeneral
+                    Where id = @id";
+
+                    SqlCommand cmd1 = new SqlCommand(cmdText1, sqlConnection);
+                    cmd1.Parameters.Add(new SqlParameter(@"Checked", job.Checked));
+                    cmd1.Parameters.Add(new SqlParameter(@"CreatedBy", job.CheckedBy));
+                    cmd1.Parameters.Add(new SqlParameter(@"IsGeneral", job.IsGeneral));
+                    cmd1.Parameters.Add(new SqlParameter(@"id", id));
+                    cmd1.ExecuteNonQuery();
+
+                }
+                else
+                {
+                    if (sqlConnection != null)
+                        sqlConnection.Close();
+
+                    sqlConnection.Open();
+
+                    string cmdText2 = @"
+                    Insert into JobLogs  ([ContractorId]
+                    ,[CustomerId]
+                    ,[AppointmentId]
+                    ,[Content]
+                    ,[Checked]
+                    ,[CheckedBy]
+                    ,[CreatedAt]
+                    ,[IsGeneral])  Values " +
+                    $"({job.ContractorId} , {job.CustomerId} , {job.AppointmentId} ,'{job.Content}',{(job.Checked ? 1 : 0) },'{job.CheckedBy}', GetDate() ,{(job.IsGeneral ? 1 : 0)} )";
+
+                    SqlCommand cmd2 = new SqlCommand(cmdText2, sqlConnection);
+                    cmd2.ExecuteNonQuery();
+
+                }
+
+                //string cmdText3 = @"
+                //    Update customers set @content = @Checked
+                //    Where appointmentID = @id";
+
+                //SqlCommand cmd3 = new SqlCommand(cmdText3, sqlConnection);
+                //cmd3.Parameters.Add(new SqlParameter(@"id", job.AppointmentId));
+                //cmd3.Parameters.Add(new SqlParameter(@"content", job.Content));
+                //cmd3.Parameters.Add(new SqlParameter(@"Checked", job.Checked));
+                //cmd3.ExecuteNonQuery();
+
+                return null;
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+
+            }
+            finally
+            {
+                if (sqlConnection != null)
+                    sqlConnection.Close();
+            }
+
+        }
+
+        #endregion
+
 
         #region GetContractorDynamicByID
         public static DBRow GetContractorDynamicByID(int franchiseMask, int contractorID)
@@ -3450,7 +3849,13 @@ TakePic)
                         CO.contractorType,
                         CO.firstName,
                         CO.lastName,
-                        CO.businessName
+                        CO.businessName,
+                        A.notes,
+                        A.jobStartTime,
+                        A.jobEndTime,
+                        A.ShareLocation,
+                        A.JobCompleted
+
                     FROM
                         Appointments A LEFT JOIN Contractors CO ON A.contractorID = CO.contractorID
                     WHERE
@@ -3498,6 +3903,12 @@ TakePic)
                     app.monthlyWeek = (int)sqlDataReader["monthlyWeek"];
                     app.monthlyDay = (int)sqlDataReader["monthlyDay"];
                     app.salesTax = (decimal)sqlDataReader["salesTax"];
+                    app.JobCompleted = (bool)sqlDataReader["JobCompleted"];
+
+                    app.ShareLocation = (bool)sqlDataReader["ShareLocation"];
+                    app.Notes = sqlDataReader["notes"] == DBNull.Value ? null : (string)sqlDataReader["notes"];
+                    app.jobStartTime = sqlDataReader["jobStartTime"] != DBNull.Value ? (DateTime?)sqlDataReader["jobStartTime"] : null;
+                    app.jobEndTime = sqlDataReader["jobEndTime"] != DBNull.Value ? (DateTime?)sqlDataReader["jobEndTime"] : null;
                     ret.Add(app);
                 }
             }
@@ -3590,7 +4001,13 @@ TakePic)
                         CU.NC_TimeOfDayPrefix,
                         CU.NC_TimeOfDay,
                         CU.NC_DayOfWeek,
-                        CU.NC_RequiresKeys
+                        CU.NC_RequiresKeys,
+                        A.notes,
+                        A.jobStartTime,
+                        A.jobEndTime,
+                        A.ShareLocation,
+                        A.JobCompleted
+
                     FROM
                         Appointments A,
                         Customers CU,
@@ -3674,7 +4091,13 @@ TakePic)
                     app.sentEmail = (bool)sqlDataReader["sentEmail"];
                     app.keysReturned = (bool)sqlDataReader["keysReturned"];
                     app.followUpSent = (bool)sqlDataReader["followUpSent"];
+                    app.ShareLocation = (bool)sqlDataReader["ShareLocation"];
+                    app.JobCompleted = (bool)sqlDataReader["JobCompleted"];
                     app.salesTax = (decimal)sqlDataReader["salesTax"];
+                    app.Notes = sqlDataReader["notes"] == DBNull.Value ? null : (string)sqlDataReader["notes"];
+                    app.jobStartTime = sqlDataReader["jobStartTime"] != DBNull.Value ? (DateTime?)sqlDataReader["jobStartTime"] : null;
+                    app.jobEndTime = sqlDataReader["jobEndTime"] != DBNull.Value ? (DateTime?)sqlDataReader["jobEndTime"] : null;
+
                     ret.Add(app);
                 }
             }
@@ -4312,6 +4735,12 @@ TakePic)
                         A.followUpSent,
                         A.username,
                         A.salesTax,
+A.notes,
+A.jobStartTime,
+A.jobEndTime,
+A.ShareLocation,
+A.JobCompleted,
+
                         CU.franchiseMask,
                         CU.firstName AS cuFirstName,
                         CU.lastName AS cuLastName,
@@ -4382,8 +4811,14 @@ TakePic)
                 app.sentWeekSMS = (bool)sqlDataReader["sentWeekSMS"];
                 app.sentEmail = (bool)sqlDataReader["sentEmail"];
                 app.followUpSent = (bool)sqlDataReader["followUpSent"];
+                app.ShareLocation = (bool)sqlDataReader["ShareLocation"];
+                app.JobCompleted = (bool)sqlDataReader["JobCompleted"];
                 app.username = Globals.SafeSqlString(sqlDataReader["username"]);
                 app.salesTax = (decimal)sqlDataReader["salesTax"];
+                app.Notes = sqlDataReader["notes"] == DBNull.Value ? null : (string)sqlDataReader["notes"];
+                app.jobStartTime = sqlDataReader["jobStartTime"] != DBNull.Value ? (DateTime?)sqlDataReader["jobStartTime"] : null;
+                app.jobEndTime = sqlDataReader["jobEndTime"] != DBNull.Value ? (DateTime?)sqlDataReader["jobEndTime"] : null;
+
                 return null;
             }
             catch (Exception ex)
@@ -4452,7 +4887,11 @@ TakePic)
                         CO.contractorType,
                         CO.firstName AS coFirstName,
                         CO.lastName AS coLastName,
-                        CO.businessName AS coBusinessName
+                        CO.businessName AS coBusinessName,
+A.notes,
+A.jobStartTime,
+A.jobEndTime,
+A.ShareLocation
                     FROM
                         Appointments A,
                         Contractors CO
@@ -4518,7 +4957,11 @@ TakePic)
                     value.sentWeekSMS = (bool)sqlDataReader["sentWeekSMS"];
                     value.sentEmail = (bool)sqlDataReader["sentEmail"];
                     value.followUpSent = (bool)sqlDataReader["followUpSent"];
+                    value.ShareLocation = (bool)sqlDataReader["ShareLocation"];
                     value.salesTax = (decimal)sqlDataReader["salesTax"];
+                    value.Notes = (string)sqlDataReader["notes"];
+                    value.jobStartTime = (DateTime)sqlDataReader["jobStartTime"];
+                    value.jobEndTime = (DateTime)sqlDataReader["jobEndTime"];
                     ret.Add(value);
                 }
             }
@@ -5185,7 +5628,7 @@ TakePic)
                     ELSE
                     BEGIN
                         DECLARE @newUnavailableID int;
-                        SET @newUnavailableID = (SELECT MAX(unavailableID) + 1 FROM Unavailable);
+                        SET @newUnavailableID = (SELECT COALESCE(MAX(unavailableID),0) + 1 FROM Unavailable);
 
                         DECLARE @recID int;
                         SET @recID = (CASE WHEN @recurrenceType != 0 THEN @newUnavailableID ELSE 0 END);
@@ -7613,5 +8056,325 @@ TakePic)
             return null;
         }
         #endregion
+
+
+        #region UpdateAppointmentFromAPI
+
+        public static string UpdateAppointmentFromAPI(int appId, List<string> images, string notes)
+        {
+            SqlConnection sqlConnection = null;
+            try
+            {
+                sqlConnection = new SqlConnection(connString);
+                sqlConnection.Open();
+
+                string cmdText = @"
+                UPDATE 
+		            Appointments
+	            SET
+                    Notes = @notes
+	            WHERE
+		            appointmentID = @appointmentID;";
+
+                SqlCommand cmd = new SqlCommand(cmdText, sqlConnection);
+                cmd.Parameters.Add(new SqlParameter(@"appointmentID", appId));
+                cmd.Parameters.Add(new SqlParameter(@"notes", notes ?? ""));
+                cmd.ExecuteNonQuery();
+
+
+                if (images.Count > 0)
+                {
+                    string cmdText1 = @"
+                Delete from 
+		            AppointmentAttachments
+	            WHERE
+		            AppointmentId = @appointmentID;";
+
+                    SqlCommand cmd1 = new SqlCommand(cmdText1, sqlConnection);
+                    cmd1.Parameters.Add(new SqlParameter(@"appointmentID", appId));
+                    cmd1.ExecuteNonQuery();
+
+
+                    foreach (var item in images)
+                    {
+
+                        string cmdText2 = @"
+                insert into 
+		            AppointmentAttachments (AppointmentId,ImageURL)
+	       VALUES
+(@appointmentId,  @imgURL  )";
+
+                        SqlCommand cmd2 = new SqlCommand(cmdText2, sqlConnection);
+                        cmd2.Parameters.Add(new SqlParameter(@"appointmentId", appId));
+                        cmd2.Parameters.Add(new SqlParameter(@"imgURL", item));
+                        cmd2.ExecuteNonQuery();
+
+
+                    }
+
+                }
+
+                return null;
+            }
+            catch (Exception ex)
+            {
+                return "SQL UpdateFranchiseNotes EX: " + ex.Message;
+            }
+            finally
+            {
+                if (sqlConnection != null)
+                    sqlConnection.Close();
+            }
+        }
+
+
+
+        #endregion
+
+
+        #region Get Appointment Attachments
+
+        public static List<AppAttachments> GetAppointmentAttachments(int appId)
+        {
+            List<AppAttachments> ret = new List<AppAttachments>();
+
+            SqlConnection sqlConnection = null;
+            SqlDataReader sqlDataReader = null;
+            try
+            {
+                sqlConnection = new SqlConnection(connString);
+                sqlConnection.Open();
+
+                string cmdText = @"
+                    SELECT
+                        *
+                    FROM
+                        AppointmentAttachments
+                    WHERE
+AppointmentId = @appID
+";
+
+                SqlCommand cmd = new SqlCommand(cmdText, sqlConnection);
+                cmd.Parameters.Add(new SqlParameter("appID", appId));
+                sqlDataReader = cmd.ExecuteReader();
+
+                while (sqlDataReader.Read())
+                {
+                    AppAttachments contractor = new AppAttachments();
+                    contractor.id = (int)sqlDataReader["id"];
+                    contractor.AppointmentId = (int)sqlDataReader["appointmentId"];
+                    contractor.ImageURL = (string)sqlDataReader["imageURL"];
+                    ret.Add(contractor);
+                }
+            }
+            catch { }
+            finally
+            {
+                if (sqlDataReader != null)
+                    sqlDataReader.Close();
+                if (sqlConnection != null)
+                    sqlConnection.Close();
+            }
+
+            return ret;
+        }
+
+
+
+        #endregion
+
+
+
+        public static string StartJobByAppId(int appId)
+        {
+            SqlConnection sqlConnection = null;
+            try
+            {
+                sqlConnection = new SqlConnection(connString);
+                sqlConnection.Open();
+
+                if (appId > 0)
+                {
+                    string cmdText1 = @"
+                select  jobStartTime from
+		            Appointments
+	            WHERE
+		            appointmentID = @appointmentID;";
+
+                    SqlCommand cmd1 = new SqlCommand(cmdText1, sqlConnection);
+                    cmd1.Parameters.Add(new SqlParameter(@"appointmentID", appId));
+                    var sqlReader = cmd1.ExecuteReader();
+
+                    if (!sqlReader.Read())
+                        return "SQL GetApointmentpByID: Record (AppointmentID=" + appId + ") does not exist.";
+
+                    if (sqlReader != null)
+                    {
+                        try
+                        {
+                            var time = (DateTime)sqlReader["jobStartTime"];
+                            DateTime.Parse(time.ToString());
+                            return "Job has already started.";
+
+                        }
+                        catch (Exception)
+                        {
+
+
+                        }
+                        finally
+                        {
+                            if (sqlConnection != null)
+                                sqlConnection.Close();
+                        }
+                    }
+                }
+
+                sqlConnection = new SqlConnection(connString);
+                sqlConnection.Open();
+
+                string cmdText = @"
+                UPDATE 
+		            Appointments
+	            SET
+                    jobStartTime = GetDate()
+	            WHERE
+		            appointmentID = @appointmentID;";
+
+                SqlCommand cmd = new SqlCommand(cmdText, sqlConnection);
+                cmd.Parameters.Add(new SqlParameter(@"appointmentID", appId));
+                cmd.ExecuteNonQuery();
+
+                return null;
+            }
+            catch (Exception ex)
+            {
+                return "SQL UpdateFranchiseNotes EX: " + ex.Message;
+            }
+            finally
+            {
+                if (sqlConnection != null)
+                    sqlConnection.Close();
+            }
+        }
+
+        public static string EndJobByAppId(int appId)
+        {
+            SqlConnection sqlConnection = null;
+            try
+            {
+                sqlConnection = new SqlConnection(connString);
+                sqlConnection.Open();
+
+                if (appId > 0)
+                {
+                    string cmdText1 = @"
+                select  jobEndTime,jobStartTime from
+		            Appointments
+	            WHERE
+		            appointmentID = @appointmentID;";
+
+                    SqlCommand cmd1 = new SqlCommand(cmdText1, sqlConnection);
+                    cmd1.Parameters.Add(new SqlParameter(@"appointmentID", appId));
+                    var sqlReader = cmd1.ExecuteReader();
+
+                    if (!sqlReader.Read())
+                        return "SQL GetApointmentpByID: Record (AppointmentID=" + appId + ") does not exist.";
+
+                    if (sqlReader != null)
+                    {
+                        try
+                        {
+                            if (sqlReader["jobStartTime"] == DBNull.Value)
+                            {
+                                return "Job is not started yet. Please start job first.";
+                            }
+
+                            var time = (DateTime)sqlReader["jobEndTime"];
+                            DateTime.Parse(time.ToString());
+                            return "Job has already ended.";
+
+                        }
+                        catch (Exception)
+                        {
+
+
+                        }
+                        finally
+                        {
+                            if (sqlConnection != null)
+                                sqlConnection.Close();
+                        }
+                    }
+                }
+
+                sqlConnection = new SqlConnection(connString);
+                sqlConnection.Open();
+
+                string cmdText = @"
+                UPDATE 
+		            Appointments
+	            SET
+                    jobEndTime = GetDate(),
+JobCompleted = 1
+	            WHERE
+		            appointmentID = @appointmentID;";
+
+                SqlCommand cmd = new SqlCommand(cmdText, sqlConnection);
+                cmd.Parameters.Add(new SqlParameter(@"appointmentID", appId));
+                cmd.ExecuteNonQuery();
+
+                return null;
+            }
+            catch (Exception ex)
+            {
+                return "SQL UpdateFranchiseNotes EX: " + ex.Message;
+            }
+            finally
+            {
+                if (sqlConnection != null)
+                    sqlConnection.Close();
+            }
+
+        }
+        public static string JobCoordinatesByAppId(int appId, string latitude, string longitude)
+        {
+            SqlConnection sqlConnection = null;
+            try
+            {
+                sqlConnection = new SqlConnection(connString);
+                sqlConnection.Open();
+
+                string cmdText = @"
+                UPDATE 
+		            Contractors
+	            SET
+                    latitude = @latitude,
+longitude = @longitude,
+ShareLocation = 1
+	            WHERE
+		            contractorID = @appointmentID;";
+
+                SqlCommand cmd = new SqlCommand(cmdText, sqlConnection);
+                cmd.Parameters.Add(new SqlParameter(@"appointmentID", appId));
+                cmd.Parameters.Add(new SqlParameter(@"longitude", longitude));
+                cmd.Parameters.Add(new SqlParameter(@"latitude", latitude));
+                cmd.ExecuteNonQuery();
+
+                return null;
+            }
+            catch (Exception ex)
+            {
+                return "SQL Update coordinates EX: " + ex.Message;
+            }
+            finally
+            {
+                if (sqlConnection != null)
+                    sqlConnection.Close();
+            }
+
+        }
+
+
     }
 }

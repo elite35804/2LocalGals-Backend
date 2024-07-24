@@ -90,7 +90,7 @@ namespace TwoLocalGals.Protected
             if (weekStartDate == DateTime.MinValue) weekStartDate = Globals.DateTimeParse(Request["date"]);
             if (weekStartDate == DateTime.MinValue) weekStartDate = DateTime.Now;
             weekStartDate = Globals.StartOfWeek(weekStartDate).Date;
-            
+
             if (!IsPostBack)
             {
                 ContractorType.Items.Clear();
@@ -333,7 +333,7 @@ namespace TwoLocalGals.Protected
 
             if (SortBy.Text == "Sort by Frequency" && customer.customerID > 0)
             {
-                contractors.Sort(delegate(ContractorStruct a, ContractorStruct b)
+                contractors.Sort(delegate (ContractorStruct a, ContractorStruct b)
                 {
                     if (a.customerFreuqency == b.customerFreuqency)
                         return b.score.CompareTo(a.score);
@@ -431,12 +431,35 @@ namespace TwoLocalGals.Protected
                             {
                                 dayRow.Style["background-color"] = "#FFA0A0";
                             }
+                            if (Math.Round(TimeSpan.FromSeconds((double)route.travelTime).TotalMinutes) == 10 || Math.Round(TimeSpan.FromSeconds((double)route.travelTime).TotalMinutes) == -10)
+                            {
+                                dayRow.Style["background-color"] = "#72D9FA";
+
+                            }
 
                             dayRow.Cells.Add(Globals.FormatedTableCell(@"<a href=""Appointments.aspx?appID=" + app.appointmentID + @""">" + app.startTime.ToString("HH:mm") + @"</a>"));
                             dayRow.Cells.Add(Globals.FormatedTableCell(@"<a href=""Appointments.aspx?appID=" + app.appointmentID + @""">" + app.endTime.ToString("HH:mm") + @"</a>"));
                             dayRow.Cells.Add(Globals.FormatedTableCell(@"<a href=""Appointments.aspx?appID=" + app.appointmentID + @""">" + hours.ToString() + @"</a>"));
                             if (userAccess <= 2) dayRow.Cells.Add(Globals.FormatedTableCell(app.customerTitle + @" <b><a href=""" + routeLink + @""">" + route.distance.ToString("N1") + @" mi (" + Math.Round(TimeSpan.FromSeconds((double)route.travelTime).TotalMinutes) + @" min)</a></b>"));
-                            else dayRow.Cells.Add(Globals.FormatedTableCell(@"<a href=""Customers.aspx?custID=" + app.customerID + @""">" + app.customerTitle + @" (" + app.customerCity + @")</a> <b><a href=""" + routeLink + @""">" + route.distance.ToString("N1") + @" mi (" + Math.Round(TimeSpan.FromSeconds((double)route.travelTime).TotalMinutes) + @" min)</a> <a href=""Schedule.aspx?replaceID=" + app.appointmentID + @""">[R]</a></b>"));
+                            else
+                            {
+                                var html = @"<a href=""Customers.aspx?custID=" + app.customerID + @""">" + app.customerTitle + @" (" + app.customerCity + @")</a> <b><a href=""" + routeLink + @""">" + route.distance.ToString("N1") + @" mi (" + Math.Round(TimeSpan.FromSeconds((double)route.travelTime).TotalMinutes) + @" min)</a> <a href=""Schedule.aspx?replaceID=" + app.appointmentID + @""">[R]</a>";
+                                if ((Database.GetAppointmentAttachments(app.appointmentID)).Count > 0)
+                                {
+                                    html += "<i class='fa fa-image'></i> ";
+                                }
+                                if (!contractor.ShareLocation)
+                                {
+                                    html += "<i class='fa fa-location-arrow'></i>";
+
+                                }
+                                if (!string.IsNullOrEmpty(app.Notes))
+                                {
+                                    html += "<i class='fa fa-book'></i>";
+                                }
+                                dayRow.Cells.Add(Globals.FormatedTableCell(html += "</b>"));
+
+                            }
                             midTime = Globals.TimeOnly(app.startTime);
                             endTime = Globals.TimeOnly(app.endTime);
                             if (app.customerAccountStatus != "Ignored" && app.appType == contractorSubType)
@@ -595,7 +618,7 @@ namespace TwoLocalGals.Protected
                     if (contractor.active && contractor.scheduled)
                     {
                         weekAvailableHours += dayAvailableHours;
-                        dayAvailableArray[i] += dayAvailableHours;  
+                        dayAvailableArray[i] += dayAvailableHours;
                     }
                 }
 
@@ -663,7 +686,7 @@ namespace TwoLocalGals.Protected
                 blankCell.CssClass = "ScheduleConBlank";
                 blankRow.Cells.Add(blankCell);
 
-                if (userAccess <= 2 || weekBookedHours > 0  || (contractor.active && contractor.scheduled))
+                if (userAccess <= 2 || weekBookedHours > 0 || (contractor.active && contractor.scheduled))
                 {
                     if (moveToFront)
                     {
