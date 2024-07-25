@@ -50,8 +50,8 @@ namespace Nexus
             if (e.CommandArgument != null)
             {
                 bool ret = true;
-                MethodInfo saveMethod = this.Page.GetType().GetMethod("SaveChanges");
-                if (saveMethod != null) ret = (bool)saveMethod.Invoke(this.Page, null);
+                // MethodInfo saveMethod = this.Page.GetType().GetMethod("SaveChanges");
+                // if (saveMethod != null) ret = (bool)saveMethod.Invoke(this.Page, null);
                 if (ret) Response.Redirect(e.CommandArgument.ToString());
             }
         }

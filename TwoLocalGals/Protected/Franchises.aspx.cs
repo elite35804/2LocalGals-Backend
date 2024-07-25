@@ -61,6 +61,10 @@ namespace Nexus.Protected
                     {
                         DefaultPic.Visible = true;
                         DefaultPic.ImageUrl = "~/ContratorPics/" + franchise.FranchiseImg;
+                    } else
+                    {
+                        DefaultPic.Visible = true;
+                        DefaultPic.ImageUrl = "~/ContratorPics/2LG_Logo.jpg";
                     }
                     AdvertisementList.Text = franchise.advertisementList;
                     if (string.IsNullOrEmpty(AdvertisementList.Text))

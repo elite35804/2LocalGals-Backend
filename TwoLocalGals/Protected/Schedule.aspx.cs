@@ -355,6 +355,7 @@ namespace TwoLocalGals.Protected
                     string lastRouteAddr = Globals.CleanAddr(contractor.address) + "," + Globals.CleanAddr(contractor.city) + "," + Globals.CleanAddr(contractor.state) + "," + Globals.CleanAddr(contractor.zip);
                     routeData.Add(lastRouteAddr);
 
+
                     decimal dayBookedHours = 0;
                     decimal dayAvailableHours = 0;
                     DateTime dayDate = weekStartDate + TimeSpan.FromDays(i);
@@ -623,6 +624,8 @@ namespace TwoLocalGals.Protected
                 }
 
 
+                FranchiseStruct selectedFranchise = Database.GetFranchiseList().Find(x => x.franchiseID == contractor.franchiseMask);
+
                 TableRow titleRow = new TableRow();
 
                 TableCell titleCell = new TableCell();
@@ -654,11 +657,11 @@ namespace TwoLocalGals.Protected
                 {
                     filename = contractor.ContractorPic;
                 }
-                else if (!string.IsNullOrEmpty("franchiseMask"))
+                else if (!string.IsNullOrEmpty(selectedFranchise.FranchiseImg))
                 {
-                    filename = "franchiseMask.jpg";
+                    filename = selectedFranchise.FranchiseImg;
                 }
-                image.ImageUrl = "~/ContratorPics/" + contractor.ContractorPic;
+                image.ImageUrl = "~/ContratorPics/" + filename;
                 image.Width = 25; image.Height = 25;
                 image.Visible = true;
                 image.Style["border-radius"] = "45%";

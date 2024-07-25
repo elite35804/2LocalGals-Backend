@@ -87,6 +87,10 @@ namespace Nexus.Protected
                     {
                         DefaultPic.Visible = true;
                         DefaultPic.ImageUrl = "~/ContratorPics/" + contractor.ContractorPic;
+                    } else
+                    {
+                        DefaultPic.Visible = true;
+                        DefaultPic.ImageUrl = "~/ContratorPics/2LG_Logo.jpg";
                     }
                 }
             }
