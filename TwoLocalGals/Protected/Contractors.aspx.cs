@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -82,6 +83,11 @@ namespace Nexus.Protected
                     SendSchedules.Checked = contractor.contractorID == 0 ? true : contractor.sendSchedules;
                     SendPayroll.Checked = contractor.contractorID == 0 ? true : contractor.sendPayroll;
                     SendScheduleByEmail.Checked = contractor.SendSchedulesByEmail;
+                    if (!string.IsNullOrEmpty(contractor.ContractorPic))
+                    {
+                        DefaultPic.Visible = true;
+                        DefaultPic.ImageUrl = "~/ContratorPics/" + contractor.ContractorPic;
+                    }
                 }
             }
             catch (Exception ex)
@@ -94,8 +100,7 @@ namespace Nexus.Protected
         {
             try
             {
-                if (SaveChanges())
-                    Response.Redirect("Contractors.aspx?conID=" + Globals.SafeIntParse(ContractorList.SelectedValue) + "&ShowAll=" + Request["ShowAll"]);
+                Response.Redirect("Contractors.aspx?conID=" + Globals.SafeIntParse(ContractorList.SelectedValue) + "&ShowAll=" + Request["ShowAll"]);
             }
             catch (Exception ex)
             {
@@ -107,11 +112,8 @@ namespace Nexus.Protected
         {
             try
             {
-                if (SaveChanges())
-                {
-                    if (Request["ShowAll"] == "Y") Response.Redirect("Contractors.aspx");
-                    else Response.Redirect("Contractors.aspx?ShowAll=Y");
-                }
+                if (Request["ShowAll"] == "Y") Response.Redirect("Contractors.aspx");
+                else Response.Redirect("Contractors.aspx?ShowAll=Y");
             }
             catch (Exception ex)
             {
@@ -123,8 +125,7 @@ namespace Nexus.Protected
         {
             try
             {
-                if (SaveChanges())
-                    Response.Redirect("Contractors.aspx");
+                Response.Redirect("Contractors.aspx");
             }
             catch (Exception ex)
             {
@@ -152,8 +153,7 @@ namespace Nexus.Protected
         {
             try
             {
-                if (SaveChanges())
-                    Response.Redirect("ApplicationPrint.aspx?conID=" + Globals.SafeIntParse(Request["conID"]));
+                Response.Redirect("ApplicationPrint.aspx?conID=" + Globals.SafeIntParse(Request["conID"]));
             }
             catch (Exception ex)
             {
@@ -290,6 +290,29 @@ namespace Nexus.Protected
                 row.SetValue("sendSchedules", SendSchedules.Checked);
                 row.SetValue("sendPayroll", SendPayroll.Checked);
                 row.SetValue("SendSchedulesByEmail", SendScheduleByEmail.Checked);
+
+                if (ContractorPic.HasFile)
+                {
+                    try
+                    {
+                        string extension = Path.GetExtension(ContractorPic.FileName);
+                        string fileName = Guid.NewGuid().ToString().Split('-').Last() + extension;
+                        string folderPath = Server.MapPath("~/ContratorPics/");
+
+                        if (!Directory.Exists(folderPath))
+                        {
+                            Directory.CreateDirectory(folderPath);
+                        }
+                        ContractorPic.Width = 25;
+                        ContractorPic.SaveAs(Path.Combine(folderPath, fileName));
+                        row.SetValue("ContractorPic", fileName);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        // TODO: Throw exception for image upload error
+                    }
+                }
 
                 contractorID = Globals.SafeIntParse(Request["conID"]);
 

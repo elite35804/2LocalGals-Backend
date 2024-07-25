@@ -396,6 +396,16 @@
 
                 </td>
             </tr>
+            <tr>
+                <td class="EntryHeader">Upload Picture:
+                </td>
+                <td>
+                    <asp:Image ID="DefaultPic" runat="server" Height="75px" Width="130px" />
+                    <br />
+                    <br />
+                    <asp:FileUpload ID="ContractorPic" runat="server" />
+                </td>
+            </tr>
         </table>
     </fieldset>
     <asp:Button ID="DeleteButton" OnClick="DeleteClick" Text="Delete Contractor" runat="server" />

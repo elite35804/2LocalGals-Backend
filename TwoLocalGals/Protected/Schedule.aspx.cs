@@ -448,7 +448,7 @@ namespace TwoLocalGals.Protected
                                 {
                                     html += "<i class='fa fa-image'></i> ";
                                 }
-                                if (!contractor.ShareLocation)
+                                if (contractor.ShareLocation)
                                 {
                                     html += "<i class='fa fa-location-arrow'></i>";
 
@@ -649,6 +649,15 @@ namespace TwoLocalGals.Protected
                 titleCell.Controls.Add(nextLink);
 
                 System.Web.UI.WebControls.Image image = new System.Web.UI.WebControls.Image();
+                string filename = "2LG_Logo.jpg";
+                if (!string.IsNullOrEmpty(contractor.ContractorPic))
+                {
+                    filename = contractor.ContractorPic;
+                }
+                else if (!string.IsNullOrEmpty("franchiseMask"))
+                {
+                    filename = "franchiseMask.jpg";
+                }
                 image.ImageUrl = "~/ContratorPics/" + contractor.ContractorPic;
                 image.Width = 25; image.Height = 25;
                 image.Visible = true;

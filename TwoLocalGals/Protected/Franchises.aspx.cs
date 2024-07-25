@@ -94,7 +94,7 @@ namespace Nexus.Protected
         {
             try
             {
-                if (SaveChanges()) Response.Redirect("Franchises.aspx?franID=" + Globals.SafeIntParse(FranchiseList.SelectedValue));
+                Response.Redirect("Franchises.aspx?franID=" + Globals.SafeIntParse(FranchiseList.SelectedValue));
             }
             catch (Exception ex)
             {
@@ -106,7 +106,7 @@ namespace Nexus.Protected
         {
             try
             {
-                if (SaveChanges()) Response.Redirect("Franchises.aspx");
+                Response.Redirect("Franchises.aspx");
             }
             catch (Exception ex)
             {
