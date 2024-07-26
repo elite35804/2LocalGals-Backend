@@ -663,6 +663,10 @@ namespace Nexus.Protected
                     tips += sameApps[i].contractorTips;
                     discountAmount += sameApps[i].customerDiscountAmount;
 
+                    List<JobLogsStruct> jobLogs = Database.GetJobLogs(sameApps[i].appointmentID, sameApps[i].contractorID, true);
+                    jobLogs = jobLogs.FindAll(x => x.CustomerId == sameApps[i].customerID);
+
+
                     ((TableRow)Globals.FindControlRecursive(ContractorTable, "ContractorRow_" + i)).Style["display"] = "table-row";
                     ((HiddenField)Globals.FindControlRecursive(ContractorTable, "ContractorAppID_" + i)).Value = sameApps[i].appointmentID.ToString();
                     ((DropDownList)Globals.FindControlRecursive(ContractorTable, "ContractorStartTime_" + i)).Text = sameApps[i].startTime.ToString("t");
@@ -721,6 +725,7 @@ namespace Nexus.Protected
                     Label locationShare = new Label();
                     locationShare.ID = "locationShare" + i;
                     locationShare.Text = contractor.ShareLocation ? "Yes" : "No";
+                    locationShare.Style["Color"] = contractor.ShareLocation ? "Green" : "Red";
                     PlaceHolder1.Controls.Add(locationShare);
 
                     PlaceHolder1.Controls.Add(new LiteralControl("<br/>"));
@@ -735,7 +740,8 @@ namespace Nexus.Protected
                     // Create a Label
                     Label StartJobTime = new Label();
                     StartJobTime.ID = "StartJobTime" + i;
-                    StartJobTime.Text = sameApps[i].jobStartTime?.ToString("T");
+                    StartJobTime.Text = sameApps[i].jobStartTime?.ToLocalTime().ToShortTimeString();
+                    StartJobTime.Style["Color"] = "Green";
                     PlaceHolder1.Controls.Add(StartJobTime);
 
                     PlaceHolder1.Controls.Add(new LiteralControl("<br/>"));
@@ -750,7 +756,8 @@ namespace Nexus.Protected
                     // Create a Label
                     Label endJobTime = new Label();
                     endJobTime.ID = "endJobTime" + i;
-                    endJobTime.Text = sameApps[i].jobEndTime?.ToString("T");
+                    endJobTime.Text = sameApps[i].jobEndTime?.ToLocalTime().ToShortTimeString();
+                    endJobTime.Style["Color"] = "Green";
                     PlaceHolder1.Controls.Add(endJobTime);
 
                     PlaceHolder1.Controls.Add(new LiteralControl("<br/>"));
@@ -766,6 +773,7 @@ namespace Nexus.Protected
                     Label jobCompleted = new Label();
                     jobCompleted.ID = "jobCompleted" + i;
                     jobCompleted.Text = sameApps[i].jobEndTime.HasValue ? "Yes" : "No";
+                    jobCompleted.Style["Color"] = sameApps[i].jobEndTime.HasValue ? "Green" : "Red";
                     PlaceHolder1.Controls.Add(jobCompleted);
 
                     PlaceHolder1.Controls.Add(new LiteralControl("<br/>"));
@@ -776,14 +784,29 @@ namespace Nexus.Protected
                     AreasCompletedlbl.ID = "AreasCompletedlbl" + i;
                     AreasCompletedlbl.Text = "Areas Completed: ";
                     PlaceHolder1.Controls.Add(AreasCompletedlbl);
+                    PlaceHolder1.Controls.Add(new LiteralControl("<br/>"));
 
                     // Create a Label
-                    Label AreasCompleted = new Label();
-                    AreasCompleted.ID = "AreasCompleted" + i;
-                    AreasCompleted.Text = "";
-                    PlaceHolder1.Controls.Add(AreasCompleted);
-
-                    PlaceHolder1.Controls.Add(new LiteralControl("<br/>"));
+                    foreach (JobLogsStruct jl in jobLogs)
+                    {
+                        string acText = "   •  " + jl.Content.Trim();
+                        if (!string.IsNullOrEmpty(jl.SubContent))
+                        {
+                            acText += (" - " + jl.SubContent);
+                        }
+                        Label AreasCompleted = new Label();
+                        AreasCompleted.ID = "AreasCompleted" + i + jl.id;
+                        AreasCompleted.Text = acText;
+                        PlaceHolder1.Controls.Add(AreasCompleted);
+                        if (jl.CreatedAt != null)
+                        {
+                            Label Timestamp = new Label();
+                            Timestamp.Style["Color"] = "Blue";
+                            Timestamp.Text = " (" + jl.CreatedAt.ToLocalTime().ToShortTimeString() + ")";
+                            PlaceHolder1.Controls.Add(Timestamp);
+                        }
+                        PlaceHolder1.Controls.Add(new LiteralControl("<br/>"));
+                    }
                     PlaceHolder1.Controls.Add(new LiteralControl("<br/>"));
                     
                     // Create a Label

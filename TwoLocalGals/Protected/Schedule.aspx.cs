@@ -449,7 +449,7 @@ namespace TwoLocalGals.Protected
                                 {
                                     html += "<i class='fa fa-image'></i> ";
                                 }
-                                if (contractor.ShareLocation)
+                                if (!contractor.ShareLocation)
                                 {
                                     html += "<i class='fa fa-location-arrow'></i>";
 

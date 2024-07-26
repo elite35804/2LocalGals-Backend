@@ -528,6 +528,7 @@ namespace Nexus
         public int CustomerId;
         public int AppointmentId;
         public string Content;
+        public string SubContent;
         public bool Checked;
         public string CheckedBy;
         public DateTime CreatedAt;
@@ -2004,7 +2005,8 @@ alternatePhoneTwoCell
                     log.CustomerId = (int)sqlDataReader["CustomerId"];
                     log.AppointmentId = (int)sqlDataReader["AppointmentId"];
                     log.ContractorId = (int)sqlDataReader["ContractorId"];
-                    log.Content = (string)sqlDataReader["content"];
+                    log.Content = (string)sqlDataReader["Content"];
+                    log.SubContent = (string)sqlDataReader["SubContent"];
                     log.Checked = (bool)sqlDataReader["Checked"];
                     log.CheckedBy = (string)sqlDataReader["CheckedBy"];
                     log.CreatedAt = (DateTime)sqlDataReader["CreatedAt"];
@@ -2058,10 +2060,11 @@ alternatePhoneTwoCell
                     sqlConnection.Open();
 
                     string cmdText1 = @"
-                    Update JobLogs set  Checked = @Checked,  CreatedAt = GetDate(), CheckedBy = @CreatedBy  , IsGeneral = @IsGeneral
+                    Update JobLogs set SubContent = @SubContent, Checked = @Checked,  CreatedAt = GetDate(), CheckedBy = @CreatedBy  , IsGeneral = @IsGeneral
                     Where id = @id";
 
                     SqlCommand cmd1 = new SqlCommand(cmdText1, sqlConnection);
+                    cmd1.Parameters.Add(new SqlParameter(@"SubContent", job.SubContent));
                     cmd1.Parameters.Add(new SqlParameter(@"Checked", job.Checked));
                     cmd1.Parameters.Add(new SqlParameter(@"CreatedBy", job.CheckedBy));
                     cmd1.Parameters.Add(new SqlParameter(@"IsGeneral", job.IsGeneral));
@@ -2081,11 +2084,12 @@ alternatePhoneTwoCell
                     ,[CustomerId]
                     ,[AppointmentId]
                     ,[Content]
+                    ,[SubContent]
                     ,[Checked]
                     ,[CheckedBy]
                     ,[CreatedAt]
                     ,[IsGeneral])  Values " +
-                    $"({job.ContractorId} , {job.CustomerId} , {job.AppointmentId} ,'{job.Content}',{(job.Checked ? 1 : 0) },'{job.CheckedBy}', GetDate() ,{(job.IsGeneral ? 1 : 0)} )";
+                    $"({job.ContractorId} , {job.CustomerId} , {job.AppointmentId} ,'{job.Content}', '{job.SubContent}',{(job.Checked ? 1 : 0) },'{job.CheckedBy}', GetDate() ,{(job.IsGeneral ? 1 : 0)} )";
 
                     SqlCommand cmd2 = new SqlCommand(cmdText2, sqlConnection);
                     cmd2.ExecuteNonQuery();
@@ -4888,10 +4892,10 @@ A.JobCompleted,
                         CO.firstName AS coFirstName,
                         CO.lastName AS coLastName,
                         CO.businessName AS coBusinessName,
-A.notes,
-A.jobStartTime,
-A.jobEndTime,
-A.ShareLocation
+                        A.notes,
+                        A.jobStartTime,
+                        A.jobEndTime,
+                        A.ShareLocation
                     FROM
                         Appointments A,
                         Contractors CO
@@ -8084,11 +8088,10 @@ A.ShareLocation
 
                 if (images.Count > 0)
                 {
-                    string cmdText1 = @"
-                Delete from 
-		            AppointmentAttachments
-	            WHERE
-		            AppointmentId = @appointmentID;";
+                    string cmdText1 = @"Delete from 
+		                                AppointmentAttachments
+	                                    WHERE
+		                                AppointmentId = @appointmentID;";
 
                     SqlCommand cmd1 = new SqlCommand(cmdText1, sqlConnection);
                     cmd1.Parameters.Add(new SqlParameter(@"appointmentID", appId));
@@ -8098,11 +8101,10 @@ A.ShareLocation
                     foreach (var item in images)
                     {
 
-                        string cmdText2 = @"
-                insert into 
-		            AppointmentAttachments (AppointmentId,ImageURL)
-	       VALUES
-(@appointmentId,  @imgURL  )";
+                        string cmdText2 = @"insert into 
+		                                    AppointmentAttachments (AppointmentId,ImageURL)
+	                                        VALUES
+                                            (@appointmentId,  @imgURL  )";
 
                         SqlCommand cmd2 = new SqlCommand(cmdText2, sqlConnection);
                         cmd2.Parameters.Add(new SqlParameter(@"appointmentId", appId));
