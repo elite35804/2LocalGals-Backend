@@ -8,8 +8,6 @@ using System.Reflection;
 using System.IO;
 using System.Web.UI.WebControls;
 using TwoLocalGals.DTO;
-using Nexus.Protected;
-using TwoLocalGals.Protected;
 
 namespace Nexus
 {
@@ -2310,6 +2308,44 @@ alternatePhoneTwoCell
         }
         #endregion
 
+        #region SetContractorWalkthrough
+
+        public static string SetContractorWalkthrough(int contractorID, bool isChecked)
+        {
+            SqlConnection sqlConnection = null;
+            try
+            {
+                sqlConnection = new SqlConnection(connString);
+                sqlConnection.Open();
+
+                string cmdText = @"
+	                    UPDATE 
+	                        Contractors
+	                    SET
+                            IsCheckedWalkthrough = @isChecked
+	                    WHERE
+		                    ContractorID = @contractorID;";
+
+                SqlCommand cmd = new SqlCommand(cmdText, sqlConnection);
+                cmd.Parameters.Add(new SqlParameter(@"contractorID", contractorID));
+                cmd.Parameters.Add(new SqlParameter(@"isChecked", isChecked));
+                cmd.ExecuteNonQuery();
+
+                return null;
+            }
+            catch (Exception ex)
+            {
+                return "SQL SetContractorWalkthrough EX: " + ex.Message;
+            }
+            finally
+            {
+                if (sqlConnection != null)
+                    sqlConnection.Close();
+            }
+        }
+
+        #endregion
+
         #region SetContractorPayrollSent
         public static string SetContractorPayrollSent(int contractorID)
         {
@@ -4117,6 +4153,198 @@ TakePic)
         }
         #endregion
 
+        #region GetAppsByContractor
+        public static List<AppStruct> GetAppsByContractor(int franchiseMask, int contractorID, DateTime startDate, DateTime endDate, string orderBy, bool showIgnored)
+        {
+            List<AppStruct> ret = new List<AppStruct>();
+
+            SqlConnection sqlConnection = null;
+            SqlDataReader sqlDataReader = null;
+            try
+            {
+                Globals.FormatDateRange(ref startDate, ref endDate);
+
+                sqlConnection = new SqlConnection(connString);
+                sqlConnection.Open();
+
+                string cmdText = @"
+                    SELECT
+                        A.appointmentID,
+                        A.appStatus,
+                        A.appType,
+                        A.appointmentDate,
+                        A.startTime,
+                        A.endTime,
+                        A.customerID,
+                        A.customerHours,
+                        A.customerRate,
+                        A.customerServiceFee,
+                        A.customerSubContractor,
+                        A.customerDiscountAmount,
+                        A.customerDiscountPercent,
+                        A.customerDiscountReferral,
+                        A.contractorID,
+                        A.contractorHours,
+                        A.contractorRate,
+                        A.contractorTips,
+                        A.contractorAdjustAmount,
+                        A.contractorAdjustType,
+                        A.amountPaid,
+                        A.paymentFinished,
+                        A.confirmed,
+                        A.leftMessage,
+                        A.sentSMS,
+                        A.sentWeekSMS,
+                        A.sentEmail,
+                        A.keysReturned,
+                        A.followUpSent,
+                        A.salesTax,
+                        CO.contractorID,
+                        CO.contractorType,
+                        CO.firstName AS coFirstName,
+                        CO.lastName AS coLastName,
+                        CO.businessName AS coBusinessName,
+                        CO.bestPhone AS coBestPhone,
+                        CU.franchiseMask,
+                        CU.firstName AS cuFirstName,
+                        CU.lastName AS cuLastName,
+                        CU.customNote,
+                        CU.businessName,
+                        CU.accountStatus,
+                        CU.paymentType,
+                        CU.creditCardExpMonth,
+                        CU.creditCardExpYear,
+                        CU.locationAddress,
+                        CU.locationCity,
+                        CU.locationState,
+                        CU.locationZip,
+                        CU.email,
+                        CU.bestPhone,
+                        CU.bestPhoneCell,
+                        CU.alternatePhoneOne,
+                        CU.alternatePhoneOneCell,
+                        CU.alternatePhoneTwo,
+                        CU.alternatePhoneTwoCell,
+                        CU.preferredContact,
+                        CU.NC_Special,
+                        CU.NC_TimeOfDayPrefix,
+                        CU.NC_TimeOfDay,
+                        CU.NC_DayOfWeek,
+                        CU.NC_RequiresKeys,
+                        A.notes,
+                        A.jobStartTime,
+                        A.jobEndTime,
+                        A.ShareLocation,
+                        A.JobCompleted
+
+                    FROM
+                        Appointments A,
+                        Customers CU,
+                        Contractors CO
+                    WHERE
+                        CU.franchiseMask & @franchiseMask > 0 AND
+                        A.appointmentDate >= @startDate AND
+                        A.appointmentDate <= @endDate AND
+                        A.customerID = CU.customerID AND
+                        A.contractorID = CO.contractorID AND
+                        A.contractorID = @contractorID
+                    ORDER BY
+                        " + orderBy;
+
+                SqlCommand cmd = new SqlCommand(cmdText, sqlConnection);
+                cmd.Parameters.Add(new SqlParameter("franchiseMask", franchiseMask));
+                cmd.Parameters.Add(new SqlParameter("contractorId", contractorID));
+                cmd.Parameters.Add(new SqlParameter("startDate", startDate));
+                cmd.Parameters.Add(new SqlParameter("endDate", endDate));
+                sqlDataReader = cmd.ExecuteReader();
+
+                while (sqlDataReader.Read())
+                {
+                    if (!showIgnored && Globals.SafeSqlString(sqlDataReader["accountStatus"]) == "Ignored")
+                        continue;
+
+                    AppStruct app = new AppStruct();
+                    app.appointmentID = (int)sqlDataReader["appointmentID"];
+                    app.appStatus = (int)sqlDataReader["appStatus"];
+                    app.appType = (int)sqlDataReader["appType"];
+                    app.franchiseMask = (int)sqlDataReader["franchiseMask"];
+                    app.appointmentDate = ((DateTime)sqlDataReader["appointmentDate"]).Date;
+                    app.startTime = Globals.TimeOnly((DateTime)sqlDataReader["startTime"]);
+                    app.endTime = Globals.TimeOnly((DateTime)sqlDataReader["endTime"]);
+
+                    app.customerTitle = Globals.FormatCustomerTitle(sqlDataReader["cuFirstName"], sqlDataReader["cuLastName"], sqlDataReader["businessName"]);
+                    app.customerTitleCustomNote = Globals.FormatCustomerTitle(sqlDataReader["cuFirstName"], sqlDataReader["cuLastName"], sqlDataReader["customNote"]);
+                    app.customerID = (int)sqlDataReader["customerID"];
+                    app.customerAccountStatus = Globals.SafeSqlString(sqlDataReader["accountStatus"]);
+                    app.customerHours = (decimal)sqlDataReader["customerHours"];
+                    app.customerRate = (decimal)sqlDataReader["customerRate"];
+                    app.customerServiceFee = (decimal)sqlDataReader["customerServiceFee"];
+                    app.customerSubContractor = (decimal)sqlDataReader["customerSubContractor"];
+                    app.customerDiscountAmount = (decimal)sqlDataReader["customerDiscountAmount"];
+                    app.customerDiscountPercent = (decimal)sqlDataReader["customerDiscountPercent"];
+                    app.customerDiscountReferral = (decimal)sqlDataReader["customerDiscountReferral"];
+                    app.customerPaymentType = Globals.SafeSqlString(sqlDataReader["paymentType"]);
+                    app.customerCardExpMonth = Globals.SafeSqlString(sqlDataReader["creditCardExpMonth"]);
+                    app.customerCardExpYear = Globals.SafeSqlString(sqlDataReader["creditCardExpYear"]);
+                    app.customerAddress = Globals.SafeSqlString(sqlDataReader["locationAddress"]);
+                    app.customerCity = Globals.SafeSqlString(sqlDataReader["locationCity"]);
+                    app.customerState = Globals.SafeSqlString(sqlDataReader["locationState"]);
+                    app.customerZip = Globals.SafeSqlString(sqlDataReader["locationZip"]);
+                    app.customerEmail = Globals.SafeSqlString(sqlDataReader["email"]);
+                    app.customerPhoneOne = Globals.SafeSqlString(sqlDataReader["bestPhone"]);
+                    app.customerPhoneOneCell = (bool)sqlDataReader["bestPhoneCell"];
+                    app.customerPhoneTwo = Globals.SafeSqlString(sqlDataReader["alternatePhoneOne"]);
+                    app.customerPhoneTwoCell = (bool)sqlDataReader["alternatePhoneOneCell"];
+                    app.customerPhoneThree = Globals.SafeSqlString(sqlDataReader["alternatePhoneTwo"]);
+                    app.customerPhoneThreeCell = (bool)sqlDataReader["alternatePhoneTwoCell"];
+                    app.customerPreferredContact = Globals.SafeSqlString(sqlDataReader["preferredContact"]);
+                    app.customerSpecial = Globals.SafeSqlString(sqlDataReader["NC_Special"]);
+                    app.customerTimeOfDayPrefix = Globals.SafeSqlString(sqlDataReader["NC_TimeOfDayPrefix"]);
+                    app.customerTimeOfDay = Globals.SafeSqlString(sqlDataReader["NC_TimeOfDay"]);
+                    app.customerDayOfWeek = Globals.SafeSqlString(sqlDataReader["NC_DayOfWeek"]);
+                    app.customerKeys = (bool)sqlDataReader["NC_RequiresKeys"];
+
+                    app.contractorTitle = Globals.FormatContractorTitle(sqlDataReader["coFirstName"], sqlDataReader["coLastName"], sqlDataReader["coBusinessName"]);
+                    app.contractorID = sqlDataReader["contractorID"] == DBNull.Value ? 0 : (int)sqlDataReader["contractorID"];
+                    app.contractorType = sqlDataReader["contractorType"] == DBNull.Value ? 0 : (int)sqlDataReader["contractorType"];
+                    app.contractorPhone = Globals.SafeSqlString(sqlDataReader["coBestPhone"]);
+                    app.contractorHours = (decimal)sqlDataReader["contractorHours"];
+                    app.contractorRate = (decimal)sqlDataReader["contractorRate"];
+                    app.contractorTips = (decimal)sqlDataReader["contractorTips"];
+                    app.contractorAdjustAmount = (decimal)sqlDataReader["contractorAdjustAmount"];
+                    app.contractorAdjustType = Globals.SafeSqlString(sqlDataReader["contractorAdjustType"]);
+                    app.amountPaid = (decimal)sqlDataReader["amountPaid"];
+                    app.paymentFinished = (bool)sqlDataReader["paymentFinished"];
+                    app.confirmed = (bool)sqlDataReader["confirmed"];
+                    app.leftMessage = (bool)sqlDataReader["leftMessage"];
+                    app.sentSMS = (bool)sqlDataReader["sentSMS"];
+                    app.sentWeekSMS = (bool)sqlDataReader["sentWeekSMS"];
+                    app.sentEmail = (bool)sqlDataReader["sentEmail"];
+                    app.keysReturned = (bool)sqlDataReader["keysReturned"];
+                    app.followUpSent = (bool)sqlDataReader["followUpSent"];
+                    app.ShareLocation = (bool)sqlDataReader["ShareLocation"];
+                    app.JobCompleted = (bool)sqlDataReader["JobCompleted"];
+                    app.salesTax = (decimal)sqlDataReader["salesTax"];
+                    app.Notes = sqlDataReader["notes"] == DBNull.Value ? null : (string)sqlDataReader["notes"];
+                    app.jobStartTime = sqlDataReader["jobStartTime"] != DBNull.Value ? (DateTime?)sqlDataReader["jobStartTime"] : null;
+                    app.jobEndTime = sqlDataReader["jobEndTime"] != DBNull.Value ? (DateTime?)sqlDataReader["jobEndTime"] : null;
+
+                    ret.Add(app);
+                }
+            }
+            catch { }
+            finally
+            {
+                if (sqlDataReader != null)
+                    sqlDataReader.Close();
+                if (sqlConnection != null)
+                    sqlConnection.Close();
+            }
+            return ret;
+        }
+        #endregion
+
+
         #region GetAppsByBooking
         public static List<AppStruct> GetAppsByBooking(int franchiseMask, DateTime startDate, DateTime endDate)
         {
@@ -4739,11 +4967,11 @@ TakePic)
                         A.followUpSent,
                         A.username,
                         A.salesTax,
-A.notes,
-A.jobStartTime,
-A.jobEndTime,
-A.ShareLocation,
-A.JobCompleted,
+                        A.notes,
+                        A.jobStartTime,
+                        A.jobEndTime,
+                        A.ShareLocation,
+                        A.JobCompleted,
 
                         CU.franchiseMask,
                         CU.firstName AS cuFirstName,
@@ -4751,6 +4979,7 @@ A.JobCompleted,
                         CU.businessName,
                         CU.customNote,
                         CU.serviceFee AS combinedFee,
+                        CO.contractorID,
                         CO.contractorType,
                         CO.firstName AS coFirstName,
                         CO.lastName AS coLastName,

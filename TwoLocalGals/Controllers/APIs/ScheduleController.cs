@@ -19,6 +19,7 @@ using System.Drawing.Imaging;
 using System.Net.Http;
 using System.Windows.Forms.VisualStyles;
 using RingCentral;
+using System.Diagnostics.Contracts;
 
 
 namespace TwoLocalGals.Controllers.APIs
@@ -126,6 +127,24 @@ namespace TwoLocalGals.Controllers.APIs
 
 
         }
+
+        [HttpPut]
+        [Route("Contractor/{ContractorID:int}/Walkthrough/{IsChecked:bool}")]
+        public IHttpActionResult SetContractorWalkthroughStatus(int ContractorID, bool IsChecked)
+        {
+            if (ContractorID <= 0)
+            {
+                return BadRequest("Invalid Contractor ID");
+            }
+
+            string error = Database.SetContractorWalkthrough(ContractorID, IsChecked);
+            if(error != null)
+            {
+                return BadRequest(error);
+            }
+            return Ok(new { status = "Contrator walkthrough updated successfully." });
+        }
+
 
 
         [HttpGet]
@@ -548,7 +567,7 @@ namespace TwoLocalGals.Controllers.APIs
 
         [HttpGet]
         [Route("Schedule/GetSchedule")]
-        public IHttpActionResult LoadSchedule(DateTime startDate, DateTime endDate)
+        public IHttpActionResult LoadSchedule(int ContractorID, DateTime startDate, DateTime endDate)
         {
 
             var claims = System.Security.Claims.ClaimsPrincipal.Current;
@@ -556,6 +575,10 @@ namespace TwoLocalGals.Controllers.APIs
             int userContractorID = Convert.ToInt32(claims.FindFirst("contractorID")?.Value);
             int franchiseMask = Convert.ToInt32(claims.FindFirst("franchiseMask")?.Value);
 
+            if (ContractorID > 0)
+            {
+                userContractorID = ContractorID;
+            }
             ContractorStruct contractor = Database.GetContractorByID(userContractorID);
 
 
@@ -564,7 +587,6 @@ namespace TwoLocalGals.Controllers.APIs
 
 
             List<ContractorStruct> contractors = new List<ContractorStruct>();
-
             {
                 List<ContractorStruct> teams = new List<ContractorStruct>();
                 List<ContractorStruct> nonTeams = new List<ContractorStruct>();
@@ -579,7 +601,7 @@ namespace TwoLocalGals.Controllers.APIs
             }
 
             List<ScheduleDTO> scheduleDTOs = new List<ScheduleDTO>();
-            var appointments = Database.GetAppsByDateRange(franchiseMask, startDate, endDate, "A.appointmentDate, A.startTime, A.endTime", true);
+            var appointments = Database.GetAppsByContractor(franchiseMask, userContractorID, startDate, endDate, "A.appointmentDate, A.startTime, A.endTime", true);
 
             List<string> routeData = new List<string>();
             string lastRouteAddr = Globals.CleanAddr(contractor.address) + "," + Globals.CleanAddr(contractor.city) + "," + Globals.CleanAddr(contractor.state) + "," + Globals.CleanAddr(contractor.zip);
