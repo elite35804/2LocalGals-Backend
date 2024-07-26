@@ -8,6 +8,7 @@ using System.Reflection;
 using System.IO;
 using System.Web.UI.WebControls;
 using TwoLocalGals.DTO;
+using System.Data.SqlTypes;
 
 namespace Nexus
 {
@@ -109,7 +110,7 @@ namespace Nexus
         public string longitude;
         public string latitude;
         public bool ShareLocation;
-
+        public bool IsCheckedWalkthrough;
     }
 
     public struct CustomerStruct
@@ -355,7 +356,9 @@ namespace Nexus
         public DateTime? jobEndTime;
         public string longitude;
         public string latitude;
-
+        public int Duration;
+        public DateTime? pauseTime;
+        public string RelatedAppointments;
     }
 
 
@@ -1865,10 +1868,10 @@ alternatePhoneTwoCell
                     contractor.sendPayroll = (bool)sqlDataReader["sendPayroll"];
                     contractor.lastPayroll = (DateTime)sqlDataReader["lastPayroll"];
                     contractor.SendSchedulesByEmail = (bool)sqlDataReader["SendSchedulesByEmail"];
-
                     contractor.longitude = Convert.ToString(sqlDataReader["longitude"]);
                     contractor.latitude = Convert.ToString(sqlDataReader["latitude"]);
                     contractor.ShareLocation = (bool)sqlDataReader["ShareLocation"];
+                    contractor.IsCheckedWalkthrough = (bool)sqlDataReader["IsCheckedWalkthrough"];
                 }
             }
             catch { }
@@ -1950,10 +1953,10 @@ alternatePhoneTwoCell
                     contractor.lastPayroll = (DateTime)sqlDataReader["lastPayroll"];
                     contractor.SendSchedulesByEmail = (bool)sqlDataReader["SendSchedulesByEmail"];
                     contractor.ContractorPic = Convert.ToString(sqlDataReader["ContractorPic"]);
-
                     contractor.longitude = Convert.ToString(sqlDataReader["longitude"]);
                     contractor.latitude = Convert.ToString(sqlDataReader["latitude"]);
                     contractor.ShareLocation = (bool)sqlDataReader["ShareLocation"];
+                    contractor.IsCheckedWalkthrough = (bool)sqlDataReader["IsCheckedWalkthrough"];
                 }
             }
             catch { }
@@ -3894,7 +3897,10 @@ TakePic)
                         A.jobStartTime,
                         A.jobEndTime,
                         A.ShareLocation,
-                        A.JobCompleted
+                        A.JobCompleted,
+                        A.Duration,
+                        A.PauseTime,
+                        A.RelatedAppointments
 
                     FROM
                         Appointments A LEFT JOIN Contractors CO ON A.contractorID = CO.contractorID
@@ -3949,6 +3955,9 @@ TakePic)
                     app.Notes = sqlDataReader["notes"] == DBNull.Value ? null : (string)sqlDataReader["notes"];
                     app.jobStartTime = sqlDataReader["jobStartTime"] != DBNull.Value ? (DateTime?)sqlDataReader["jobStartTime"] : null;
                     app.jobEndTime = sqlDataReader["jobEndTime"] != DBNull.Value ? (DateTime?)sqlDataReader["jobEndTime"] : null;
+                    app.Duration = sqlDataReader["Duration"] == DBNull.Value ? 0 : (int)sqlDataReader["Duration"];
+                    app.pauseTime = sqlDataReader["PauseTime"] != DBNull.Value ? (DateTime?)sqlDataReader["PauseTime"] : null;
+                    app.RelatedAppointments = sqlDataReader["RelatedAppointments"] == DBNull.Value ? null : (string)sqlDataReader["RelatedAppointments"];
                     ret.Add(app);
                 }
             }
@@ -4046,7 +4055,10 @@ TakePic)
                         A.jobStartTime,
                         A.jobEndTime,
                         A.ShareLocation,
-                        A.JobCompleted
+                        A.JobCompleted,
+                        A.Duration,
+                        A.PauseTime,
+                        A.RelatedAppointments
 
                     FROM
                         Appointments A,
@@ -4137,6 +4149,9 @@ TakePic)
                     app.Notes = sqlDataReader["notes"] == DBNull.Value ? null : (string)sqlDataReader["notes"];
                     app.jobStartTime = sqlDataReader["jobStartTime"] != DBNull.Value ? (DateTime?)sqlDataReader["jobStartTime"] : null;
                     app.jobEndTime = sqlDataReader["jobEndTime"] != DBNull.Value ? (DateTime?)sqlDataReader["jobEndTime"] : null;
+                    app.Duration = sqlDataReader["Duration"] == DBNull.Value ? 0 : (int)sqlDataReader["Duration"];
+                    app.pauseTime = sqlDataReader["PauseTime"] != DBNull.Value ? (DateTime?)sqlDataReader["PauseTime"] : null;
+                    app.RelatedAppointments = sqlDataReader["RelatedAppointments"] == DBNull.Value ? null : (string)sqlDataReader["RelatedAppointments"];
 
                     ret.Add(app);
                 }
@@ -4235,7 +4250,10 @@ TakePic)
                         A.jobStartTime,
                         A.jobEndTime,
                         A.ShareLocation,
-                        A.JobCompleted
+                        A.JobCompleted,
+                        A.Duration,
+                        A.PauseTime,
+                        A.RelatedAppointments
 
                     FROM
                         Appointments A,
@@ -4328,6 +4346,9 @@ TakePic)
                     app.Notes = sqlDataReader["notes"] == DBNull.Value ? null : (string)sqlDataReader["notes"];
                     app.jobStartTime = sqlDataReader["jobStartTime"] != DBNull.Value ? (DateTime?)sqlDataReader["jobStartTime"] : null;
                     app.jobEndTime = sqlDataReader["jobEndTime"] != DBNull.Value ? (DateTime?)sqlDataReader["jobEndTime"] : null;
+                    app.Duration = sqlDataReader["Duration"] == DBNull.Value ? 0 : (int)sqlDataReader["Duration"];
+                    app.pauseTime = sqlDataReader["PauseTime"] != DBNull.Value ? (DateTime?)sqlDataReader["PauseTime"] : null;
+                    app.RelatedAppointments = sqlDataReader["RelatedAppointments"] == DBNull.Value ? null : (string)sqlDataReader["RelatedAppointments"];
 
                     ret.Add(app);
                 }
@@ -4972,6 +4993,9 @@ TakePic)
                         A.jobEndTime,
                         A.ShareLocation,
                         A.JobCompleted,
+                        A.Duration,
+                        A.PauseTime,
+                        A.RelatedAppointments,
 
                         CU.franchiseMask,
                         CU.firstName AS cuFirstName,
@@ -5051,6 +5075,9 @@ TakePic)
                 app.Notes = sqlDataReader["notes"] == DBNull.Value ? null : (string)sqlDataReader["notes"];
                 app.jobStartTime = sqlDataReader["jobStartTime"] != DBNull.Value ? (DateTime?)sqlDataReader["jobStartTime"] : null;
                 app.jobEndTime = sqlDataReader["jobEndTime"] != DBNull.Value ? (DateTime?)sqlDataReader["jobEndTime"] : null;
+                app.Duration = sqlDataReader["Duration"] == DBNull.Value ? 0 : (int)sqlDataReader["Duration"];
+                app.pauseTime = sqlDataReader["PauseTime"] != DBNull.Value ? (DateTime?)sqlDataReader["PauseTime"] : null;
+                app.RelatedAppointments = sqlDataReader["RelatedAppointments"] == DBNull.Value ? null : (string)sqlDataReader["RelatedAppointments"];
 
                 return null;
             }
@@ -5124,7 +5151,10 @@ TakePic)
                         A.notes,
                         A.jobStartTime,
                         A.jobEndTime,
-                        A.ShareLocation
+                        A.ShareLocation,
+                        A.Duration,
+                        A.PauseTime,
+                        A.RelatedAppointments
                     FROM
                         Appointments A,
                         Contractors CO
@@ -5195,6 +5225,9 @@ TakePic)
                     value.Notes = (string)sqlDataReader["notes"];
                     value.jobStartTime = (DateTime)sqlDataReader["jobStartTime"];
                     value.jobEndTime = (DateTime)sqlDataReader["jobEndTime"];
+                    value.Duration = sqlDataReader["Duration"] == DBNull.Value ? 0 : (int)sqlDataReader["Duration"];
+                    value.pauseTime = sqlDataReader["PauseTime"] != DBNull.Value ? (DateTime?)sqlDataReader["PauseTime"] : null;
+                    value.RelatedAppointments = sqlDataReader["RelatedAppointments"] == DBNull.Value ? null : (string)sqlDataReader["RelatedAppointments"];
                     ret.Add(value);
                 }
             }
@@ -8606,6 +8639,45 @@ ShareLocation = 1
 
         }
 
+        public static string UpdateDurationTimeByAppId(int appId, DateTime? jobStartTime, DateTime? jobEndTime, DateTime? pauseTime, int duration)
+        {
+            SqlConnection sqlConnection = null;
+            try
+            {
+                sqlConnection = new SqlConnection(connString);
+                sqlConnection.Open();
 
+                string cmdText = @"
+                UPDATE 
+		            Appointments
+	            SET
+                    jobStartTime = ISNULL(@jobStartTime, jobStartTime),
+                    jobEndTime = ISNULL(@jobEndTime, jobEndTime),
+                    Duration = ISNULL(NULLIF(@Duration, 0), Duration),
+                    PauseTime = ISNULL(@PauseTime, PauseTime)
+	            WHERE
+		            AppointmentID = @AppointmentID;";
+
+                SqlCommand cmd = new SqlCommand(cmdText, sqlConnection);
+                cmd.Parameters.Add(new SqlParameter(@"AppointmentID", appId));
+                cmd.Parameters.Add(new SqlParameter(@"jobStartTime", jobStartTime ?? SqlDateTime.Null));
+                cmd.Parameters.Add(new SqlParameter(@"jobEndTime", jobEndTime ?? SqlDateTime.Null));
+                cmd.Parameters.Add(new SqlParameter(@"Duration", duration));
+                cmd.Parameters.Add(new SqlParameter(@"PauseTime", pauseTime ?? SqlDateTime.Null));
+                cmd.ExecuteNonQuery();
+
+                return null;
+            }
+            catch (Exception ex)
+            {
+                return "SQL Update duration time EX: " + ex.Message;
+            }
+            finally
+            {
+                if (sqlConnection != null)
+                    sqlConnection.Close();
+            }
+
+        }
     }
 }

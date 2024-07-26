@@ -128,7 +128,7 @@ namespace TwoLocalGals.Controllers.APIs
 
         }
 
-        [HttpPut]
+        [HttpPost]
         [Route("Contractor/{ContractorID:int}/Walkthrough/{IsChecked:bool}")]
         public IHttpActionResult SetContractorWalkthroughStatus(int ContractorID, bool IsChecked)
         {
@@ -948,6 +948,19 @@ namespace TwoLocalGals.Controllers.APIs
             return BadRequest(error);
         }
 
+        [HttpPost]
+        [Route("Schedule/Appointment/UpdateDurationTime/{appId:int}")]
+        public IHttpActionResult UpdateAppointmentDurationTime(int appId, DurationTime durationTime)
+        {
+            var error = Database.UpdateDurationTimeByAppId(appId, durationTime.JobStartTime, durationTime.JobEndTime, durationTime.PauseTime, durationTime.Duration);
+            if (error == null)
+            {
+                return Ok("Appointment's Duration and Time updated successfully!");
+            }
+
+            return BadRequest(error);
+        }
+
 
         [HttpGet]
         [Route("schedule/GetJobLogs")]
@@ -974,6 +987,14 @@ namespace TwoLocalGals.Controllers.APIs
         {
             public string latitude { get; set; }
             public string longitude { get; set; }
+        }
+
+        public class DurationTime
+        {
+            public DateTime? JobStartTime { get; set; }
+            public DateTime? JobEndTime { get; set; }
+            public int Duration { get; set; }
+            public DateTime? PauseTime { get; set; }
         }
     }
 }

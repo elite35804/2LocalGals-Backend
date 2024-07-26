@@ -451,7 +451,7 @@ namespace TwoLocalGals.Protected
                                 }
                                 if (!contractor.ShareLocation)
                                 {
-                                    html += "<i class='fa fa-location-arrow'></i>";
+                                    html += "<img src='../../2LG_No_Location.png' style='width: 10px'></img>";
 
                                 }
                                 if (!string.IsNullOrEmpty(app.Notes))
