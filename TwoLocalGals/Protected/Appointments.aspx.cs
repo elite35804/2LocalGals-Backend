@@ -236,7 +236,19 @@ namespace Nexus.Protected
                         break;
                     }
                     if (i == 0) appID = app.appointmentID;
+                    apps[i] = app;
                 }
+
+                // Update Related Appointments
+                List<int> relatedAppointmentIds = apps.Select(x => x.appointmentID).ToList();
+                relatedAppointmentIds = relatedAppointmentIds.Distinct().ToList();
+                relatedAppointmentIds.Remove(0);
+                relatedAppointmentIds.Sort();
+                if (relatedAppointmentIds.Count > 1)
+                {
+                    Database.UpdateRelatedApointmentIDs(relatedAppointmentIds);
+                }
+
 
                 (new Thread(() => {
                     //Recalculate Referrals
@@ -518,6 +530,7 @@ namespace Nexus.Protected
                     if (conApp.appType == 1 && housekeepingCount > 0) conApp.customerHours /= housekeepingCount;
                     conApp.customerDiscountAmount /= ret.Count;
                     if (splitServiceFee && conApp.appType == 1 && housekeepingCount > 0) conApp.customerServiceFee = app.combinedFee / housekeepingCount;
+
                     ret[i] = conApp;
                 }
             }
@@ -604,7 +617,36 @@ namespace Nexus.Protected
 
                 if (app.appointmentID != 0 || !string.IsNullOrEmpty(Request["conID"]))
                 {
-                    sameApps.AddRange(Database.GetSameApointments(app));
+                    List<AppStruct> relatedApps = new List<AppStruct>();
+                    if(!string.IsNullOrEmpty(app.RelatedAppointments))
+                    {
+                        List<int> appIds = app.RelatedAppointments.Split(',')?.Select(Int32.Parse).ToList();
+                        appIds.Sort();
+                        List<int> newAppIds = appIds;
+                        var areSameSet = true;
+                        do
+                        {
+                            newAppIds = Database.GetRelatedApointmentIDs(appIds);
+                            areSameSet = AreSameSets(newAppIds, appIds);
+                            appIds = newAppIds;
+                        } while (!areSameSet);
+
+                        newAppIds = newAppIds.Distinct().ToList();
+                        newAppIds.Remove(appID);
+
+                        foreach(var item in newAppIds)
+                        {
+                            AppStruct fetchedApp = new AppStruct();
+                            Database.GetApointmentpByID(Globals.GetFranchiseMask(), item, out fetchedApp);
+                            if (relatedApps.Find(x => x.appointmentID == fetchedApp.appointmentID).appointmentID <= 0)
+                            {
+                                relatedApps.Add(fetchedApp);
+                            }
+                        }
+                        
+                    }
+                    sameApps.AddRange(relatedApps);
+                    // sameApps.AddRange(Database.GetSameApointments(app));
 
                     if (!string.IsNullOrEmpty(Request["conID"]))
                     {
@@ -876,6 +918,25 @@ namespace Nexus.Protected
                 ErrorLabel.Text = "LoadAppointment EX: " + ex.Message;
             }
         }
+        #endregion
+
+        #region Helper
+
+        public bool AreSameSets(List<int> set1, List<int> set2)
+        {
+            set1 = set1.Distinct().ToList();
+            set2 = set2.Distinct().ToList();
+            if (set1.Count != set2.Count) { return false; }
+            else
+            {
+                foreach (int item1 in set1)
+                {
+                    if (!set2.Contains(item1)) { return false; }
+                }
+            }
+            return true;
+        }
+
         #endregion
     }
 }

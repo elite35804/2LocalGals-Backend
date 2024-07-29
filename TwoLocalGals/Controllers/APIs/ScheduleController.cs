@@ -710,7 +710,13 @@ namespace TwoLocalGals.Controllers.APIs
 				schedule.ContractorTips = item.contractorTips;
                 schedule.customerRate = item.customerRate;
                 schedule.NC_RequiresKeys = customer.NC_RequiresKeys;
-				scheduleDTOs.Add(schedule);
+                schedule.jobStartTime = item.jobStartTime;
+                schedule.jobEndTime = item.jobEndTime;
+                schedule.Duration = item.Duration;
+                schedule.pauseTime = item.pauseTime;
+                schedule.RelatedAppointments = item.RelatedAppointments;
+                schedule.lastStartTime = item.lastStartTime;
+                scheduleDTOs.Add(schedule);
             }
 
 
@@ -838,20 +844,26 @@ namespace TwoLocalGals.Controllers.APIs
             schedule.ContractorTips = item.contractorTips;
 			schedule.customerRate = item.customerRate;
             schedule.NC_RequiresKeys = customer.NC_RequiresKeys;
-			schedule.Partners = new List<PartnerDTO>();
+            schedule.jobStartTime = item.jobStartTime;
+            schedule.jobEndTime = item.jobEndTime;
+            schedule.Duration = item.Duration;
+            schedule.pauseTime = item.pauseTime;
+            schedule.RelatedAppointments = item.RelatedAppointments;
+            schedule.lastStartTime = item.lastStartTime;
 
-            var rows = Database.GetPartnersByCategory(null, franchiseMask, "companyName");
+            var rows = Database.GetPartnersByAppointmentIDs(item.RelatedAppointments);
             if (rows != null)
             {
+                schedule.Partners = new List<PartnerDTO>();
                 foreach (var p in rows)
                 {
                     PartnerDTO partner = new PartnerDTO();
-                    partner.Name = p.GetString("companyName");
-                    partner.category = p.GetString("category");
-                    partner.phoneNumber = p.GetString("phoneNumber");
-                    partner.webAddress = p.GetString("webAddress");
-                    partner.description = p.GetString("description");
-                    partner.approved = p.GetBool("approved");
+                    partner.Firstname = p.GetString("firstName");
+                    partner.Lastname = p.GetString("lastName");
+                    partner.BusinessName = p.GetString("businessName");
+                    partner.PhoneNumber = p.GetString("bestPhone");
+                    partner.AlternatePhone = p.GetString("alternatePhone");
+                    partner.Email = p.GetString("email");
                     schedule.Partners.Add(partner);
                 }
             }
@@ -952,7 +964,7 @@ namespace TwoLocalGals.Controllers.APIs
         [Route("Schedule/Appointment/UpdateDurationTime/{appId:int}")]
         public IHttpActionResult UpdateAppointmentDurationTime(int appId, DurationTime durationTime)
         {
-            var error = Database.UpdateDurationTimeByAppId(appId, durationTime.JobStartTime, durationTime.JobEndTime, durationTime.PauseTime, durationTime.Duration);
+            var error = Database.UpdateDurationTimeByAppId(appId, durationTime.LastStartTime, durationTime.PauseTime, durationTime.Duration);
             if (error == null)
             {
                 return Ok("Appointment's Duration and Time updated successfully!");
@@ -991,8 +1003,7 @@ namespace TwoLocalGals.Controllers.APIs
 
         public class DurationTime
         {
-            public DateTime? JobStartTime { get; set; }
-            public DateTime? JobEndTime { get; set; }
+            public DateTime? LastStartTime { get; set; }
             public int Duration { get; set; }
             public DateTime? PauseTime { get; set; }
         }

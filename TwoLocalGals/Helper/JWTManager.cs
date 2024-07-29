@@ -12,7 +12,7 @@ public class JwtManager
     {
         var symmetricKey = Convert.FromBase64String(Secret);
         var tokenHandler = new JwtSecurityTokenHandler();
-        int expireMinutes = 60;
+        int expireMinutes = 24*60;
         var now = DateTime.UtcNow;
 
         var tokenDescriptor = new SecurityTokenDescriptor

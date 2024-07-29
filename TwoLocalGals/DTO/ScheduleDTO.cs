@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 
 namespace TwoLocalGals.DTO
@@ -91,19 +92,35 @@ namespace TwoLocalGals.DTO
         public decimal ContractorTips { get; set; }
         public decimal customerRate { get; set; }
 
-        public List<PartnerDTO> Partners { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Include)]
+        public DateTime? jobStartTime;
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Include)]
+        public DateTime? jobEndTime;
+        
+        [JsonProperty(NullValueHandling = NullValueHandling.Include)]
+        public int Duration;
+        
+        [JsonProperty(NullValueHandling = NullValueHandling.Include)]
+        public DateTime? pauseTime;
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Include)]
+        public DateTime? lastStartTime;
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Include)]
+        public string RelatedAppointments;
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Include)]
+        public List<PartnerDTO> Partners;
     }
 
     public class PartnerDTO
     {
-        public string Name { get; set; }
-        public string category { get; set; }
-        public string phoneNumber { get; set; }
-        public string webAddress { get; set; }
-        public string description { get; set; }
-        public bool approved { get; set; }
-        
-
-
+        public string Firstname { get; set; }
+        public string Lastname { get; set; }
+        public string BusinessName { get; set; }
+        public string PhoneNumber { get; set; }
+        public string AlternatePhone { get; set; }
+        public string Email { get; set; }
     }
 }

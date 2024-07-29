@@ -9,6 +9,9 @@ using System.IO;
 using System.Web.UI.WebControls;
 using TwoLocalGals.DTO;
 using System.Data.SqlTypes;
+using System.Security.Cryptography.Xml;
+using System.Linq;
+using Newtonsoft.Json;
 
 namespace Nexus
 {
@@ -352,13 +355,21 @@ namespace Nexus
         public bool ShareLocation;
         public bool JobCompleted;
         public string Notes;
+        [JsonProperty(NullValueHandling = NullValueHandling.Include)]
         public DateTime? jobStartTime;
+        [JsonProperty(NullValueHandling = NullValueHandling.Include)]
         public DateTime? jobEndTime;
+        [JsonProperty(NullValueHandling = NullValueHandling.Include)]
+        public DateTime? lastStartTime;
         public string longitude;
         public string latitude;
+        [JsonProperty(NullValueHandling = NullValueHandling.Include)]
         public int Duration;
+        [JsonProperty(NullValueHandling = NullValueHandling.Include)]
         public DateTime? pauseTime;
+        [JsonProperty(NullValueHandling = NullValueHandling.Include)]
         public string RelatedAppointments;
+        [JsonProperty(NullValueHandling = NullValueHandling.Include)]
         public string Partners;
     }
 
@@ -2040,14 +2051,16 @@ alternatePhoneTwoCell
 
                 string cmdText = @"
                 Select * from JobLogs where 
-                        AppointmentId = @AppointmentId and
-                        @contractorID = contractorID and 
-                        Content = @content";
+                        AppointmentId = @AppointmentId AND
+                        @contractorID = contractorID AND 
+                        UPPER(Content) = UPPER(@content) AND
+                        UPPER(SubContent) = UPPER(@SubContent)";
 
                 SqlCommand cmd = new SqlCommand(cmdText, sqlConnection);
                 cmd.Parameters.Add(new SqlParameter(@"AppointmentId", job.AppointmentId));
                 cmd.Parameters.Add(new SqlParameter(@"contractorID", job.ContractorId));
                 cmd.Parameters.Add(new SqlParameter(@"Content", job.Content));
+                cmd.Parameters.Add(new SqlParameter(@"SubContent", job.SubContent));
                 sqlDataReader = cmd.ExecuteReader();
 
              
@@ -3901,7 +3914,8 @@ TakePic)
                         A.JobCompleted,
                         A.Duration,
                         A.PauseTime,
-                        A.RelatedAppointments
+                        A.RelatedAppointments,
+                        A.lastStartTime
 
                     FROM
                         Appointments A LEFT JOIN Contractors CO ON A.contractorID = CO.contractorID
@@ -3956,6 +3970,7 @@ TakePic)
                     app.Notes = sqlDataReader["notes"] == DBNull.Value ? null : (string)sqlDataReader["notes"];
                     app.jobStartTime = sqlDataReader["jobStartTime"] != DBNull.Value ? (DateTime?)sqlDataReader["jobStartTime"] : null;
                     app.jobEndTime = sqlDataReader["jobEndTime"] != DBNull.Value ? (DateTime?)sqlDataReader["jobEndTime"] : null;
+                    app.lastStartTime = sqlDataReader["lastStartTime"] != DBNull.Value ? (DateTime?)sqlDataReader["lastStartTime"] : null;
                     app.Duration = sqlDataReader["Duration"] == DBNull.Value ? 0 : (int)sqlDataReader["Duration"];
                     app.pauseTime = sqlDataReader["PauseTime"] != DBNull.Value ? (DateTime?)sqlDataReader["PauseTime"] : null;
                     app.RelatedAppointments = sqlDataReader["RelatedAppointments"] == DBNull.Value ? null : (string)sqlDataReader["RelatedAppointments"];
@@ -4059,7 +4074,8 @@ TakePic)
                         A.JobCompleted,
                         A.Duration,
                         A.PauseTime,
-                        A.RelatedAppointments
+                        A.RelatedAppointments,
+                        A.lastStartTime
 
                     FROM
                         Appointments A,
@@ -4150,6 +4166,7 @@ TakePic)
                     app.Notes = sqlDataReader["notes"] == DBNull.Value ? null : (string)sqlDataReader["notes"];
                     app.jobStartTime = sqlDataReader["jobStartTime"] != DBNull.Value ? (DateTime?)sqlDataReader["jobStartTime"] : null;
                     app.jobEndTime = sqlDataReader["jobEndTime"] != DBNull.Value ? (DateTime?)sqlDataReader["jobEndTime"] : null;
+                    app.lastStartTime = sqlDataReader["lastStartTime"] != DBNull.Value ? (DateTime?)sqlDataReader["lastStartTime"] : null;
                     app.Duration = sqlDataReader["Duration"] == DBNull.Value ? 0 : (int)sqlDataReader["Duration"];
                     app.pauseTime = sqlDataReader["PauseTime"] != DBNull.Value ? (DateTime?)sqlDataReader["PauseTime"] : null;
                     app.RelatedAppointments = sqlDataReader["RelatedAppointments"] == DBNull.Value ? null : (string)sqlDataReader["RelatedAppointments"];
@@ -4255,6 +4272,7 @@ TakePic)
                         A.Duration,
                         A.PauseTime,
                         A.RelatedAppointments
+                        A.lastStartTime
 
                     FROM
                         Appointments A,
@@ -4347,6 +4365,7 @@ TakePic)
                     app.Notes = sqlDataReader["notes"] == DBNull.Value ? null : (string)sqlDataReader["notes"];
                     app.jobStartTime = sqlDataReader["jobStartTime"] != DBNull.Value ? (DateTime?)sqlDataReader["jobStartTime"] : null;
                     app.jobEndTime = sqlDataReader["jobEndTime"] != DBNull.Value ? (DateTime?)sqlDataReader["jobEndTime"] : null;
+                    app.lastStartTime = sqlDataReader["lastStartTime"] != DBNull.Value ? (DateTime?)sqlDataReader["lastStartTime"] : null;
                     app.Duration = sqlDataReader["Duration"] == DBNull.Value ? 0 : (int)sqlDataReader["Duration"];
                     app.pauseTime = sqlDataReader["PauseTime"] != DBNull.Value ? (DateTime?)sqlDataReader["PauseTime"] : null;
                     app.RelatedAppointments = sqlDataReader["RelatedAppointments"] == DBNull.Value ? null : (string)sqlDataReader["RelatedAppointments"];
@@ -4997,6 +5016,7 @@ TakePic)
                         A.Duration,
                         A.PauseTime,
                         A.RelatedAppointments,
+                        A.lastStartTime,
 
                         CU.franchiseMask,
                         CU.firstName AS cuFirstName,
@@ -5076,6 +5096,7 @@ TakePic)
                 app.Notes = sqlDataReader["notes"] == DBNull.Value ? null : (string)sqlDataReader["notes"];
                 app.jobStartTime = sqlDataReader["jobStartTime"] != DBNull.Value ? (DateTime?)sqlDataReader["jobStartTime"] : null;
                 app.jobEndTime = sqlDataReader["jobEndTime"] != DBNull.Value ? (DateTime?)sqlDataReader["jobEndTime"] : null;
+                app.lastStartTime = sqlDataReader["lastStartTime"] != DBNull.Value ? (DateTime?)sqlDataReader["lastStartTime"] : null;
                 app.Duration = sqlDataReader["Duration"] == DBNull.Value ? 0 : (int)sqlDataReader["Duration"];
                 app.pauseTime = sqlDataReader["PauseTime"] != DBNull.Value ? (DateTime?)sqlDataReader["PauseTime"] : null;
                 app.RelatedAppointments = sqlDataReader["RelatedAppointments"] == DBNull.Value ? null : (string)sqlDataReader["RelatedAppointments"];
@@ -5156,7 +5177,8 @@ TakePic)
                         A.ShareLocation,
                         A.Duration,
                         A.PauseTime,
-                        A.RelatedAppointments
+                        A.RelatedAppointments,
+                        A.lastStartTime
                     FROM
                         Appointments A,
                         Contractors CO
@@ -5227,6 +5249,7 @@ TakePic)
                     value.Notes = (string)sqlDataReader["notes"];
                     value.jobStartTime = (DateTime)sqlDataReader["jobStartTime"];
                     value.jobEndTime = (DateTime)sqlDataReader["jobEndTime"];
+                    value.lastStartTime = sqlDataReader["lastStartTime"] != DBNull.Value ? (DateTime?)sqlDataReader["lastStartTime"] : null;
                     value.Duration = sqlDataReader["Duration"] == DBNull.Value ? 0 : (int)sqlDataReader["Duration"];
                     value.pauseTime = sqlDataReader["PauseTime"] != DBNull.Value ? (DateTime?)sqlDataReader["PauseTime"] : null;
                     value.RelatedAppointments = sqlDataReader["RelatedAppointments"] == DBNull.Value ? null : (string)sqlDataReader["RelatedAppointments"];
@@ -5244,6 +5267,111 @@ TakePic)
                     sqlConnection.Close();
             }
             return ret;
+        }
+        #endregion
+
+        #region GetRelatedAppointments
+        public static List<int> GetRelatedApointmentIDs(List<int> appointmentIDs)
+        {
+            List<int> newAppIDs = new List<int>();
+
+            newAppIDs.AddRange(appointmentIDs);
+            newAppIDs.Sort();
+
+            SqlConnection sqlConnection = null;
+            SqlDataReader sqlDataReader = null;
+            try
+            {
+                sqlConnection = new SqlConnection(connString);
+                sqlConnection.Open();
+
+                var appIDStrings = string.Join(",", appointmentIDs);
+
+                string cmdText = @"
+                    SELECT
+                        A.RelatedAppointments
+                    FROM
+                        [MyDemo].[dbo].Appointments A
+                    WHERE
+                        A.appointmentID IN (SELECT * FROM STRING_SPLIT(@appointmentIDs, ','));";
+
+                SqlCommand cmd = new SqlCommand(cmdText, sqlConnection);
+                cmd.Parameters.Add(new SqlParameter("appointmentIDs", appIDStrings));
+                sqlDataReader = cmd.ExecuteReader();
+
+                while (sqlDataReader.Read())
+                {
+                    var relAppIDsString = sqlDataReader["RelatedAppointments"] == DBNull.Value ? null : (string)sqlDataReader["RelatedAppointments"];
+                    if(!string.IsNullOrEmpty(relAppIDsString))
+                    {
+                        List<int> relAppIDs = relAppIDsString.Split(',')?.Select(Int32.Parse).ToList();
+                        foreach(var id in relAppIDs)
+                        {
+                            if(!newAppIDs.Contains(id))
+                            {
+                                newAppIDs.Add(id);
+                            }
+                        }
+                    }
+                }
+                newAppIDs.Sort();
+            }
+            catch
+            {
+            }
+            finally
+            {
+                if (sqlDataReader != null)
+                    sqlDataReader.Close();
+                if (sqlConnection != null)
+                    sqlConnection.Close();
+            }
+            return newAppIDs;
+        }
+        #endregion
+
+        #region UpdateRelatedAppointments
+        public static string UpdateRelatedApointmentIDs(List<int> appointmentIDs)
+        {
+            SqlConnection sqlConnection = null;
+            try
+            {
+                sqlConnection = new SqlConnection(connString);
+                sqlConnection.Open();
+
+                foreach(var appId in appointmentIDs)
+                {
+                    List<int> relatedAppointmentList = appointmentIDs.ToList();
+
+                    relatedAppointmentList.Remove(appId);
+                    relatedAppointmentList.Sort();
+                    var relatedAppointments = string.Join(",", relatedAppointmentList);
+
+                    string cmdText = @"
+                                        UPDATE 
+		                                    Appointments
+	                                    SET
+                                            RelatedAppointments = @RelatedAppointments
+	                                    WHERE
+		                                    AppointmentID = @AppointmentID;";
+
+                    SqlCommand cmd = new SqlCommand(cmdText, sqlConnection);
+                    cmd.Parameters.Add(new SqlParameter(@"RelatedAppointments", relatedAppointments));
+                    cmd.Parameters.Add(new SqlParameter(@"AppointmentID", appId));
+                    cmd.ExecuteNonQuery();
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                return "SQL Update related appointments EX: " + ex.Message;
+            }
+            finally
+            {
+                if (sqlConnection != null)
+                    sqlConnection.Close();
+            }
+
         }
         #endregion
 
@@ -7839,6 +7967,45 @@ TakePic)
         }
         #endregion
 
+        #region GetPartnersByAppointmentIDs
+        public static List<DBRow> GetPartnersByAppointmentIDs(string ids)
+        {
+            SqlConnection sqlConnection = null;
+            SqlDataReader sqlDataReader = null;
+
+            try
+            {
+                sqlConnection = new SqlConnection(connString);
+                sqlConnection.Open();
+
+                string cmdText = @"
+                                    SELECT
+                                        *
+                                    FROM
+                                        Contractors AS c
+                                    INNER JOIN Appointments AS a
+                                        ON a.contractorID = c.contractorID
+                                    WHERE
+                                        a.AppointmentID IN (SELECT * FROM STRING_SPLIT(@relatedAppointmentIDs, ','));";
+
+                SqlCommand cmd = new SqlCommand(cmdText, sqlConnection);
+                cmd.Parameters.Add(new SqlParameter("relatedAppointmentIDs", ids));
+                sqlDataReader = cmd.ExecuteReader();
+
+                return GetDBRows(sqlDataReader);
+            }
+            catch { }
+            finally
+            {
+                if (sqlDataReader != null)
+                    sqlDataReader.Close();
+                if (sqlConnection != null)
+                    sqlConnection.Close();
+            }
+            return new List<DBRow>();
+        }
+        #endregion
+
         #region AddDrivingRoute
         public static string AddDrivingRoute(string lookupKey, decimal distance, decimal travelTime)
         {
@@ -8612,14 +8779,14 @@ JobCompleted = 1
                 sqlConnection.Open();
 
                 string cmdText = @"
-                UPDATE 
-		            Contractors
-	            SET
-                    latitude = @latitude,
-longitude = @longitude,
-ShareLocation = 1
-	            WHERE
-		            contractorID = @appointmentID;";
+                                UPDATE c
+                                SET c.latitude = @latitude,
+	                                c.longitude = @longitude,
+	                                c.ShareLocation = 1
+                                FROM    Contractors AS c
+		                                INNER JOIN Appointments AS a
+		                                ON a.contractorID = c.contractorID
+                                WHERE	a.appointmentID = @appointmentID;";
 
                 SqlCommand cmd = new SqlCommand(cmdText, sqlConnection);
                 cmd.Parameters.Add(new SqlParameter(@"appointmentID", appId));
@@ -8641,7 +8808,7 @@ ShareLocation = 1
 
         }
 
-        public static string UpdateDurationTimeByAppId(int appId, DateTime? jobStartTime, DateTime? jobEndTime, DateTime? pauseTime, int duration)
+        public static string UpdateDurationTimeByAppId(int appId, DateTime? lastStartTime, DateTime? pauseTime, int duration)
         {
             SqlConnection sqlConnection = null;
             try
@@ -8653,8 +8820,7 @@ ShareLocation = 1
                 UPDATE 
 		            Appointments
 	            SET
-                    jobStartTime = ISNULL(@jobStartTime, jobStartTime),
-                    jobEndTime = ISNULL(@jobEndTime, jobEndTime),
+                    lastStartTime = ISNULL(@lastStartTime, lastStartTime),
                     Duration = ISNULL(NULLIF(@Duration, 0), Duration),
                     PauseTime = ISNULL(@PauseTime, PauseTime)
 	            WHERE
@@ -8662,8 +8828,7 @@ ShareLocation = 1
 
                 SqlCommand cmd = new SqlCommand(cmdText, sqlConnection);
                 cmd.Parameters.Add(new SqlParameter(@"AppointmentID", appId));
-                cmd.Parameters.Add(new SqlParameter(@"jobStartTime", jobStartTime ?? SqlDateTime.Null));
-                cmd.Parameters.Add(new SqlParameter(@"jobEndTime", jobEndTime ?? SqlDateTime.Null));
+                cmd.Parameters.Add(new SqlParameter(@"lastStartTime", lastStartTime ?? SqlDateTime.Null));
                 cmd.Parameters.Add(new SqlParameter(@"Duration", duration));
                 cmd.Parameters.Add(new SqlParameter(@"PauseTime", pauseTime ?? SqlDateTime.Null));
                 cmd.ExecuteNonQuery();
