@@ -359,6 +359,7 @@ namespace Nexus
         public int Duration;
         public DateTime? pauseTime;
         public string RelatedAppointments;
+        public string Partners;
     }
 
 
@@ -5078,6 +5079,7 @@ TakePic)
                 app.Duration = sqlDataReader["Duration"] == DBNull.Value ? 0 : (int)sqlDataReader["Duration"];
                 app.pauseTime = sqlDataReader["PauseTime"] != DBNull.Value ? (DateTime?)sqlDataReader["PauseTime"] : null;
                 app.RelatedAppointments = sqlDataReader["RelatedAppointments"] == DBNull.Value ? null : (string)sqlDataReader["RelatedAppointments"];
+                app.Partners = app.RelatedAppointments;
 
                 return null;
             }
