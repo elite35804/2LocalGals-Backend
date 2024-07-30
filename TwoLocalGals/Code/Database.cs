@@ -4271,7 +4271,7 @@ TakePic)
                         A.JobCompleted,
                         A.Duration,
                         A.PauseTime,
-                        A.RelatedAppointments
+                        A.RelatedAppointments,
                         A.lastStartTime
 
                     FROM
@@ -8519,14 +8519,15 @@ TakePic)
 
                 if (images.Count > 0)
                 {
-                    string cmdText1 = @"Delete from 
-		                                AppointmentAttachments
-	                                    WHERE
-		                                AppointmentId = @appointmentID;";
+                    // Removed code to delete the attachments as per request
+                    //string cmdText1 = @"Delete from 
+		                  //              AppointmentAttachments
+	                   //                 WHERE
+		                  //              AppointmentId = @appointmentID;";
 
-                    SqlCommand cmd1 = new SqlCommand(cmdText1, sqlConnection);
-                    cmd1.Parameters.Add(new SqlParameter(@"appointmentID", appId));
-                    cmd1.ExecuteNonQuery();
+                    //SqlCommand cmd1 = new SqlCommand(cmdText1, sqlConnection);
+                    //cmd1.Parameters.Add(new SqlParameter(@"appointmentID", appId));
+                    //cmd1.ExecuteNonQuery();
 
 
                     foreach (var item in images)
