@@ -840,11 +840,11 @@ namespace Nexus.Protected
                         AreasCompleted.ID = "AreasCompleted" + i + jl.id;
                         AreasCompleted.Text = acText;
                         PlaceHolder1.Controls.Add(AreasCompleted);
-                        if (jl.CreatedAt != null)
+                        if (jl.CreatedAt != null || !string.IsNullOrEmpty(jl.CreatedAtStr))
                         {
                             Label Timestamp = new Label();
                             Timestamp.Style["Color"] = "Blue";
-                            Timestamp.Text = " (" + jl.CreatedAt.ToLocalTime().ToShortTimeString() + ")";
+                            Timestamp.Text = " (" + (string.IsNullOrEmpty(jl.CreatedAtStr) ? jl.CreatedAt.ToShortTimeString() : jl.CreatedAtStr) + ")";
                             PlaceHolder1.Controls.Add(Timestamp);
                         }
                         PlaceHolder1.Controls.Add(new LiteralControl("<br/>"));

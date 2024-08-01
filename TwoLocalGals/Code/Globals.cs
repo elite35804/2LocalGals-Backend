@@ -860,18 +860,41 @@ namespace Nexus
             List<ListItem> ret = new List<ListItem>();
             try
             {
-                foreach (FranchiseStruct franchise in Database.GetFranchiseList())
+                var franchiseList = Database.GetFranchiseList();
+                foreach (FranchiseStruct franchise in franchiseList)
                 {
                     ListItem item = new ListItem(franchise.franchiseName, franchise.franchiseID.ToString("D2"));
-                    if ((selectedMask & IDToMask(franchise.franchiseID)) > 0)
+                    var fMask = IDToMask(franchise.franchiseID);
+                    if ((selectedMask & fMask) > 0)
                         item.Selected = true;
-                    if ((includeMask & IDToMask(franchise.franchiseID)) > 0)
+                    if ((includeMask & fMask) > 0)
                         ret.Add(item);
                 }
             }
             catch { }
             return ret.ToArray();
         }
+
+        public static ListItem[] GetFranchiseListNoMask(int includeMask, int selectedMask)
+        {
+            List<ListItem> ret = new List<ListItem>();
+            try
+            {
+                var franchiseList = Database.GetFranchiseList();
+                foreach (FranchiseStruct franchise in franchiseList)
+                {
+                    ListItem item = new ListItem(franchise.franchiseName, franchise.franchiseID.ToString("D2"));
+                    var fMask = IDToMask(franchise.franchiseID);
+                    if ((selectedMask & fMask) > 0)
+                        item.Selected = true;
+                    // if ((includeMask & fMask) > 0)
+                    ret.Add(item);
+                }
+            }
+            catch { }
+            return ret.ToArray();
+        }
+
         #endregion
 
         #region GetContractorTypeList

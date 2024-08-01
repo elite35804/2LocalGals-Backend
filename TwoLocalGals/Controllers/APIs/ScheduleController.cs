@@ -161,12 +161,13 @@ namespace TwoLocalGals.Controllers.APIs
             var claim = System.Security.Claims.ClaimsPrincipal
                 .Current.FindFirst("franchiseMask");
             int selectedMask = Convert.ToInt32(claim?.Value);
+            int contractorID = Convert.ToInt32(ClaimsPrincipal.Current.FindFirst("contractorID")?.Value);
 
             List<DBRow> invoiceRangeList = Database.GetInvoiceRangeByDateRange(startDate, endDate);
             Lookup<int, DBRow> invoiceRangeLookup = (Lookup<int, DBRow>)invoiceRangeList.ToLookup(p => p.GetInt("customerID"), p => p);
 
             SortedList<DateTime, SortedList<int, List<AppStruct>>> dictApp = new SortedList<DateTime, SortedList<int, List<AppStruct>>>();
-            List<AppStruct> appList = Database.GetAppsByDateRange(selectedMask, startDate, endDate, @"A.appointmentDate, A.startTime, A.endTime", false);
+            List<AppStruct> appList = Database.GetAppsByContractor(selectedMask, contractorID, startDate, endDate, @"A.appointmentDate, A.startTime, A.endTime", false);
             foreach (AppStruct app in appList)
             {
                 if (!dictApp.ContainsKey(app.appointmentDate)) dictApp.Add(app.appointmentDate, new SortedList<int, List<AppStruct>>());

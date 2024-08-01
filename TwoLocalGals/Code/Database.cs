@@ -545,6 +545,7 @@ namespace Nexus
         public bool Checked;
         public string CheckedBy;
         public DateTime CreatedAt;
+        public string CreatedAtStr;
         public bool IsGeneral;
     }
 
@@ -2002,17 +2003,20 @@ alternatePhoneTwoCell
                         JobLogs
                     WHERE
                         AppointmentId = @AppointmentId and
-                        @contractorID = contractorID and 
-                        IsGeneral = @IsGeneral";
+                        @contractorID = contractorID";
 
                 SqlCommand cmd = new SqlCommand(cmdText, sqlConnection);
                 cmd.Parameters.Add(new SqlParameter("AppointmentId", AppointmentId));
                 cmd.Parameters.Add(new SqlParameter("contractorID", contractorID));
-                cmd.Parameters.Add(new SqlParameter("IsGeneral", isGeneral));
                 sqlDataReader = cmd.ExecuteReader();
                 List<JobLogsStruct> jobLogs = new List<JobLogsStruct>();
                 while (sqlDataReader.Read())
                 {
+                    long ticks = (long)sqlDataReader["TimeSpanTicks"];
+                    DateTime createdAt = (DateTime)sqlDataReader["CreatedAt"];
+                    TimeZoneInfo tz = TimeZoneInfo.Local;
+                    DateTime localTime = createdAt.AddTicks(ticks);
+
                     JobLogsStruct log = new JobLogsStruct();
                     log.id = (int)sqlDataReader["id"];
                     log.CustomerId = (int)sqlDataReader["CustomerId"];
@@ -2022,7 +2026,8 @@ alternatePhoneTwoCell
                     log.SubContent = (string)sqlDataReader["SubContent"];
                     log.Checked = (bool)sqlDataReader["Checked"];
                     log.CheckedBy = (string)sqlDataReader["CheckedBy"];
-                    log.CreatedAt = (DateTime)sqlDataReader["CreatedAt"];
+                    log.CreatedAt = localTime;
+                    log.CreatedAtStr = Globals.SafeSqlString(sqlDataReader["CreatedAtStr"]);
                     log.IsGeneral = (bool)sqlDataReader["IsGeneral"];
                     jobLogs.Add(log);
                 }
@@ -2063,19 +2068,27 @@ alternatePhoneTwoCell
                 cmd.Parameters.Add(new SqlParameter(@"SubContent", job.SubContent));
                 sqlDataReader = cmd.ExecuteReader();
 
-             
+                TimeSpan ts = new TimeSpan();
+                if (job.CreatedAt != null)
+                {
+                    TimeZoneInfo tz = TimeZoneInfo.Local;
+                    ts = tz.GetUtcOffset(job.CreatedAt);
+                }
+
+                string createdAtTimeStr = job.CreatedAtStr.Contains("T") ? job.CreatedAtStr?.Split('T')[1] : job.CreatedAtStr;
 
                 if (sqlDataReader.HasRows)
                 {
                     sqlDataReader.Read();
                     var id = (int)sqlDataReader["id"];
+
                     if (sqlConnection != null)
                         sqlConnection.Close();
 
                     sqlConnection.Open();
 
                     string cmdText1 = @"
-                    Update JobLogs set SubContent = @SubContent, Checked = @Checked,  CreatedAt = GetDate(), CheckedBy = @CreatedBy  , IsGeneral = @IsGeneral
+                    Update JobLogs set SubContent = @SubContent, Checked = @Checked,  CreatedAt = GetDate(), CheckedBy = @CreatedBy  , IsGeneral = @IsGeneral, TimeSpanTicks = @TimespanTicks, CreatedAtStr = @CreatedAtStr
                     Where id = @id";
 
                     SqlCommand cmd1 = new SqlCommand(cmdText1, sqlConnection);
@@ -2084,6 +2097,8 @@ alternatePhoneTwoCell
                     cmd1.Parameters.Add(new SqlParameter(@"CreatedBy", job.CheckedBy));
                     cmd1.Parameters.Add(new SqlParameter(@"IsGeneral", job.IsGeneral));
                     cmd1.Parameters.Add(new SqlParameter(@"id", id));
+                    cmd1.Parameters.Add(new SqlParameter(@"TimeSpanTicks", ts.Ticks));
+                    cmd1.Parameters.Add(new SqlParameter(@"CreatedAtStr", createdAtTimeStr));
                     cmd1.ExecuteNonQuery();
 
                 }
@@ -2103,8 +2118,10 @@ alternatePhoneTwoCell
                     ,[Checked]
                     ,[CheckedBy]
                     ,[CreatedAt]
-                    ,[IsGeneral])  Values " +
-                    $"({job.ContractorId} , {job.CustomerId} , {job.AppointmentId} ,'{job.Content}', '{job.SubContent}',{(job.Checked ? 1 : 0) },'{job.CheckedBy}', GetDate() ,{(job.IsGeneral ? 1 : 0)} )";
+                    ,[IsGeneral]
+                    ,[TimeSpanTicks]
+                    ,[CreatedAtStr])  Values " +
+                    $"({job.ContractorId} , {job.CustomerId} , {job.AppointmentId} ,'{job.Content}', '{job.SubContent}',{(job.Checked ? 1 : 0) },'{job.CheckedBy}', GetDate() ,{(job.IsGeneral ? 1 : 0)}, {ts.Ticks}, '{createdAtTimeStr}' )";
 
                     SqlCommand cmd2 = new SqlCommand(cmdText2, sqlConnection);
                     cmd2.ExecuteNonQuery();

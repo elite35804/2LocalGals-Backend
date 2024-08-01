@@ -35,7 +35,7 @@ namespace Nexus.Protected
                     ContractorList.Items.Add(new ListItem("(New Contractor)", "0"));
                     ContractorList.Items.AddRange(Globals.GetContractorList(Globals.GetFranchiseMask(), Globals.SafeIntParse(Request["conID"]), 0, out contractor, OnlyActive.Checked, false));
                     FranchiseList.Items.Clear();
-                    FranchiseList.Items.AddRange(Globals.GetFranchiseList(Globals.GetFranchiseMask() | contractor.franchiseMask, contractor.franchiseMask));
+                    FranchiseList.Items.AddRange(Globals.GetFranchiseListNoMask(Globals.GetFranchiseMask() | contractor.franchiseMask, contractor.franchiseMask));
                     if (FranchiseList.Items.Count == 1) FranchiseList.SelectedIndex = 0;
 
                     if (contractor.contractorID == 0)
