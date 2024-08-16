@@ -865,6 +865,8 @@ namespace TwoLocalGals.Controllers.APIs
                     partner.PhoneNumber = p.GetString("bestPhone");
                     partner.AlternatePhone = p.GetString("alternatePhone");
                     partner.Email = p.GetString("email");
+                    partner.AppointmentId = Int32.Parse(p.GetString("appointmentId"));
+                    partner.ContractorId = Int32.Parse(p.GetString("contractorID"));
                     schedule.Partners.Add(partner);
                 }
             }
@@ -872,6 +874,14 @@ namespace TwoLocalGals.Controllers.APIs
 
             return Ok(schedule);
 
+        }
+
+        [HttpGet]
+        [Route("Schedule/GetAppNotesAndAttachment/{appId:int}")]
+        public IHttpActionResult GetNotesAndAttachments(int appId)
+        {
+            var data = Database.GetAppointmentAttachmentsAndNotes(appId);
+            return Ok(data);
         }
 
         [HttpPost]

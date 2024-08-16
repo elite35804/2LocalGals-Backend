@@ -381,6 +381,13 @@ namespace Nexus
         public string ImageURL;
     }
 
+    public struct AppNotesAndAttachments
+    {
+        public int AppointmentId;
+        public string Notes;
+        public AppAttachments[] attachments;
+    }
+
     public struct ConAppStruct
     {
         public int appointmentID;
@@ -5726,6 +5733,16 @@ TakePic)
                         appointmentID = @appointmentID;
 
                     DELETE FROM 
+                        AppointmentAttachments
+                    WHERE
+                        AppointmentId = @appointmentID;
+
+                    DELETE FROM 
+                        JobLogs
+                    WHERE
+                        AppointmentId = @appointmentID;
+
+                    DELETE FROM 
                         Appointments
 	                WHERE
 		                appointmentID = @appointmentID;";
@@ -7997,7 +8014,8 @@ TakePic)
 
                 string cmdText = @"
                                     SELECT
-                                        *
+                                        *,
+                                        a.AppointmentID
                                     FROM
                                         Contractors AS c
                                     INNER JOIN Appointments AS a
@@ -8524,7 +8542,7 @@ TakePic)
                 UPDATE 
 		            Appointments
 	            SET
-                    Notes = @notes
+                    Notes = ISNULL(NULLIF(@notes, ''), Notes)
 	            WHERE
 		            appointmentID = @appointmentID;";
 
@@ -8634,7 +8652,55 @@ AppointmentId = @appID
 
         #endregion
 
+        #region Get Appointment Notes and Attachments
 
+        public static AppNotesAndAttachments GetAppointmentAttachmentsAndNotes(int appId)
+        {
+            AppNotesAndAttachments result = new AppNotesAndAttachments();
+
+            SqlConnection sqlConnection = null;
+            SqlDataReader sqlDataReader = null;
+            try
+            {
+                sqlConnection = new SqlConnection(connString);
+                sqlConnection.Open();
+
+                string cmdText = @"
+                    SELECT
+                        AppointmentId,
+                        Notes
+                    FROM
+                        Appointments
+                    WHERE
+                        AppointmentId = @appID
+                    ";
+
+                SqlCommand cmd = new SqlCommand(cmdText, sqlConnection);
+                cmd.Parameters.Add(new SqlParameter("appID", appId));
+                sqlDataReader = cmd.ExecuteReader();
+
+                if (sqlDataReader.Read())
+                {
+                    result.AppointmentId = appId;
+                    result.Notes = (string) sqlDataReader["Notes"];
+                    result.attachments = GetAppointmentAttachments(appId).ToArray();
+                }
+            }
+            catch { }
+            finally
+            {
+                if (sqlDataReader != null)
+                    sqlDataReader.Close();
+                if (sqlConnection != null)
+                    sqlConnection.Close();
+            }
+
+            return result;
+        }
+
+
+
+        #endregion
 
         public static string StartJobByAppId(int appId)
         {

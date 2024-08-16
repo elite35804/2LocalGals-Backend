@@ -1416,7 +1416,6 @@ namespace Nexus.Protected
                 Dictionary<int, int> rowColors = new Dictionary<int, int>();
 
                 AppTable.Rows.Add(headerRow);
-                int rowsCt = 0;
                 foreach (AppStruct app in Database.GetAppsByCustomerID(customerID))
                 {
                     TableCell cell = null;
@@ -1468,15 +1467,8 @@ namespace Nexus.Protected
                     cell.Controls.Add(conLink);
                     row.Cells.Add(cell);
 
-                    if (rowsCt < 4)
-                    {
-                        // Grouping logic
-                        rowsCt++;
-                    }
-                    else
-                    {
-                        AppTable.Rows.Add(row);
-                    }
+                    
+                    AppTable.Rows.Add(row);
 
                     if (app.appointmentDate.Date >= currDate.Date)
                         currentDateIndex = AppTable.Rows.Count;

@@ -782,7 +782,9 @@ namespace Nexus.Protected
                     // Create a Label
                     Label StartJobTime = new Label();
                     StartJobTime.ID = "StartJobTime" + i;
-                    StartJobTime.Text = sameApps[i].jobStartTime?.ToLocalTime().ToShortTimeString();
+                    TimeZoneInfo infotime = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time");
+                    if (sameApps[i].jobStartTime != null) 
+                        StartJobTime.Text = TimeZoneInfo.ConvertTimeFromUtc(sameApps[i].jobStartTime.Value, infotime).ToShortTimeString();
                     StartJobTime.Style["Color"] = "Green";
                     PlaceHolder1.Controls.Add(StartJobTime);
 
@@ -798,7 +800,8 @@ namespace Nexus.Protected
                     // Create a Label
                     Label endJobTime = new Label();
                     endJobTime.ID = "endJobTime" + i;
-                    endJobTime.Text = sameApps[i].jobEndTime?.ToLocalTime().ToShortTimeString();
+                    if (sameApps[i].jobEndTime != null)
+                        endJobTime.Text = TimeZoneInfo.ConvertTimeFromUtc(sameApps[i].jobEndTime.Value, infotime).ToShortTimeString();
                     endJobTime.Style["Color"] = "Green";
                     PlaceHolder1.Controls.Add(endJobTime);
 
@@ -808,7 +811,7 @@ namespace Nexus.Protected
                     // Create a Label
                     Label jobCompletedlbl = new Label();
                     jobCompletedlbl.ID = "jobCompletedlbl" + i;
-                    jobCompletedlbl.Text = "job Completed: ";
+                    jobCompletedlbl.Text = "Job Completed: ";
                     PlaceHolder1.Controls.Add(jobCompletedlbl);
 
                     // Create a Label
