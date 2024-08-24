@@ -662,10 +662,11 @@ namespace TwoLocalGals.Protected
                     filename = selectedFranchise.FranchiseImg;
                 }
                 image.ImageUrl = "~/ContratorPics/" + filename;
-                image.Width = 25; image.Height = 25;
+                image.Width = 50; image.Height = 50;
                 image.Visible = true;
                 image.Style["border-radius"] = "45%";
                 image.Style["border"] = "solid 0.1px";
+                image.Style["margin-left"] = "10px";
                 titleCell.Controls.Add(image);
 
                 Label conLabel = new Label();

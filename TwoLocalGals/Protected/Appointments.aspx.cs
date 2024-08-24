@@ -881,18 +881,41 @@ namespace Nexus.Protected
                     {
 
                         var fileName = Path.GetFileName(img.ImageURL);
-                        var imageUrl = "~/ContratorPics/" + fileName;
-                        var image = new Image
+                        var imageUrl = "../../ContratorPics/" + fileName;
+                        var imgNew = new Image
                         {
                             ImageUrl = imageUrl,
-                            CssClass = "galleryImage"
+                            CssClass = "image"
                         };
-                        PlaceHolder1.Controls.Add(image);
+
+                        // Create a Preview Button
+                        Button btnPreview = new Button();
+                        btnPreview.ID = "btnPreview" + img.id;
+                        btnPreview.Text = "Preview";
+                        // btnPreview.CssClass = "image-button preview-button";
+                        btnPreview.OnClientClick = $"previewImage('{imageUrl}'); return false;";
+
+                        // Create a Download Button
+                        Button btnDownload = new Button();
+                        btnDownload.ID = "btnDownload" + img.id;
+                        btnDownload.Text = "Download";
+                        // btnDownload.OnClientClick = $"downloadImage('{imageUrl}'); return false;";
+                        // btnDownload.CssClass = "image-button download-button";
+                        btnDownload.Attributes.Add("onclick", "return false;");
+                        btnDownload.CommandArgument = imageUrl;
+                        btnDownload.Command += DownloadImage;
+                        //btnDownload.CausesValidation = false;
+                        // btnDownload.UseSubmitBehavior = false;
+                        //btnPreview.Command += btn_Preview_Click;
+                        //btnPreview.CommandArgument = img.id.ToString();
+
+
+                        PlaceHolder1.Controls.Add(imgNew);
+                        PlaceHolder1.Controls.Add(btnPreview); 
+                        PlaceHolder1.Controls.Add(btnDownload);
+
                     }
-
-
-
-                        
+    
 
                     // Optionally add a line break
                     PlaceHolder1.Controls.Add(new LiteralControl("<br/>"));
@@ -919,6 +942,45 @@ namespace Nexus.Protected
             catch (Exception ex)
             {
                 ErrorLabel.Text = "LoadAppointment EX: " + ex.Message;
+            }
+        }
+
+        protected void PreviewImage(object sender, CommandEventArgs e)
+        {
+            var abc = 10;
+            abc = abc + 10;
+            // Here's where you do stuff.
+        }
+
+        protected void DownloadImage(object sender, EventArgs e)
+        {
+            try
+            {
+                string imageUrl = (sender as Button).CommandArgument;
+                string fileName = System.IO.Path.GetFileName(imageUrl);
+                string filePath = Server.MapPath(imageUrl);
+
+                // Verify that the file exists
+                if (System.IO.File.Exists(filePath))
+                {
+                    // Set the response content type and headers
+                    Response.Clear();
+                    Response.ContentType = "image/png"; // Set appropriate content type
+                    Response.AppendHeader("Content-Disposition", $"attachment; filename={fileName}");
+                    Response.TransmitFile(filePath);
+                    Response.Flush(); // Ensure all content is sent to the client
+                    Response.End(); // End the response
+                }
+                else
+                {
+                    // Handle the case where the file does not exist
+                    Response.Write("<script>alert('File not found.');</script>");
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions (e.g., file not found, access denied)
+                Response.Write("<script>alert('An error occurred: " + ex.Message + "');</script>");
             }
         }
         #endregion

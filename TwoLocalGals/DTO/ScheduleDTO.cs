@@ -91,6 +91,7 @@ namespace TwoLocalGals.DTO
         public decimal CustomerServiceFee { get; set; }
         public decimal ContractorTips { get; set; }
         public decimal customerRate { get; set; }
+        public decimal total { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Include)]
         public DateTime? jobStartTime;
@@ -122,5 +123,7 @@ namespace TwoLocalGals.DTO
         public string PhoneNumber { get; set; }
         public string AlternatePhone { get; set; }
         public string Email { get; set; }
+        public int ContractorId { get; set; }
+        public int AppointmentId { get; set; }
     }
 }

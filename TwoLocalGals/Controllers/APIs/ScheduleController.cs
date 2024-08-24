@@ -162,6 +162,9 @@ namespace TwoLocalGals.Controllers.APIs
                 .Current.FindFirst("franchiseMask");
             int selectedMask = Convert.ToInt32(claim?.Value);
             int contractorID = Convert.ToInt32(ClaimsPrincipal.Current.FindFirst("contractorID")?.Value);
+            ContractorStruct contractor = Database.GetContractorByID(contractorID);
+            List<ContractorStruct> cList = new List<ContractorStruct>();
+            cList.Add(contractor);
 
             List<DBRow> invoiceRangeList = Database.GetInvoiceRangeByDateRange(startDate, endDate);
             Lookup<int, DBRow> invoiceRangeLookup = (Lookup<int, DBRow>)invoiceRangeList.ToLookup(p => p.GetInt("customerID"), p => p);
@@ -222,8 +225,8 @@ namespace TwoLocalGals.Controllers.APIs
                         paymentDetail.ContractorTitle = appStruct.contractorTitle;
                         paymentDetail.ServiceFee = appStruct.customerServiceFee;
                         paymentDetail.SubCon = appStruct.customerSubContractor;
-                        paymentDetail.Hours = Globals.FormatHours(appStruct.appType == 1 ? appStruct.customerHours : 0);
-                        paymentDetail.HourRate = appStruct.customerRate;
+                        paymentDetail.Hours = Globals.FormatHours(appStruct.appType == 1 ? appStruct.contractorHours : 0);
+                        paymentDetail.HourRate = appStruct.contractorRate;
                         paymentDetail.Tips = appStruct.contractorTips;
                         paymentDetail.DiscountAmount = appStruct.customerDiscountAmount;
                         paymentDetail.DiscountPercentage = appStruct.customerDiscountPercent;
@@ -499,6 +502,15 @@ namespace TwoLocalGals.Controllers.APIs
                 }
 
             }
+
+            List<PayrollDoc> payrollList = new List<PayrollDoc>();
+            string ret = PayrollDoc.GetPayroll(2, -1, -1, cList, startDate, endDate, false, out payrollList);
+
+            foreach(PaymentDTO paymentDTO in payments)
+            {
+                paymentDTO.Total = payrollList[0].appTotal;
+            }
+
             return Ok(payments);
 
         }
@@ -717,6 +729,7 @@ namespace TwoLocalGals.Controllers.APIs
                 schedule.pauseTime = item.pauseTime;
                 schedule.RelatedAppointments = item.RelatedAppointments;
                 schedule.lastStartTime = item.lastStartTime;
+                schedule.total = item.total;
                 scheduleDTOs.Add(schedule);
             }
 
@@ -851,6 +864,7 @@ namespace TwoLocalGals.Controllers.APIs
             schedule.pauseTime = item.pauseTime;
             schedule.RelatedAppointments = item.RelatedAppointments;
             schedule.lastStartTime = item.lastStartTime;
+            schedule.total = item.total;
 
             var rows = Database.GetPartnersByAppointmentIDs(item.RelatedAppointments);
             if (rows != null)
@@ -865,8 +879,8 @@ namespace TwoLocalGals.Controllers.APIs
                     partner.PhoneNumber = p.GetString("bestPhone");
                     partner.AlternatePhone = p.GetString("alternatePhone");
                     partner.Email = p.GetString("email");
-                    partner.AppointmentId = Int32.Parse(p.GetString("appointmentId"));
-                    partner.ContractorId = Int32.Parse(p.GetString("contractorID"));
+                    partner.AppointmentId = p.GetInt("appointmentID");
+                    partner.ContractorId = p.GetInt("contractorID");
                     schedule.Partners.Add(partner);
                 }
             }
@@ -934,9 +948,9 @@ namespace TwoLocalGals.Controllers.APIs
 
         [HttpPost]
         [Route("schedule/StartJob/{appId:int}")]
-        public IHttpActionResult StartJobByAppId(int appId)
+        public IHttpActionResult StartJobByAppId(int appId, string date = "")
         {
-            var error = Database.StartJobByAppId(appId);
+            var error = Database.StartJobByAppId(appId, date);
             if (error == null)
             {
                 return Ok("Job Started successfully!");
@@ -946,9 +960,9 @@ namespace TwoLocalGals.Controllers.APIs
         }
         [HttpPost]
         [Route("schedule/EndJob/{appId:int}")]
-        public IHttpActionResult EndJobByAppId(int appId)
+        public IHttpActionResult EndJobByAppId(int appId, string date = "")
         {
-            var error = Database.EndJobByAppId(appId);
+            var error = Database.EndJobByAppId(appId, date);
             if (error == null)
             {
                 return Ok("Job Ended successfully!");

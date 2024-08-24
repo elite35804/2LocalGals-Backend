@@ -870,17 +870,14 @@
                     <div class="EntryValue">
                         <asp:TextBox ID="NC_DoorCode" runat="server" Width="40px" CssClass="entryTextBoxCenter" onchange="JsFormValueChanged(this)" />
                     </div>
+                </div>
+                <div class="EntryLine">
                     <div class="EntryValue">
                         Take Before/After Pics:
-                   
                     </div>
                     <div class="EntryValue">
                         <asp:CheckBox ID="TakePic" runat="server" />
-
                     </div>
-
-
-
                 </div>
             </fieldset>
             <fieldset class="EntryField" runat="server">

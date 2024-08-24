@@ -10,6 +10,42 @@
             width: 75px;
             padding: 5px 0px 0px 10px;
         }
+
+        .image-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .image {
+            max-width: 75px;
+            width: 75px;
+            padding: 5px 0px 0px 10px;
+        }
+
+        .image-button {
+            position: absolute;
+            display: none;
+            padding: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .preview-button {
+            top: 10px;
+            left: 10px;
+        }
+
+        .download-button {
+            top: 10px;
+            right: 10px;
+        }
+
+        .image-container:hover .image-button {
+            display: inline-block;
+        }
     </style>
 </asp:Content>
 <asp:Content ID="BodyContent" runat="server" ContentPlaceHolderID="MainContent">
@@ -296,6 +332,14 @@
             document.getElementById("ContractorDayOfWeek_" + i).style.display = (rec == "Monthly" ? "inline" : "none");
             document.getElementById("ContractorApplyToFutureLabel_" + i).style.display = (rec != "None" ? "inline" : "none");
             document.getElementById("ContractorApplyToFuture_" + i).style.display = (rec != "None" ? "inline" : "none");
+        }
+
+        function previewImage(imageUrl) {
+            window.open(imageUrl, '_blank');
+        }
+
+        function downloadImage(imageUrl) {
+            window.location.href = 'DownloadHandler.ashx?file=' + encodeURIComponent(imageUrl);
         }
 
     </script>

@@ -12,6 +12,7 @@ using System.Data.SqlTypes;
 using System.Security.Cryptography.Xml;
 using System.Linq;
 using Newtonsoft.Json;
+using System.Xml.Linq;
 
 namespace Nexus
 {
@@ -355,6 +356,7 @@ namespace Nexus
         public bool ShareLocation;
         public bool JobCompleted;
         public string Notes;
+        public decimal total;
         [JsonProperty(NullValueHandling = NullValueHandling.Include)]
         public DateTime? jobStartTime;
         [JsonProperty(NullValueHandling = NullValueHandling.Include)]
@@ -5126,6 +5128,28 @@ TakePic)
                 app.RelatedAppointments = sqlDataReader["RelatedAppointments"] == DBNull.Value ? null : (string)sqlDataReader["RelatedAppointments"];
                 app.Partners = app.RelatedAppointments;
 
+                // Total Calculation
+
+                var total = app.contractorHours * app.contractorRate;
+                total += app.customerServiceFee;
+                total -= app.customerDiscountAmount;
+                total += app.contractorTips;
+
+                if (app.appointmentDate < DateTime.Parse("2021/1/15"))
+                {
+                    total -= (((app.customerDiscountPercent + app.customerDiscountReferral) / 100) * ((app.contractorHours * app.contractorRate) + app.customerServiceFee));
+                }
+                else
+                {
+                    total -= (((app.customerDiscountPercent + app.customerDiscountReferral) / 100) * (app.contractorHours * app.contractorRate));
+                }
+
+                total += ((app.salesTax / 100) * (total -= app.contractorTips));
+
+                app.total = total;
+
+                // ----------------
+
                 return null;
             }
             catch (Exception ex)
@@ -8014,8 +8038,7 @@ TakePic)
 
                 string cmdText = @"
                                     SELECT
-                                        *,
-                                        a.AppointmentID
+                                        *
                                     FROM
                                         Contractors AS c
                                     INNER JOIN Appointments AS a
@@ -8555,14 +8578,14 @@ TakePic)
                 if (images.Count > 0)
                 {
                     // Removed code to delete the attachments as per request
-                    //string cmdText1 = @"Delete from 
-		                  //              AppointmentAttachments
-	                   //                 WHERE
-		                  //              AppointmentId = @appointmentID;";
+                    string cmdText1 = @"Delete from 
+		                                AppointmentAttachments
+	                                    WHERE
+		                                AppointmentId = @appointmentID;";
 
-                    //SqlCommand cmd1 = new SqlCommand(cmdText1, sqlConnection);
-                    //cmd1.Parameters.Add(new SqlParameter(@"appointmentID", appId));
-                    //cmd1.ExecuteNonQuery();
+                    SqlCommand cmd1 = new SqlCommand(cmdText1, sqlConnection);
+                    cmd1.Parameters.Add(new SqlParameter(@"appointmentID", appId));
+                    cmd1.ExecuteNonQuery();
 
 
                     foreach (var item in images)
@@ -8702,7 +8725,7 @@ AppointmentId = @appID
 
         #endregion
 
-        public static string StartJobByAppId(int appId)
+        public static string StartJobByAppId(int appId, string date = "")
         {
             SqlConnection sqlConnection = null;
             try
@@ -8754,12 +8777,13 @@ AppointmentId = @appID
                 UPDATE 
 		            Appointments
 	            SET
-                    jobStartTime = GetDate()
+                    jobStartTime = ISNULL(NULLIF(@date, ''), GetDate())
 	            WHERE
 		            appointmentID = @appointmentID;";
 
                 SqlCommand cmd = new SqlCommand(cmdText, sqlConnection);
                 cmd.Parameters.Add(new SqlParameter(@"appointmentID", appId));
+                cmd.Parameters.Add(new SqlParameter(@"date", date));
                 cmd.ExecuteNonQuery();
 
                 return null;
@@ -8775,7 +8799,7 @@ AppointmentId = @appID
             }
         }
 
-        public static string EndJobByAppId(int appId)
+        public static string EndJobByAppId(int appId, string date = "")
         {
             SqlConnection sqlConnection = null;
             try
@@ -8832,13 +8856,14 @@ AppointmentId = @appID
                 UPDATE 
 		            Appointments
 	            SET
-                    jobEndTime = GetDate(),
+                    jobEndTime = ISNULL(NULLIF(@date, ''), GetDate()),
 JobCompleted = 1
 	            WHERE
 		            appointmentID = @appointmentID;";
 
                 SqlCommand cmd = new SqlCommand(cmdText, sqlConnection);
                 cmd.Parameters.Add(new SqlParameter(@"appointmentID", appId));
+                cmd.Parameters.Add(new SqlParameter(@"date", date));
                 cmd.ExecuteNonQuery();
 
                 return null;
