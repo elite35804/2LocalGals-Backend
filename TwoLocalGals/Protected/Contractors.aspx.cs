@@ -83,11 +83,18 @@ namespace Nexus.Protected
                     SendSchedules.Checked = contractor.contractorID == 0 ? true : contractor.sendSchedules;
                     SendPayroll.Checked = contractor.contractorID == 0 ? true : contractor.sendPayroll;
                     SendScheduleByEmail.Checked = contractor.SendSchedulesByEmail;
+                    FranchiseStruct selectedFranchise = Database.GetFranchiseList().Find(x => x.franchiseID == contractor.franchiseMask);
                     if (!string.IsNullOrEmpty(contractor.ContractorPic))
                     {
                         DefaultPic.Visible = true;
                         DefaultPic.ImageUrl = "~/ContratorPics/" + contractor.ContractorPic;
-                    } else
+                    }
+                    else if (!string.IsNullOrEmpty(selectedFranchise.FranchiseImg))
+                    {
+                        DefaultPic.Visible = true;
+                        DefaultPic.ImageUrl = "~/ContratorPics/" + selectedFranchise.FranchiseImg;
+                    }
+                    else
                     {
                         DefaultPic.Visible = true;
                         DefaultPic.ImageUrl = "~/ContratorPics/2LG_Logo.jpg";

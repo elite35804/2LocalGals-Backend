@@ -13,6 +13,7 @@ using System.Security.Cryptography.Xml;
 using System.Linq;
 using Newtonsoft.Json;
 using System.Xml.Linq;
+using TwoLocalGals.Protected;
 
 namespace Nexus
 {
@@ -357,6 +358,7 @@ namespace Nexus
         public bool JobCompleted;
         public string Notes;
         public decimal total;
+        public decimal aproxPay;
         [JsonProperty(NullValueHandling = NullValueHandling.Include)]
         public DateTime? jobStartTime;
         [JsonProperty(NullValueHandling = NullValueHandling.Include)]
@@ -375,6 +377,13 @@ namespace Nexus
         public string Partners;
     }
 
+    public struct AppMiniStruct
+    {
+        public int appointmentID;
+        public decimal customerHours; 
+        public decimal customerRate;
+        public decimal customerServiceFee;
+    }
 
     public struct AppAttachments
     {
@@ -967,6 +976,7 @@ namespace Nexus
             return ret;
         }
         #endregion
+
         #region GetUserByID
         public static UsersDTO GetUserById(string userId)
         {
@@ -1996,12 +2006,18 @@ alternatePhoneTwoCell
 
         #region ------------------Job Logs-----------------
 
-        public static List<JobLogsStruct> GetJobLogs(int AppointmentId, int contractorID, bool isGeneral)
+        public static List<JobLogsStruct> GetJobLogs(int AppointmentId, int contractorID)
         {
             SqlConnection sqlConnection = null;
             SqlDataReader sqlDataReader = null;
             try
             {
+                var appIds = new List<int>();
+                appIds.Add(AppointmentId);
+                appIds = GetRelatedApointmentIDs(appIds);
+
+                var appIDStrings = string.Join(",", appIds);
+
                 sqlConnection = new SqlConnection(connString);
                 sqlConnection.Open();
 
@@ -2011,11 +2027,11 @@ alternatePhoneTwoCell
                     FROM
                         JobLogs
                     WHERE
-                        AppointmentId = @AppointmentId and
-                        @contractorID = contractorID";
+                        AppointmentId IN (SELECT * FROM STRING_SPLIT(@appointmentIDs, ',')) OR (AppointmentId = @appointmentId AND @contractorID = contractorID)";
 
                 SqlCommand cmd = new SqlCommand(cmdText, sqlConnection);
-                cmd.Parameters.Add(new SqlParameter("AppointmentId", AppointmentId));
+                cmd.Parameters.Add(new SqlParameter("appointmentIDs", appIDStrings));
+                cmd.Parameters.Add(new SqlParameter("appointmentId", AppointmentId));
                 cmd.Parameters.Add(new SqlParameter("contractorID", contractorID));
                 sqlDataReader = cmd.ExecuteReader();
                 List<JobLogsStruct> jobLogs = new List<JobLogsStruct>();
@@ -2042,7 +2058,7 @@ alternatePhoneTwoCell
                 }
                 return jobLogs;
             }
-            catch { }
+            catch (Exception ex) { }
             finally
             {
                 if (sqlDataReader != null)
@@ -4197,6 +4213,43 @@ TakePic)
                     app.pauseTime = sqlDataReader["PauseTime"] != DBNull.Value ? (DateTime?)sqlDataReader["PauseTime"] : null;
                     app.RelatedAppointments = sqlDataReader["RelatedAppointments"] == DBNull.Value ? null : (string)sqlDataReader["RelatedAppointments"];
 
+                    // Total Calculation
+                    List<int> appIds = new List<int>();
+                    decimal totalHours = app.customerHours;
+                    decimal totalServiceFee = app.customerServiceFee;
+                    if (!string.IsNullOrEmpty(app.RelatedAppointments))
+                    {
+                        appIds = app.RelatedAppointments?.Split(',')?.Select(Int32.Parse).ToList();
+                        List<AppMiniStruct> miniApps = new List<AppMiniStruct>();
+                        foreach (int relAppId in appIds)
+                        {
+                            AppMiniStruct miniApp = new AppMiniStruct();
+                            GetApointmentMiniByID(relAppId, out miniApp);
+                            totalHours += miniApp.customerHours;
+                            totalServiceFee += miniApp.customerServiceFee;
+                        }
+                    }
+
+                    var total = totalHours * app.customerRate;
+                    total += totalServiceFee;
+                    total -= app.customerDiscountAmount;
+                    total += app.contractorTips;
+
+                    if (app.appointmentDate < DateTime.Parse("2021/1/15"))
+                    {
+                        total -= (((app.customerDiscountPercent + app.customerDiscountReferral) / 100) * ((totalHours * app.customerRate) + totalServiceFee));
+                    }
+                    else
+                    {
+                        total -= (((app.customerDiscountPercent + app.customerDiscountReferral) / 100) * (totalHours * app.customerRate));
+                    }
+
+                    total += ((app.salesTax / 100) * (total -= app.contractorTips));
+
+                    app.total = total;
+
+                    // ----------------
+
                     ret.Add(app);
                 }
             }
@@ -4395,6 +4448,56 @@ TakePic)
                     app.Duration = sqlDataReader["Duration"] == DBNull.Value ? 0 : (int)sqlDataReader["Duration"];
                     app.pauseTime = sqlDataReader["PauseTime"] != DBNull.Value ? (DateTime?)sqlDataReader["PauseTime"] : null;
                     app.RelatedAppointments = sqlDataReader["RelatedAppointments"] == DBNull.Value ? null : (string)sqlDataReader["RelatedAppointments"];
+
+                    // Approx Calculation
+
+                    List<ContractorStruct> cList = new List<ContractorStruct>();
+                    cList.Add(GetContractorByID(app.contractorID));
+                    List<PayrollDoc> payrollList = new List<PayrollDoc>();
+                    string retn = PayrollDoc.GetPayroll(2, -1, -1, cList, startDate, endDate, false, out payrollList);
+                    if (payrollList.Count > 0)
+                    {
+                        app.aproxPay = Math.Round(payrollList[0].appTotal, 2);
+                    }
+
+                    // ------------------
+
+                    // Total Calculation
+                    List<int> appIds = new List<int>();
+                    decimal totalHours = app.customerHours;
+                    decimal totalServiceFee = app.customerServiceFee;
+                    if (!string.IsNullOrEmpty(app.RelatedAppointments))
+                    {
+                        appIds = app.RelatedAppointments?.Split(',')?.Select(Int32.Parse).ToList();
+                        List<AppMiniStruct> miniApps = new List<AppMiniStruct>();
+                        foreach (int relAppId in appIds)
+                        {
+                            AppMiniStruct miniApp = new AppMiniStruct();
+                            GetApointmentMiniByID(relAppId, out miniApp);
+                            totalHours += miniApp.customerHours;
+                            totalServiceFee += miniApp.customerServiceFee;
+                        }
+                    }
+
+                    var total = totalHours * app.customerRate;
+                    total += totalServiceFee;
+                    total -= app.customerDiscountAmount;
+                    total += app.contractorTips;
+
+                    if (app.appointmentDate < DateTime.Parse("2021/1/15"))
+                    {
+                        total -= (((app.customerDiscountPercent + app.customerDiscountReferral) / 100) * ((totalHours * app.customerRate) + totalServiceFee));
+                    }
+                    else
+                    {
+                        total -= (((app.customerDiscountPercent + app.customerDiscountReferral) / 100) * (totalHours * app.customerRate));
+                    }
+
+                    total += ((app.salesTax / 100) * (total -= app.contractorTips));
+
+                    app.total = Math.Round(total, 2);
+
+                    // ----------------
 
                     ret.Add(app);
                 }
@@ -5128,25 +5231,53 @@ TakePic)
                 app.RelatedAppointments = sqlDataReader["RelatedAppointments"] == DBNull.Value ? null : (string)sqlDataReader["RelatedAppointments"];
                 app.Partners = app.RelatedAppointments;
 
-                // Total Calculation
+                // Approx Calculation
 
-                var total = app.contractorHours * app.contractorRate;
-                total += app.customerServiceFee;
+                List<ContractorStruct> cList = new List<ContractorStruct>();
+                cList.Add(GetContractorByID(app.contractorID));
+                List<PayrollDoc> payrollList = new List<PayrollDoc>();
+                string ret = PayrollDoc.GetPayroll(2, -1, -1, cList, app.appointmentDate.AddDays(-1), app.appointmentDate.AddDays(1), false, out payrollList);
+                if (payrollList.Count > 0)
+                {
+                    app.aproxPay = Math.Round(payrollList[0].appTotal, 2);
+                }
+
+                // ------------------
+
+                // Total Calculation
+                List<int> appIds = new List<int>();
+                decimal totalHours = app.customerHours;
+                decimal totalServiceFee = app.customerServiceFee;
+                if (!string.IsNullOrEmpty(app.RelatedAppointments))
+                {
+                    appIds = app.RelatedAppointments?.Split(',')?.Select(Int32.Parse).ToList();
+                    List<AppMiniStruct> miniApps = new List<AppMiniStruct>();
+                    foreach (int relAppId in appIds)
+                    {
+                        AppMiniStruct miniApp = new AppMiniStruct();
+                        GetApointmentMiniByID(relAppId, out miniApp);
+                        totalHours += miniApp.customerHours;
+                        totalServiceFee += miniApp.customerServiceFee;
+                    }
+                }
+
+                var total = totalHours * app.customerRate;
+                total += totalServiceFee;
                 total -= app.customerDiscountAmount;
                 total += app.contractorTips;
 
                 if (app.appointmentDate < DateTime.Parse("2021/1/15"))
                 {
-                    total -= (((app.customerDiscountPercent + app.customerDiscountReferral) / 100) * ((app.contractorHours * app.contractorRate) + app.customerServiceFee));
+                    total -= (((app.customerDiscountPercent + app.customerDiscountReferral) / 100) * ((totalHours * app.customerRate) + totalServiceFee));
                 }
                 else
                 {
-                    total -= (((app.customerDiscountPercent + app.customerDiscountReferral) / 100) * (app.contractorHours * app.contractorRate));
+                    total -= (((app.customerDiscountPercent + app.customerDiscountReferral) / 100) * (totalHours * app.customerRate));
                 }
 
                 total += ((app.salesTax / 100) * (total -= app.contractorTips));
 
-                app.total = total;
+                app.total = Math.Round(total, 2);
 
                 // ----------------
 
@@ -5164,6 +5295,60 @@ TakePic)
                     sqlConnection.Close();
             }
         }
+        #endregion
+
+        #region GetAppointmentMiniById
+
+        public static string GetApointmentMiniByID(int appID, out AppMiniStruct app)
+        {
+            app = new AppMiniStruct();
+            if (appID == 0) return null;
+            SqlConnection sqlConnection = null;
+            SqlDataReader sqlDataReader = null;
+            try
+            {
+                sqlConnection = new SqlConnection(connString);
+                sqlConnection.Open();
+
+                string cmdText = @"
+                    SELECT
+                        A.appointmentID,
+                        A.customerHours,
+                        A.customerRate,
+                        A.customerServiceFee
+                     
+                    FROM
+                        Appointments A
+                    WHERE
+                        A.appointmentID = @appointmentID;";
+
+                SqlCommand cmd = new SqlCommand(cmdText, sqlConnection);
+                cmd.Parameters.Add(new SqlParameter("appointmentID", appID));
+                sqlDataReader = cmd.ExecuteReader();
+
+                if (!sqlDataReader.Read())
+                    return "SQL GetApointmentpByID: Record (AppointmentID=" + appID + ") does not exist.";
+
+                app.appointmentID = (int)sqlDataReader["appointmentID"];
+                app.customerHours = (decimal)sqlDataReader["customerHours"];
+                app.customerRate = (decimal)sqlDataReader["customerRate"];
+                app.customerServiceFee = (decimal)sqlDataReader["customerServiceFee"];
+
+                return null;
+            }
+            catch (Exception ex)
+            {
+                return "SQL GetApointmentMiniByID EX: " + ex.Message;
+            }
+            finally
+            {
+                if (sqlDataReader != null)
+                    sqlDataReader.Close();
+                if (sqlConnection != null)
+                    sqlConnection.Close();
+            }
+        }
+
         #endregion
 
         #region GetSameApointments
@@ -5339,7 +5524,7 @@ TakePic)
                     SELECT
                         A.RelatedAppointments
                     FROM
-                        [MyDemo].[dbo].Appointments A
+                        Appointments as A
                     WHERE
                         A.appointmentID IN (SELECT * FROM STRING_SPLIT(@appointmentIDs, ','));";
 
@@ -5771,8 +5956,19 @@ TakePic)
 	                WHERE
 		                appointmentID = @appointmentID;";
 
+                    //;WITH CTE AS
+                    //(
+                    //    SELECT [RelatedAppointments], REPLACE(',' + [RelatedAppointments] + ',' , ',' + @appointmentIDStr + ',', ',') As WithoutID
+                    //    FROM Appointments
+                    //)
+                    //UPDATE CTE
+                    //SET [RelatedAppointments] = ISNULL(STUFF(STUFF(WithoutID, 1, 2, ''), LEN(WithoutID)-2, 2, ''), '') ";
+
+
+
                     SqlCommand cmd = new SqlCommand(cmdText, sqlConnection);
                     cmd.Parameters.Add(new SqlParameter(@"appointmentID", appointmentID));
+                    // cmd.Parameters.Add(new SqlParameter(@"appointmentIDStr", appointmentID.ToString()));
                     cmd.ExecuteNonQuery();
                 }
                 return null;
@@ -6202,6 +6398,39 @@ TakePic)
             catch (Exception ex)
             {
                 return "SQL DeleteUnavailable EX: " + ex.Message;
+            }
+            finally
+            {
+                if (sqlConnection != null)
+                    sqlConnection.Close();
+            }
+        }
+        #endregion
+
+        #region DeleteAppointmentAttachment
+        public static string DeleteAppointmentAttachment(int imageId)
+        {
+            SqlConnection sqlConnection = null;
+            try
+            {
+                if (imageId == 0) return null;
+                sqlConnection = new SqlConnection(connString);
+                sqlConnection.Open();
+
+                string cmdText = @"
+                    DELETE FROM
+                        AppointmentAttachments
+	                WHERE
+		                Id = @ImageId;";
+
+                SqlCommand cmd = new SqlCommand(cmdText, sqlConnection);
+                cmd.Parameters.Add(new SqlParameter(@"ImageId", imageId));
+                cmd.ExecuteNonQuery();
+                return null;
+            }
+            catch (Exception ex)
+            {
+                return "SQL DeleteAppointmentAttachment EX: " + ex.Message;
             }
             finally
             {
@@ -8573,19 +8802,19 @@ TakePic)
                 cmd.Parameters.Add(new SqlParameter(@"appointmentID", appId));
                 cmd.Parameters.Add(new SqlParameter(@"notes", notes ?? ""));
                 cmd.ExecuteNonQuery();
-
+                
 
                 if (images.Count > 0)
                 {
                     // Removed code to delete the attachments as per request
-                    string cmdText1 = @"Delete from 
-		                                AppointmentAttachments
-	                                    WHERE
-		                                AppointmentId = @appointmentID;";
+                    //string cmdText1 = @"Delete from 
+		                  //              AppointmentAttachments
+	                   //                 WHERE
+		                  //              AppointmentId = @appointmentID;";
 
-                    SqlCommand cmd1 = new SqlCommand(cmdText1, sqlConnection);
-                    cmd1.Parameters.Add(new SqlParameter(@"appointmentID", appId));
-                    cmd1.ExecuteNonQuery();
+                    //SqlCommand cmd1 = new SqlCommand(cmdText1, sqlConnection);
+                    //cmd1.Parameters.Add(new SqlParameter(@"appointmentID", appId));
+                    //cmd1.ExecuteNonQuery();
 
 
                     foreach (var item in images)
@@ -8705,7 +8934,7 @@ AppointmentId = @appID
                 if (sqlDataReader.Read())
                 {
                     result.AppointmentId = appId;
-                    result.Notes = (string) sqlDataReader["Notes"];
+                    result.Notes = (string) (sqlDataReader["Notes"] == DBNull.Value ? "": sqlDataReader["Notes"]);
                     result.attachments = GetAppointmentAttachments(appId).ToArray();
                 }
             }
@@ -8748,7 +8977,7 @@ AppointmentId = @appID
                     if (!sqlReader.Read())
                         return "SQL GetApointmentpByID: Record (AppointmentID=" + appId + ") does not exist.";
 
-                    if (sqlReader != null)
+                    if (sqlReader != null && sqlReader["jobStartTime"] != DBNull.Value)
                     {
                         try
                         {
@@ -8757,7 +8986,7 @@ AppointmentId = @appID
                             return "Job has already started.";
 
                         }
-                        catch (Exception)
+                        catch (Exception ex)
                         {
 
 

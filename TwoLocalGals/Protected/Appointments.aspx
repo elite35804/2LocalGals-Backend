@@ -24,8 +24,8 @@
 
         .image-button {
             position: absolute;
-            display: none;
-            padding: 10px;
+            display: inline-block;
+            padding: 5px;
             background-color: rgba(0, 0, 0, 0.7);
             color: white;
             border: none;
@@ -39,8 +39,7 @@
         }
 
         .download-button {
-            top: 10px;
-            right: 10px;
+            
         }
 
         .image-container:hover .image-button {
@@ -339,7 +338,12 @@
         }
 
         function downloadImage(imageUrl) {
-            window.location.href = 'DownloadHandler.ashx?file=' + encodeURIComponent(imageUrl);
+            var a = document.createElement('a');
+            a.href = imageUrl;
+            a.download = "image.png";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
         }
 
     </script>

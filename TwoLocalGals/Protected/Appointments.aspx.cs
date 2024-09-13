@@ -8,6 +8,7 @@ using System.Drawing;
 using System.Threading;
 using System.IO;
 using Image = System.Web.UI.WebControls.Image;
+using System.Web.UI.HtmlControls;
 
 namespace Nexus.Protected
 {
@@ -53,6 +54,9 @@ namespace Nexus.Protected
                     Globals.SetPreviousPage(this, new string[] { "Users.aspx", "FollowUp.aspx", "PrintOut.aspx" });
                     AppDate.Attributes.Add("onkeydown", "return (event.keyCode!=13);");
                     LoadAppointment();
+                } else
+                {
+                    // DownloadImage(this, e);
                 }
             }
             catch (Exception ex)
@@ -498,7 +502,8 @@ namespace Nexus.Protected
                     if (conApp.appointmentID >= 0)
                     {
                         conApp.contractorID = Globals.SafeIntParse(((DropDownList)Globals.FindControlRecursive(ContractorTable, "Contractor_" + i)).SelectedValue.Split('|')[0]);
-                        conApp.appType = Globals.SafeIntParse(((DropDownList)Globals.FindControlRecursive(ContractorTable, "Contractor_" + i)).SelectedValue.Split('|')[1]);
+                        var temp = (DropDownList)Globals.FindControlRecursive(ContractorTable, "Contractor_" + i);
+                        conApp.appType = temp.SelectedValue.Split('|').Length > 1 ? Globals.SafeIntParse(temp.SelectedValue.Split('|')[1]) : 1;
                         conApp.startTime = Convert.ToDateTime(((DropDownList)Globals.FindControlRecursive(ContractorTable, "ContractorStartTime_" + i)).Text);
                         conApp.endTime = Convert.ToDateTime(((DropDownList)Globals.FindControlRecursive(ContractorTable, "ContractorEndTime_" + i)).Text);
                         if (conApp.appType > 1) conApp.customerHours = (decimal)(conApp.endTime - conApp.startTime).TotalHours;
@@ -534,7 +539,7 @@ namespace Nexus.Protected
                     ret[i] = conApp;
                 }
             }
-            catch { }
+            catch(Exception ex)  { }
             return ret;
         }
         #endregion
@@ -705,7 +710,7 @@ namespace Nexus.Protected
                     tips += sameApps[i].contractorTips;
                     discountAmount += sameApps[i].customerDiscountAmount;
 
-                    List<JobLogsStruct> jobLogs = Database.GetJobLogs(sameApps[i].appointmentID, sameApps[i].contractorID, true);
+                    List<JobLogsStruct> jobLogs = Database.GetJobLogs(sameApps[i].appointmentID, sameApps[i].contractorID);
                     jobLogs = jobLogs.FindAll(x => x.CustomerId == sameApps[i].customerID);
 
 
@@ -784,7 +789,7 @@ namespace Nexus.Protected
                     StartJobTime.ID = "StartJobTime" + i;
                     TimeZoneInfo infotime = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time");
                     if (sameApps[i].jobStartTime != null) 
-                        StartJobTime.Text = TimeZoneInfo.ConvertTimeFromUtc(sameApps[i].jobStartTime.Value, infotime).ToShortTimeString();
+                        StartJobTime.Text = sameApps[i].jobStartTime.Value.ToShortTimeString();
                     StartJobTime.Style["Color"] = "Green";
                     PlaceHolder1.Controls.Add(StartJobTime);
 
@@ -801,7 +806,7 @@ namespace Nexus.Protected
                     Label endJobTime = new Label();
                     endJobTime.ID = "endJobTime" + i;
                     if (sameApps[i].jobEndTime != null)
-                        endJobTime.Text = TimeZoneInfo.ConvertTimeFromUtc(sameApps[i].jobEndTime.Value, infotime).ToShortTimeString();
+                        endJobTime.Text = sameApps[i].jobEndTime.Value.ToShortTimeString();
                     endJobTime.Style["Color"] = "Green";
                     PlaceHolder1.Controls.Add(endJobTime);
 
@@ -834,6 +839,10 @@ namespace Nexus.Protected
                     // Create a Label
                     foreach (JobLogsStruct jl in jobLogs)
                     {
+                        if (jl.ContractorId != sameApps[i].contractorID)
+                        {
+                            continue;
+                        }
                         string acText = "   •  " + jl.Content.Trim();
                         if (!string.IsNullOrEmpty(jl.SubContent))
                         {
@@ -882,36 +891,21 @@ namespace Nexus.Protected
 
                         var fileName = Path.GetFileName(img.ImageURL);
                         var imageUrl = "../../ContratorPics/" + fileName;
-                        var imgNew = new Image
+                        var imgNew = new ImageButton
                         {
                             ImageUrl = imageUrl,
-                            CssClass = "image"
+                            CssClass = "image",
+                            OnClientClick = $"previewImage('{imageUrl}'); return false;"
                         };
-
-                        // Create a Preview Button
-                        Button btnPreview = new Button();
-                        btnPreview.ID = "btnPreview" + img.id;
-                        btnPreview.Text = "Preview";
-                        // btnPreview.CssClass = "image-button preview-button";
-                        btnPreview.OnClientClick = $"previewImage('{imageUrl}'); return false;";
 
                         // Create a Download Button
                         Button btnDownload = new Button();
                         btnDownload.ID = "btnDownload" + img.id;
-                        btnDownload.Text = "Download";
-                        // btnDownload.OnClientClick = $"downloadImage('{imageUrl}'); return false;";
-                        // btnDownload.CssClass = "image-button download-button";
-                        btnDownload.Attributes.Add("onclick", "return false;");
-                        btnDownload.CommandArgument = imageUrl;
-                        btnDownload.Command += DownloadImage;
-                        //btnDownload.CausesValidation = false;
-                        // btnDownload.UseSubmitBehavior = false;
-                        //btnPreview.Command += btn_Preview_Click;
-                        //btnPreview.CommandArgument = img.id.ToString();
-
+                        btnDownload.Text = "⇩";
+                        btnDownload.CssClass = "image-button download-button";
+                        btnDownload.OnClientClick = $"downloadImage('{imageUrl}'); return false;";
 
                         PlaceHolder1.Controls.Add(imgNew);
-                        PlaceHolder1.Controls.Add(btnPreview); 
                         PlaceHolder1.Controls.Add(btnDownload);
 
                     }
@@ -945,44 +939,6 @@ namespace Nexus.Protected
             }
         }
 
-        protected void PreviewImage(object sender, CommandEventArgs e)
-        {
-            var abc = 10;
-            abc = abc + 10;
-            // Here's where you do stuff.
-        }
-
-        protected void DownloadImage(object sender, EventArgs e)
-        {
-            try
-            {
-                string imageUrl = (sender as Button).CommandArgument;
-                string fileName = System.IO.Path.GetFileName(imageUrl);
-                string filePath = Server.MapPath(imageUrl);
-
-                // Verify that the file exists
-                if (System.IO.File.Exists(filePath))
-                {
-                    // Set the response content type and headers
-                    Response.Clear();
-                    Response.ContentType = "image/png"; // Set appropriate content type
-                    Response.AppendHeader("Content-Disposition", $"attachment; filename={fileName}");
-                    Response.TransmitFile(filePath);
-                    Response.Flush(); // Ensure all content is sent to the client
-                    Response.End(); // End the response
-                }
-                else
-                {
-                    // Handle the case where the file does not exist
-                    Response.Write("<script>alert('File not found.');</script>");
-                }
-            }
-            catch (Exception ex)
-            {
-                // Handle exceptions (e.g., file not found, access denied)
-                Response.Write("<script>alert('An error occurred: " + ex.Message + "');</script>");
-            }
-        }
         #endregion
 
         #region Helper

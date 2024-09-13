@@ -432,11 +432,39 @@ namespace TwoLocalGals.Protected
                             {
                                 dayRow.Style["background-color"] = "#FFA0A0";
                             }
-                            if (Math.Round(TimeSpan.FromSeconds((double)route.travelTime).TotalMinutes) == 10 || Math.Round(TimeSpan.FromSeconds((double)route.travelTime).TotalMinutes) == -10)
-                            {
-                                dayRow.Style["background-color"] = "#72D9FA";
+                            // Start and End time difference calculation
 
+                            //if (app.jobStartTime != null && app.jobEndTime != null && app.jobStartTime > new DateTime() && app.jobEndTime > new DateTime())
+                            //{
+                            //    var startTimeDiff = (app.startTime.Subtract(app.startTime.Date).Subtract(app.jobStartTime.Value.Subtract(app.jobEndTime.Value.Date)));
+                            //    var endTimeDiff = (app.endTime.Subtract(app.endTime.Date).Subtract(app.jobEndTime.Value.Subtract(app.jobEndTime.Value.Date)));
+
+                            //    var startDiff = Math.Abs(startTimeDiff.Minutes);
+                            //    var endDiff = Math.Abs(endTimeDiff.Minutes);
+
+                            //    if (startDiff <= 10 && endDiff <= 10)
+                            //    {
+                            //        dayRow.Style["background-color"] = "#72D9FA";
+                            //    }
+                            //}
+
+                            if (app.jobStartTime != null && app.jobEndTime != null && app.jobStartTime > new DateTime() && app.jobEndTime > new DateTime())
+                            {
+                                var scheduledJobTime = Math.Abs((app.endTime.Subtract(app.endTime.Date)).Subtract(app.startTime.Subtract(app.startTime.Date)).TotalMinutes);
+                                var actualJobTime = Math.Abs(app.jobEndTime.Value.Subtract(app.jobStartTime.Value).TotalMinutes);
+
+                                if (Math.Abs(actualJobTime - scheduledJobTime) >= 10)
+                                {
+                                    dayRow.Style["background-color"] = "#72D9FA";
+                                }
                             }
+
+                            // -----------------------------------------
+                            //if (Math.Round(TimeSpan.FromSeconds((double)route.travelTime).TotalMinutes) <= 10 || Math.Round(TimeSpan.FromSeconds((double)route.travelTime).TotalMinutes) >= -10)
+                            //{
+                            //    dayRow.Style["background-color"] = "#72D9FA";
+
+                            //}
 
                             dayRow.Cells.Add(Globals.FormatedTableCell(@"<a href=""Appointments.aspx?appID=" + app.appointmentID + @""">" + app.startTime.ToString("HH:mm") + @"</a>"));
                             dayRow.Cells.Add(Globals.FormatedTableCell(@"<a href=""Appointments.aspx?appID=" + app.appointmentID + @""">" + app.endTime.ToString("HH:mm") + @"</a>"));

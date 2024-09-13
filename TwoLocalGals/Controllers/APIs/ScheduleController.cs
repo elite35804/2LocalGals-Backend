@@ -148,8 +148,8 @@ namespace TwoLocalGals.Controllers.APIs
 
 
         [HttpGet]
-        [Route("Payment/GetPaymentByDateRange")]
-        public IHttpActionResult GetPaymentDetails(DateTime startDate, DateTime endDate)
+        [Route("Payment/GetPaymentByDateRange/{contractorId:int}")]
+        public IHttpActionResult GetPaymentDetails(int contractorID, DateTime startDate, DateTime endDate)
         {
 
             DateTime mst = Globals.UtcToMst(DateTime.UtcNow);
@@ -161,7 +161,10 @@ namespace TwoLocalGals.Controllers.APIs
             var claim = System.Security.Claims.ClaimsPrincipal
                 .Current.FindFirst("franchiseMask");
             int selectedMask = Convert.ToInt32(claim?.Value);
-            int contractorID = Convert.ToInt32(ClaimsPrincipal.Current.FindFirst("contractorID")?.Value);
+            if (contractorID <= 0)
+            {
+                contractorID = Convert.ToInt32(ClaimsPrincipal.Current.FindFirst("contractorID")?.Value);
+            }
             ContractorStruct contractor = Database.GetContractorByID(contractorID);
             List<ContractorStruct> cList = new List<ContractorStruct>();
             cList.Add(contractor);
@@ -508,7 +511,7 @@ namespace TwoLocalGals.Controllers.APIs
 
             foreach(PaymentDTO paymentDTO in payments)
             {
-                paymentDTO.Total = payrollList[0].appTotal;
+                paymentDTO.Total = Math.Round(payrollList[0].appTotal, 1);
             }
 
             return Ok(payments);
@@ -730,6 +733,7 @@ namespace TwoLocalGals.Controllers.APIs
                 schedule.RelatedAppointments = item.RelatedAppointments;
                 schedule.lastStartTime = item.lastStartTime;
                 schedule.total = item.total;
+                schedule.AproxPay = item.aproxPay;
                 scheduleDTOs.Add(schedule);
             }
 
@@ -865,6 +869,7 @@ namespace TwoLocalGals.Controllers.APIs
             schedule.RelatedAppointments = item.RelatedAppointments;
             schedule.lastStartTime = item.lastStartTime;
             schedule.total = item.total;
+            schedule.AproxPay = item.aproxPay;
 
             var rows = Database.GetPartnersByAppointmentIDs(item.RelatedAppointments);
             if (rows != null)
@@ -946,6 +951,19 @@ namespace TwoLocalGals.Controllers.APIs
 
         }
 
+        [HttpDelete]
+        [Route("Appointment/Attachment/{imageId:int}")]
+        public IHttpActionResult DeleteAppointmentAttachments(int imageId)
+        {
+            var data = Database.DeleteAppointmentAttachment(imageId);
+            if (data == null)
+            {
+                return Ok("Record deleted successfully.");
+            }
+
+            return BadRequest(data);
+        }
+
         [HttpPost]
         [Route("schedule/StartJob/{appId:int}")]
         public IHttpActionResult StartJobByAppId(int appId, string date = "")
@@ -1001,10 +1019,10 @@ namespace TwoLocalGals.Controllers.APIs
 
         [HttpGet]
         [Route("schedule/GetJobLogs")]
-        public IHttpActionResult GetJobLogs(int AppointmentId, int contractorID, bool isGeneral)
+        public IHttpActionResult GetJobLogs(int AppointmentId, int contractorID)
         {
 
-            var data = Database.GetJobLogs(AppointmentId, contractorID, isGeneral);
+            var data = Database.GetJobLogs(AppointmentId, contractorID);
             return Ok(data);
         }
         
