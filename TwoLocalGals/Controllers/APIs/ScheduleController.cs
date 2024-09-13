@@ -233,6 +233,7 @@ namespace TwoLocalGals.Controllers.APIs
                         paymentDetail.Tips = appStruct.contractorTips;
                         paymentDetail.DiscountAmount = appStruct.customerDiscountAmount;
                         paymentDetail.DiscountPercentage = appStruct.customerDiscountPercent;
+                        paymentDetail.AproxPay = appStruct.aproxPay;
 
                         paymentDetails.Add(paymentDetail);
                         if (appStruct.appStatus == 0)
@@ -331,6 +332,19 @@ namespace TwoLocalGals.Controllers.APIs
                             paymentDetail.Tips = transStruct.tips;
                             paymentDetail.DiscountAmount = transStruct.discountAmount;
                             paymentDetail.DiscountPercentage = transStruct.discountPercent + transStruct.discountReferral;
+
+                            //// Approx Calculation
+
+                            //List<ContractorStruct> cnList = new List<ContractorStruct>();
+                            //cList.Add(Database.GetContractorByID(contractorID));
+                            //List<PayrollDoc> payrollListNew = new List<PayrollDoc>();
+                            //string retn = PayrollDoc.GetPayroll(2, -1, -1, cList, appDate.AddDays(-1), appDate.AddDays(1), false, out payrollListNew);
+                            //if (payrollListNew.Count > 0)
+                            //{
+                            //    paymentDetail.AproxPay = Math.Round(payrollListNew[0].appTotal, 2);
+                            //}
+
+                            //// ------------------
 
 
                             paymentDetails.Add(paymentDetail);
@@ -493,6 +507,9 @@ namespace TwoLocalGals.Controllers.APIs
                         if (year == 0 || month == 0) paymentType = "Bad Card";
                         else if (year <= mst.Year && (year != mst.Year || month < mst.Month)) paymentType = "Expired Card";
                     }
+
+                    
+
                     PaymentDTO payment = new PaymentDTO();
                     payment.Date = appDate;
                     payment.Customer = firstApp.customerTitleCustomNote;
@@ -501,6 +518,7 @@ namespace TwoLocalGals.Controllers.APIs
                     payment.Balance = balance == 0 ? "Paid" : Globals.FormatMoney(balance);
                     payment.PymentType = paymentType;
                     payment.AveragePayRate = (decimal)dayAppTotal / (decimal)paymentDetails.Sum(x => Convert.ToDecimal(x.Hours));
+
                     payments.Add(payment);
                 }
 

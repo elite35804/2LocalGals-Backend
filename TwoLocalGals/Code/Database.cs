@@ -383,6 +383,7 @@ namespace Nexus
         public decimal customerHours; 
         public decimal customerRate;
         public decimal customerServiceFee;
+        public decimal contractorTip;
     }
 
     public struct AppAttachments
@@ -4454,7 +4455,7 @@ TakePic)
                     List<ContractorStruct> cList = new List<ContractorStruct>();
                     cList.Add(GetContractorByID(app.contractorID));
                     List<PayrollDoc> payrollList = new List<PayrollDoc>();
-                    string retn = PayrollDoc.GetPayroll(2, -1, -1, cList, startDate, endDate, false, out payrollList);
+                    string retn = PayrollDoc.GetPayroll(2, -1, -1, cList, app.appointmentDate.AddDays(-1), app.appointmentDate.AddDays(1), false, out payrollList);
                     if (payrollList.Count > 0)
                     {
                         app.aproxPay = Math.Round(payrollList[0].appTotal, 2);
@@ -5248,6 +5249,7 @@ TakePic)
                 List<int> appIds = new List<int>();
                 decimal totalHours = app.customerHours;
                 decimal totalServiceFee = app.customerServiceFee;
+                decimal totalTip = app.contractorTips;
                 if (!string.IsNullOrEmpty(app.RelatedAppointments))
                 {
                     appIds = app.RelatedAppointments?.Split(',')?.Select(Int32.Parse).ToList();
@@ -5258,13 +5260,14 @@ TakePic)
                         GetApointmentMiniByID(relAppId, out miniApp);
                         totalHours += miniApp.customerHours;
                         totalServiceFee += miniApp.customerServiceFee;
+                        totalTip += miniApp.contractorTip;
                     }
                 }
 
                 var total = totalHours * app.customerRate;
                 total += totalServiceFee;
                 total -= app.customerDiscountAmount;
-                total += app.contractorTips;
+                total += totalTip;
 
                 if (app.appointmentDate < DateTime.Parse("2021/1/15"))
                 {
@@ -5275,7 +5278,7 @@ TakePic)
                     total -= (((app.customerDiscountPercent + app.customerDiscountReferral) / 100) * (totalHours * app.customerRate));
                 }
 
-                total += ((app.salesTax / 100) * (total -= app.contractorTips));
+                total += ((app.salesTax / 100) * (total -= totalTip));
 
                 app.total = Math.Round(total, 2);
 
@@ -5315,7 +5318,8 @@ TakePic)
                         A.appointmentID,
                         A.customerHours,
                         A.customerRate,
-                        A.customerServiceFee
+                        A.customerServiceFee,
+                        A.contractorTips
                      
                     FROM
                         Appointments A
@@ -5333,6 +5337,7 @@ TakePic)
                 app.customerHours = (decimal)sqlDataReader["customerHours"];
                 app.customerRate = (decimal)sqlDataReader["customerRate"];
                 app.customerServiceFee = (decimal)sqlDataReader["customerServiceFee"];
+                app.contractorTip = (decimal)sqlDataReader["contractorTips"];
 
                 return null;
             }
