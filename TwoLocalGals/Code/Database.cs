@@ -4452,13 +4452,11 @@ TakePic)
 
                     // Approx Calculation
 
-                    List<ContractorStruct> cList = new List<ContractorStruct>();
-                    cList.Add(GetContractorByID(app.contractorID));
-                    List<PayrollDoc> payrollList = new List<PayrollDoc>();
-                    string retn = PayrollDoc.GetPayroll(2, -1, -1, cList, app.appointmentDate.AddDays(-1), app.appointmentDate.AddDays(1), false, out payrollList);
-                    if (payrollList.Count > 0)
+                    ContractorStruct ct = GetContractorByID(app.contractorID);
+                    PayrollDoc doc = PayrollDoc.GetPayrollByApp(app, ct, franchiseMask);
+                    if (doc != null)
                     {
-                        app.aproxPay = Math.Round(payrollList[0].appTotal, 2);
+                        app.aproxPay = Math.Round(doc.appTotal, 2);
                     }
 
                     // ------------------
@@ -5234,13 +5232,11 @@ TakePic)
 
                 // Approx Calculation
 
-                List<ContractorStruct> cList = new List<ContractorStruct>();
-                cList.Add(GetContractorByID(app.contractorID));
-                List<PayrollDoc> payrollList = new List<PayrollDoc>();
-                string ret = PayrollDoc.GetPayroll(2, -1, -1, cList, app.appointmentDate.AddDays(-1), app.appointmentDate.AddDays(1), false, out payrollList);
-                if (payrollList.Count > 0)
+                ContractorStruct ct = GetContractorByID(app.contractorID);
+                PayrollDoc doc = PayrollDoc.GetPayrollByApp(app, ct, franchiseMask);
+                if (doc != null)
                 {
-                    app.aproxPay = Math.Round(payrollList[0].appTotal, 2);
+                    app.aproxPay = Math.Round(doc.appTotal, 2);
                 }
 
                 // ------------------

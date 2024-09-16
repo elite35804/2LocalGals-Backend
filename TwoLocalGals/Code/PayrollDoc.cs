@@ -377,5 +377,135 @@ namespace Nexus
             }
             return ret == "" ? null : ret;
         }
+
+        public static PayrollDoc GetPayrollByApp(AppStruct app, ContractorStruct contractor, int franchiseMask)
+        {
+
+            totalAppCount = new Dictionary<KeyValuePair<int, DateTime>, bool>();
+            totalMiles = 0;
+            totalContractorHours = 0;
+            totalCustomerHours = 0;
+            totalTips = 0;
+            totalServiceFee = 0;
+            totalSuppliesFee = 0;
+            totalCarFee = 0;
+            totalSuppliesFeeNW = 0;
+            totalCarFeeNW = 0;
+            totalSubContractor = 0;
+            totalServiceSplit = 0;
+            totalScheduleFee = 0;
+            totalAdjustments = 0;
+            totalNonWaiver = 0;
+            totalNonInsurance = 0;
+            totalPayroll = 0;
+            totalLabor = 0;
+            totalRevenue = 0;
+            totalGrossRevenue = 0;
+            totalDiscounts = 0;
+            totalSalesTax = 0;
+
+            try
+            {
+                Dictionary<int, FranchiseStruct> franDict = new Dictionary<int, FranchiseStruct>();
+                foreach (FranchiseStruct fran in Database.GetFranchiseList())
+                    franDict.Add(fran.franchiseMask, fran);
+
+                PayrollDoc doc = new PayrollDoc();
+
+
+                string lastAddr = "";
+                DateTime lastDate = DateTime.MinValue;
+                decimal subTotalHours = 0;
+                decimal subTotalMiles = 0;
+                decimal subTotalTips = 0;
+                decimal subTotalServiceFee = 0;
+                decimal subTotalSuppliesFee = 0;
+                decimal subTotalCarFee = 0;
+                decimal subTotalSuppliesFeeNW = 0;
+                decimal subTotalCarFeeNW = 0;
+                decimal subTotalSubContractor = 0;
+                decimal subTotalServiceSplit = 0;
+                decimal subTotalScheduleFee = 0;
+                decimal subTotalAdjustments = 0;
+                decimal subTotalCommission = 0;
+                decimal subTotalNonWaiver = 0;
+                decimal subTotalNonInsurance = 0;
+                decimal scheduleFeeMax = 0;
+                List<string> adjustmentList = new List<string>();
+
+
+                if (lastDate.Date != app.appointmentDate)
+                {
+                    lastAddr = Globals.CleanAddr(contractor.address) + "," + Globals.CleanAddr(contractor.city) + "," + Globals.CleanAddr(contractor.state) + "," + Globals.CleanAddr(contractor.zip);
+                    lastDate = app.appointmentDate;
+                }
+
+                string routeAddr = Globals.CleanAddr(app.customerAddress) + "," + Globals.CleanAddr(app.customerCity) + "," + Globals.CleanAddr(app.customerState) + "," + Globals.CleanAddr(app.customerZip);
+                decimal miles = GoogleMaps.GetDrivingRoute(lastAddr, routeAddr).distance;
+                lastAddr = routeAddr;
+
+                decimal feePercent = franDict.ContainsKey(app.franchiseMask) ? Globals.ParseScheduleFee(franDict[app.franchiseMask].scheduleFeeString, app.appointmentDate) : 0;
+                if (feePercent > scheduleFeeMax) scheduleFeeMax = feePercent;
+
+                decimal appTotalCommission = (app.contractorRate * app.contractorHours) + (app.customerSubContractor * (contractor.serviceSplit / 100.0m));
+                decimal appScheduleFee = (app.contractorRate * app.contractorHours) * (feePercent / 100.0m);
+
+                subTotalHours += app.contractorHours;
+                subTotalMiles += miles;
+                subTotalTips += app.contractorTips;
+                subTotalServiceFee += app.customerServiceFee;
+                subTotalSuppliesFee += app.customerServiceFee * (franDict[app.franchiseMask].suppliesPercentage / 100.0m);
+                subTotalCarFee += app.customerServiceFee * (franDict[app.franchiseMask].carPercentage / 100.0m);
+                subTotalSubContractor += app.customerSubContractor;
+                subTotalServiceSplit += app.customerSubContractor * ((100.0m - contractor.serviceSplit) / 100.0m);
+                subTotalScheduleFee += appScheduleFee;
+                subTotalAdjustments += app.contractorAdjustAmount;
+                subTotalCommission += appTotalCommission;
+
+                totalSalesTax += Globals.ExtractSalesTaxFromTotal(Globals.CalculateAppointmentTotal(app), app.contractorTips, app.salesTax);
+
+                if (!Globals.WithinContractYear(contractor.waiverDate, app.appointmentDate) && !Globals.WithinContractYear(contractor.waiverUpdateDate, app.appointmentDate))
+                {
+                    subTotalNonWaiver += appTotalCommission + app.contractorTips + app.customerServiceFee + app.contractorAdjustAmount - appScheduleFee;
+                    subTotalSuppliesFeeNW += app.customerServiceFee * (franDict[app.franchiseMask].suppliesPercentage / 100.0m);
+                    subTotalCarFeeNW += app.customerServiceFee * (franDict[app.franchiseMask].carPercentage / 100.0m);
+                }
+
+                if (!Globals.WithinContractYear(contractor.insuranceDate, app.appointmentDate) && !Globals.WithinContractYear(contractor.insuranceUpdateDate, app.appointmentDate))
+                {
+                    subTotalNonInsurance += appTotalCommission + app.contractorTips + app.customerServiceFee + app.contractorAdjustAmount - appScheduleFee;
+                }
+
+                if (app.contractorAdjustAmount != 0)
+                    adjustmentList.Add((app.contractorAdjustType ?? "Unknown") + " " + Globals.FormatMoney(app.contractorAdjustAmount));
+
+                if (!totalAppCount.ContainsKey(new KeyValuePair<int, DateTime>(app.customerID, app.appointmentDate)))
+                    totalAppCount.Add(new KeyValuePair<int, DateTime>(app.customerID, app.appointmentDate), true);
+
+                if (app.customerAccountStatus != "Ignored")
+                {
+                    decimal revenue = app.appType <= 1 ? (app.customerRate * app.customerHours) : 0;
+                    totalRevenue += revenue;
+                    totalRevenue += app.customerSubContractor;
+                    totalGrossRevenue += Globals.CalculateAppointmentTotal(app);
+                    totalDiscounts += Globals.CalculateDiscountPercent(app.appType <= 1 ? app.customerHours : 0, app.customerRate, app.customerServiceFee, app.customerDiscountPercent + app.customerDiscountReferral, app.appointmentDate);
+                    totalDiscounts += app.customerDiscountAmount;
+                    totalContractorHours += app.contractorHours;
+                    totalCustomerHours += app.appType <= 1 ? app.customerHours : 0;
+                    totalMiles += miles;
+                }
+
+                doc.appTotal = subTotalCommission + subTotalTips + subTotalServiceFee + subTotalAdjustments - subTotalScheduleFee;
+                doc.serviceFeeTotal = subTotalServiceFee;
+                decimal adjustedHourly = subTotalHours == 0 ? 0 : doc.appTotal / subTotalHours; //OLD WAY: (subTotalCommission + subTotalTips + subTotalServiceFee - subTotalScheduleFee) / subTotalHours;
+
+                return doc;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
     }
 }
