@@ -54,7 +54,9 @@ namespace Nexus.Protected
                     Globals.SetPreviousPage(this, new string[] { "Users.aspx", "FollowUp.aspx", "PrintOut.aspx" });
                     AppDate.Attributes.Add("onkeydown", "return (event.keyCode!=13);");
                     LoadAppointment();
-                } else
+                    Session["IsAdd"] = null;
+                }
+                else
                 {
                     // DownloadImage(this, e);
                 }
@@ -254,12 +256,13 @@ namespace Nexus.Protected
                 }
 
 
-                (new Thread(() => {
+                (new Thread(() =>
+                {
                     //Recalculate Referrals
                     Database.UpdateInactiveCustomers();
                 })).Start();
 
-                
+
 
                 return error == null;
             }
@@ -410,11 +413,14 @@ namespace Nexus.Protected
         {
             try
             {
+                Session["IsAdd"] = true;
                 if (SaveChanges())
                 {
                     string url = Globals.BuildQueryString("Appointments.aspx", "appID", appID);
-                    url = Globals.BuildQueryString(url, "conID", "0");
+                    //url = Globals.BuildQueryString(url, "conID", "0");
                     Response.Redirect(url);
+
+                    //LoadAppointment();
                 }
             }
             catch (Exception ex)
@@ -439,7 +445,7 @@ namespace Nexus.Protected
                     {
                         Response.Redirect(Globals.BuildQueryString("Schedule.aspx", "custID", Request["custID"]));
                     }
-                    
+
                 }
             }
             catch (Exception ex)
@@ -539,7 +545,7 @@ namespace Nexus.Protected
                     ret[i] = conApp;
                 }
             }
-            catch(Exception ex)  { }
+            catch (Exception ex) { }
             return ret;
         }
         #endregion
@@ -559,7 +565,8 @@ namespace Nexus.Protected
                 {
                     CustomerStruct customer;
                     Database.GetCustomerByID(Globals.GetFranchiseMask(), Globals.SafeIntParse(Request["custID"]), out customer);
-                    ContractorStruct contractor = Database.GetContractorByID(customer.franchiseMask, Globals.SafeIntParse(Request["conID"]));
+                    //ContractorStruct contractor = Database.GetContractorByID(customer.franchiseMask, Globals.SafeIntParse(Request["conID"]));
+                    ContractorStruct contractor = Database.GetContractorByID(customer.franchiseMask, 0);
 
                     app.franchiseMask = customer.franchiseMask;
                     app.customerID = customer.customerID;
@@ -620,10 +627,11 @@ namespace Nexus.Protected
                 List<AppStruct> sameApps = new List<AppStruct>();
                 sameApps.Add(app);
 
-                if (app.appointmentID != 0 || !string.IsNullOrEmpty(Request["conID"]))
+                //if (app.appointmentID != 0 || !string.IsNullOrEmpty(Request["conID"]))
+                if (app.appointmentID != 0 || (Session["IsAdd"] != null && (bool)Session["IsAdd"]))
                 {
                     List<AppStruct> relatedApps = new List<AppStruct>();
-                    if(!string.IsNullOrEmpty(app.RelatedAppointments))
+                    if (!string.IsNullOrEmpty(app.RelatedAppointments))
                     {
                         List<int> appIds = app.RelatedAppointments.Split(',')?.Select(Int32.Parse).ToList();
                         appIds.Sort();
@@ -639,24 +647,26 @@ namespace Nexus.Protected
                         newAppIds = newAppIds.Distinct().ToList();
                         newAppIds.Remove(appID);
 
-                        foreach(var item in newAppIds)
+                        foreach (var item in newAppIds)
                         {
                             AppStruct fetchedApp = new AppStruct();
                             Database.GetApointmentpByID(Globals.GetFranchiseMask(), item, out fetchedApp);
-                            if (relatedApps.Find(x => x.appointmentID == fetchedApp.appointmentID).appointmentID <= 0)
+                            if (relatedApps.Find(x => x.appointmentID == fetchedApp.appointmentID).appointmentID <= 0 && fetchedApp.appointmentID > 0)
                             {
                                 relatedApps.Add(fetchedApp);
                             }
                         }
-                        
+
                     }
                     sameApps.AddRange(relatedApps);
                     // sameApps.AddRange(Database.GetSameApointments(app));
 
-                    if (!string.IsNullOrEmpty(Request["conID"]))
+                    //if (!string.IsNullOrEmpty(Request["conID"]))
+                    if (Session["IsAdd"] != null && (bool)Session["IsAdd"])
                     {
                         AppStruct addApp = new AppStruct();
-                        addApp.contractorID = Globals.SafeIntParse(Request["conID"]);
+                        //addApp.contractorID = Globals.SafeIntParse(Request["conID"]);
+                        addApp.contractorID = 0;
                         addApp.appType = Globals.SafeIntParse(Request["appType"]);
                         if (addApp.appType <= 0) addApp.appType = 1;
                         addApp.startTime = app.startTime;
@@ -675,7 +685,8 @@ namespace Nexus.Protected
                             sameApps.Add(addApp);
                     }
 
-                    if (sameApps.Count > 1 && !string.IsNullOrEmpty(Request["conID"]))
+                    //if (sameApps.Count > 1 && !string.IsNullOrEmpty(Request["conID"]))
+                    if (sameApps.Count > 1 && (Session["IsAdd"] != null && (bool)Session["IsAdd"]))
                     {
                         int houseKeepingCount = 0;
                         for (int i = 0; i < sameApps.Count; i++)
@@ -788,7 +799,7 @@ namespace Nexus.Protected
                     Label StartJobTime = new Label();
                     StartJobTime.ID = "StartJobTime" + i;
                     TimeZoneInfo infotime = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time");
-                    if (sameApps[i].jobStartTime != null) 
+                    if (sameApps[i].jobStartTime != null)
                         StartJobTime.Text = sameApps[i].jobStartTime.Value.ToShortTimeString();
                     StartJobTime.Style["Color"] = "Green";
                     PlaceHolder1.Controls.Add(StartJobTime);
@@ -862,7 +873,7 @@ namespace Nexus.Protected
                         PlaceHolder1.Controls.Add(new LiteralControl("<br/>"));
                     }
                     PlaceHolder1.Controls.Add(new LiteralControl("<br/>"));
-                    
+
                     // Create a Label
                     Label Noteslbl = new Label();
                     Noteslbl.ID = "Noteslbl" + i;
@@ -878,7 +889,7 @@ namespace Nexus.Protected
                     PlaceHolder1.Controls.Add(new LiteralControl("<br/>"));
                     PlaceHolder1.Controls.Add(new LiteralControl("<br/>"));
 
-                    
+
                     // Create a Label
                     Label Pictureslbl = new Label();
                     Pictureslbl.ID = "Pictures" + i;
@@ -909,7 +920,7 @@ namespace Nexus.Protected
                         PlaceHolder1.Controls.Add(btnDownload);
 
                     }
-    
+
 
                     // Optionally add a line break
                     PlaceHolder1.Controls.Add(new LiteralControl("<br/>"));
